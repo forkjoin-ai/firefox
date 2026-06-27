@@ -127,6 +127,13 @@ TEST(TaskController, GnosisSafeLaneClassifiesNativeTasks)
 
   ASSERT_TRUE(safeLaneTask->IsDone());
   ASSERT_TRUE(protectedTask->IsDone());
+
+  snapshot = TaskControllerGnosisTelemetry::Snapshot();
+  ASSERT_EQ(snapshot.mMainThreadSelected, 6u);
+  ASSERT_EQ(snapshot.mSafeLaneSelected, 3u);
+  ASSERT_EQ(snapshot.mProtectedSelected, 3u);
+  ASSERT_EQ(snapshot.mSafeLaneCompleted, 1u);
+  ASSERT_EQ(snapshot.mSafeLaneRequeued, 2u);
 }
 
 TEST(TaskController, RescheduleOffMainThread)

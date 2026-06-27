@@ -16,12 +16,20 @@ struct TaskControllerGnosisSnapshot {
   uint64_t mProtectedQueued = 0;
   uint64_t mSafeLaneCandidates = 0;
   uint64_t mManagedTasks = 0;
+  uint64_t mMainThreadSelected = 0;
+  uint64_t mSafeLaneSelected = 0;
+  uint64_t mProtectedSelected = 0;
+  uint64_t mManagedSelected = 0;
+  uint64_t mSafeLaneCompleted = 0;
+  uint64_t mSafeLaneRequeued = 0;
 };
 
 class TaskControllerGnosisTelemetry {
  public:
   static void RecordTaskQueued(uint32_t aPriority, bool aMainThread,
                                bool aManaged);
+  static void RecordMainThreadTaskSelected(uint32_t aPriority, bool aManaged);
+  static void RecordMainThreadTaskFinished(uint32_t aPriority, bool aComplete);
   static TaskControllerGnosisSnapshot Snapshot();
   static void ResetForTests();
 

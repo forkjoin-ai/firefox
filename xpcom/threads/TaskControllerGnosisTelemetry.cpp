@@ -15,6 +15,12 @@ static Atomic<uint64_t, Relaxed> sOffMainThreadQueued;
 static Atomic<uint64_t, Relaxed> sProtectedQueued;
 static Atomic<uint64_t, Relaxed> sSafeLaneCandidates;
 static Atomic<uint64_t, Relaxed> sManagedTasks;
+static Atomic<uint64_t, Relaxed> sMainThreadSelected;
+static Atomic<uint64_t, Relaxed> sSafeLaneSelected;
+static Atomic<uint64_t, Relaxed> sProtectedSelected;
+static Atomic<uint64_t, Relaxed> sManagedSelected;
+static Atomic<uint64_t, Relaxed> sSafeLaneCompleted;
+static Atomic<uint64_t, Relaxed> sSafeLaneRequeued;
 
 /* static */
 bool TaskControllerGnosisTelemetry::IsProtectedPriority(uint32_t aPriority) {
@@ -58,6 +64,34 @@ void TaskControllerGnosisTelemetry::RecordTaskQueued(uint32_t aPriority,
 }
 
 /* static */
+void TaskControllerGnosisTelemetry::RecordMainThreadTaskSelected(
+    uint32_t aPriority, bool aManaged) {
+  sMainThreadSelected++;
+  if (IsProtectedPriority(aPriority)) {
+    sProtectedSelected++;
+  }
+  if (IsSafeLaneCandidate(aPriority, true)) {
+    sSafeLaneSelected++;
+  }
+  if (aManaged) {
+    sManagedSelected++;
+  }
+}
+
+/* static */
+void TaskControllerGnosisTelemetry::RecordMainThreadTaskFinished(
+    uint32_t aPriority, bool aComplete) {
+  if (!IsSafeLaneCandidate(aPriority, true)) {
+    return;
+  }
+  if (aComplete) {
+    sSafeLaneCompleted++;
+  } else {
+    sSafeLaneRequeued++;
+  }
+}
+
+/* static */
 TaskControllerGnosisSnapshot TaskControllerGnosisTelemetry::Snapshot() {
   return {
       sQueued,
@@ -66,6 +100,12 @@ TaskControllerGnosisSnapshot TaskControllerGnosisTelemetry::Snapshot() {
       sProtectedQueued,
       sSafeLaneCandidates,
       sManagedTasks,
+      sMainThreadSelected,
+      sSafeLaneSelected,
+      sProtectedSelected,
+      sManagedSelected,
+      sSafeLaneCompleted,
+      sSafeLaneRequeued,
   };
 }
 
@@ -77,6 +117,12 @@ void TaskControllerGnosisTelemetry::ResetForTests() {
   sProtectedQueued = 0;
   sSafeLaneCandidates = 0;
   sManagedTasks = 0;
+  sMainThreadSelected = 0;
+  sSafeLaneSelected = 0;
+  sProtectedSelected = 0;
+  sManagedSelected = 0;
+  sSafeLaneCompleted = 0;
+  sSafeLaneRequeued = 0;
 }
 
 }  // namespace mozilla

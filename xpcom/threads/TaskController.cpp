@@ -1305,6 +1305,9 @@ bool TaskController::DoExecuteNextTaskOnlyMainThreadInternal(
       task->mIterator = mMainThreadTasks.end();
       task->mInProgress = true;
       TaskManager* manager = task->GetManager();
+      const uint32_t selectedPriority = task->GetPriority();
+      TaskControllerGnosisTelemetry::RecordMainThreadTaskSelected(
+          selectedPriority, manager != nullptr);
       bool result = false;
 
       {
@@ -1362,6 +1365,9 @@ bool TaskController::DoExecuteNextTaskOnlyMainThreadInternal(
 
           result = RunTask(task) == Task::TaskResult::Complete;
         }
+
+        TaskControllerGnosisTelemetry::RecordMainThreadTaskFinished(
+            selectedPriority, result);
 
         // Task itself should keep manager alive.
         if (manager) {

@@ -1456,6 +1456,25 @@ const FIREFOX_STORAGE_SURFACES = Object.freeze([
     reason: "async write batches should become provenance-aware knotgraph commits before SQLite materialization",
   },
   {
+    id: "quota-vfs-materialization",
+    kind: "sqlite",
+    route: "knotgraph-index",
+    priority: 80,
+    frequency: "high",
+    files: [
+      "storage/QuotaVFS.cpp",
+      "storage/StorageGnosisTelemetry.cpp",
+      "storage/StorageGnosisTelemetry.h",
+    ],
+    diskArtifacts: [
+      "storage/default/**/*.sqlite",
+      "storage/default/**/*.sqlite-wal",
+      "storage/temporary/**/*.sqlite",
+      "storage/temporary/**/*.sqlite-wal",
+    ],
+    reason: "quota-controlled SQLite VFS writes and truncates are the materialization boundary for knotgraph blocks",
+  },
+  {
     id: "quota-origin-operations",
     kind: "sqlite",
     route: "knotgraph-index",
@@ -1504,6 +1523,11 @@ const STORAGE_SURFACE_INTEGRATION_EVIDENCE = Object.freeze({
     "netwerk/cache2/CacheGnosisTelemetry.cpp",
   ],
   "sqlite-async-writes": [
+    "storage/StorageGnosisTelemetry.h",
+    "storage/StorageGnosisTelemetry.cpp",
+  ],
+  "quota-vfs-materialization": [
+    "storage/QuotaVFS.cpp",
     "storage/StorageGnosisTelemetry.h",
     "storage/StorageGnosisTelemetry.cpp",
   ],
@@ -2736,7 +2760,12 @@ async function runSelfTest() {
     throw new Error("storage bench failed");
   }
   const victims = await dispatch("gnosis.storage.victims", {});
-  if (victims.topVictim?.id !== "sessionstore-recovery") {
+  if (
+    victims.pending.length !== 0 ||
+    !victims.integrated.some(surface => surface.id === "sessionstore-recovery") ||
+    !victims.integrated.some(surface => surface.id === "quota-vfs-materialization") ||
+    !victims.integrated.some(surface => surface.id === "profile-json-small-writes")
+  ) {
     throw new Error("storage victim ranking failed");
   }
 
@@ -2848,7 +2877,7 @@ async function runSelfTest() {
     antiqueueScheduled: antiqueue.scheduled.length,
     schedulerVerdict: scheduler.verdict,
     storageAvoidedDiskBytes: storage.deltas.avoidedDiskBytes,
-    topStorageVictim: victims.topVictim.id,
+    topStorageVictim: victims.topVictim?.id ?? "none",
     authDidPrimary: authPlan.invariants.didPrimaryAuth,
     entropyRewardToken: entropy.reward.token,
     wall: "available",

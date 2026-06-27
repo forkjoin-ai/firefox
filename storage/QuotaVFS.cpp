@@ -4,6 +4,7 @@
 
 #include "QuotaVFS.h"
 
+#include "StorageGnosisTelemetry.h"
 #include "mozilla/dom/quota/PersistenceType.h"
 #include "mozilla/dom/quota/QuotaManager.h"
 #include "mozilla/dom/quota/QuotaObject.h"
@@ -127,6 +128,9 @@ int QuotaWrite(sqlite3_file* pFile, const void* zBuf, int iAmt,
     }
   }
   rc = p->pReal->pMethods->xWrite(p->pReal, zBuf, iAmt, iOfst);
+  mozilla::storage::StorageGnosisTelemetry::RecordQuotaVFSWrite(
+      iAmt > 0 ? static_cast<uint64_t>(iAmt) : 0, p->quotaObject != nullptr,
+      rc);
   if (p->quotaObject && rc != SQLITE_OK) {
     NS_WARNING(
         "xWrite failed on a quota-controlled file, attempting to "
@@ -159,6 +163,9 @@ int QuotaTruncate(sqlite3_file* pFile, sqlite_int64 size) {
     }
   }
   rc = p->pReal->pMethods->xTruncate(p->pReal, size);
+  mozilla::storage::StorageGnosisTelemetry::RecordQuotaVFSTruncate(
+      size > 0 ? static_cast<uint64_t>(size) : 0, p->quotaObject != nullptr,
+      rc);
   if (p->quotaObject) {
     if (rc == SQLITE_OK) {
 #ifdef DEBUG
@@ -241,6 +248,12 @@ int QuotaFileControl(sqlite3_file* pFile, int op, void* pArg) {
     }
   }
   rc = p->pReal->pMethods->xFileControl(p->pReal, op, pArg);
+  if (op == SQLITE_FCNTL_SIZE_HINT) {
+    sqlite3_int64 hintSize = *static_cast<sqlite3_int64*>(pArg);
+    mozilla::storage::StorageGnosisTelemetry::RecordQuotaVFSSizeHint(
+        hintSize > 0 ? static_cast<uint64_t>(hintSize) : 0,
+        p->quotaObject != nullptr, rc);
+  }
   // Grab the file chunk size after the SQLite VFS has approved.
   if (op == SQLITE_FCNTL_CHUNK_SIZE && rc == SQLITE_OK) {
     p->fileChunkSize = *static_cast<int*>(pArg);

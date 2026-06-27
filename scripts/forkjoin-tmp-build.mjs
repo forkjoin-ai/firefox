@@ -33,6 +33,10 @@ const monorepoArtifactRoot = resolve(
 );
 const monorepoAppPath = join(monorepoArtifactRoot, "Kenoma.app");
 const monorepoAppExecutable = join(monorepoAppPath, "Contents", "MacOS", "firefox");
+const legacyMonorepoAppPaths = [
+  join(monorepoArtifactRoot, "Nightly.app"),
+  join(monorepoArtifactRoot, "Firefox Nightly.app"),
+];
 
 function run(command, commandArgs, cwd = tmpRoot) {
   const result = spawnSync(command, commandArgs, {
@@ -174,6 +178,7 @@ function syncForkjoinFiles() {
   copyPath("netwerk/cache2/CacheGnosisTelemetry.h");
   copyPath("netwerk/cache2/moz.build");
   copyPath("storage/mozStorageAsyncStatementExecution.cpp");
+  copyPath("storage/QuotaVFS.cpp");
   copyPath("storage/StorageGnosisTelemetry.cpp");
   copyPath("storage/StorageGnosisTelemetry.h");
   copyPath("storage/moz.build");
@@ -432,6 +437,9 @@ function mirrorBuiltAppToMonorepo() {
     process.exit(1);
   }
   mkdirSync(monorepoArtifactRoot, { recursive: true });
+  for (const legacyAppPath of legacyMonorepoAppPaths) {
+    rmSync(legacyAppPath, { recursive: true, force: true });
+  }
   rmSync(monorepoAppPath, { recursive: true, force: true });
   cpSync(appPath, monorepoAppPath, { recursive: true });
   console.log(`Monorepo Kenoma app: ${monorepoAppPath}`);

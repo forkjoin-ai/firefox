@@ -14,6 +14,10 @@ static Atomic<uint64_t, Relaxed> sAsyncWriteSteps(0);
 static Atomic<uint64_t, Relaxed> sCompletedWriteSteps(0);
 static Atomic<uint64_t, Relaxed> sBusyRetries(0);
 static Atomic<uint64_t, Relaxed> sProjectedKnotgraphBlocks(0);
+static Atomic<uint64_t, Relaxed> sQuotaVFSWrites(0);
+static Atomic<uint64_t, Relaxed> sQuotaVFSTruncates(0);
+static Atomic<uint64_t, Relaxed> sQuotaVFSSizeHints(0);
+static Atomic<uint64_t, Relaxed> sQuotaVFSBytesProjected(0);
 
 void StorageGnosisTelemetry::RecordAsyncStep(bool aReadOnly,
                                              int aSqliteResult) {
@@ -31,6 +35,48 @@ void StorageGnosisTelemetry::RecordAsyncStep(bool aReadOnly,
   }
 }
 
+static uint64_t ProjectedKnotgraphBytes(uint64_t aBytes) {
+  return 432 + ((aBytes + 4095) / 4096) * 64;
+}
+
+void StorageGnosisTelemetry::RecordQuotaVFSWrite(uint64_t aBytes,
+                                                 bool aQuotaControlled,
+                                                 int aSqliteResult) {
+  if (!aQuotaControlled) {
+    return;
+  }
+  sQuotaVFSWrites++;
+  if (aSqliteResult == SQLITE_OK) {
+    sProjectedKnotgraphBlocks++;
+    sQuotaVFSBytesProjected += ProjectedKnotgraphBytes(aBytes);
+  }
+}
+
+void StorageGnosisTelemetry::RecordQuotaVFSTruncate(uint64_t aSize,
+                                                    bool aQuotaControlled,
+                                                    int aSqliteResult) {
+  if (!aQuotaControlled) {
+    return;
+  }
+  sQuotaVFSTruncates++;
+  if (aSqliteResult == SQLITE_OK) {
+    sProjectedKnotgraphBlocks++;
+    sQuotaVFSBytesProjected += ProjectedKnotgraphBytes(aSize);
+  }
+}
+
+void StorageGnosisTelemetry::RecordQuotaVFSSizeHint(uint64_t aSize,
+                                                    bool aQuotaControlled,
+                                                    int aSqliteResult) {
+  if (!aQuotaControlled) {
+    return;
+  }
+  sQuotaVFSSizeHints++;
+  if (aSqliteResult == SQLITE_OK) {
+    sQuotaVFSBytesProjected += ProjectedKnotgraphBytes(aSize);
+  }
+}
+
 StorageGnosisSnapshot StorageGnosisTelemetry::Snapshot() {
   return {
       sAsyncSteps,
@@ -38,6 +84,10 @@ StorageGnosisSnapshot StorageGnosisTelemetry::Snapshot() {
       sCompletedWriteSteps,
       sBusyRetries,
       sProjectedKnotgraphBlocks,
+      sQuotaVFSWrites,
+      sQuotaVFSTruncates,
+      sQuotaVFSSizeHints,
+      sQuotaVFSBytesProjected,
   };
 }
 

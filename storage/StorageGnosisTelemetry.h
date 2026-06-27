@@ -15,11 +15,21 @@ struct StorageGnosisSnapshot {
   uint64_t mCompletedWriteSteps;
   uint64_t mBusyRetries;
   uint64_t mProjectedKnotgraphBlocks;
+  uint64_t mQuotaVFSWrites;
+  uint64_t mQuotaVFSTruncates;
+  uint64_t mQuotaVFSSizeHints;
+  uint64_t mQuotaVFSBytesProjected;
 };
 
 class StorageGnosisTelemetry final {
  public:
   static void RecordAsyncStep(bool aReadOnly, int aSqliteResult);
+  static void RecordQuotaVFSWrite(uint64_t aBytes, bool aQuotaControlled,
+                                  int aSqliteResult);
+  static void RecordQuotaVFSTruncate(uint64_t aSize, bool aQuotaControlled,
+                                     int aSqliteResult);
+  static void RecordQuotaVFSSizeHint(uint64_t aSize, bool aQuotaControlled,
+                                     int aSqliteResult);
   static StorageGnosisSnapshot Snapshot();
 };
 
