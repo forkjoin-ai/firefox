@@ -47,6 +47,9 @@ with Files("EncryptedMedia*.sys.mjs"):
 with Files("FormValidation*.sys.mjs"):
     BUG_COMPONENT = ("Core", "DOM: Core & HTML")
 
+with Files("KenomaAgent*.sys.mjs"):
+    BUG_COMPONENT = ("Firefox", "General")
+
 with Files("KenomaIdentity*.sys.mjs"):
     BUG_COMPONENT = ("Firefox", "General")
 
@@ -124,6 +127,8 @@ FINAL_TARGET_FILES.actors += [
     "EncryptedMediaParent.sys.mjs",
     "FormValidationChild.sys.mjs",
     "FormValidationParent.sys.mjs",
+    "KenomaAgentChild.sys.mjs",
+    "KenomaAgentParent.sys.mjs",
     "KenomaIdentityChild.sys.mjs",
     "KenomaIdentityParent.sys.mjs",
     "LightweightThemeChild.sys.mjs",

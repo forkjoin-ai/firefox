@@ -350,8 +350,104 @@ function wireInteractions() {
   wireWidgetControls();
 }
 
+function kenomaEscape(text) {
+  return String(text == null ? "" : text).replace(/[&<>"]/g, c =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+}
+
+function kenomaDescribeAction(action) {
+  if (!action || typeof action.action !== "string") {
+    return "(no action)";
+  }
+  const detail = action.url || action.selector || action.answer || "";
+  return detail ? `${action.action} ${detail}` : action.action;
+}
+
+function wireAgent() {
+  const runBtn = qs("#agent-run");
+  const stopBtn = qs("#agent-stop");
+  const input = qs("#q");
+  const list = qs(".in-flight .run-list");
+  if (!runBtn || !stopBtn || !input) {
+    return;
+  }
+  const log = (dotClass, title, sub, tag) => {
+    if (!list) {
+      return;
+    }
+    list.insertAdjacentHTML(
+      "afterbegin",
+      `<div class="run"><span class="run-dot ${dotClass}"></span><span><strong>${kenomaEscape(title)}</strong><small>${kenomaEscape(sub)}</small></span><em>${kenomaEscape(tag)}</em></div>`
+    );
+  };
+  let running = false;
+  const setRunning = on => {
+    running = on;
+    stopBtn.classList.toggle("is-hidden", !on);
+    runBtn.disabled = on;
+  };
+  // window.KenomaAgent is injected by the KenomaAgent child actor. It may land
+  // just after this deferred script runs, so wire on ready as well as now.
+  const attach = () => {
+    const api = window.KenomaAgent;
+    if (!api || typeof api.run !== "function" || runBtn.dataset.kenomaWired) {
+      return false;
+    }
+    runBtn.dataset.kenomaWired = "1";
+    api.onEvent(event => {
+      if (!event) {
+        return;
+      }
+      if (event.kind === "observe") {
+        log("cyan", `looking (${event.tabs} tabs)`, event.url || "", `STEP ${event.step}`);
+      } else if (event.kind === "decide") {
+        log("violet", kenomaDescribeAction(event.action), `step ${event.step}`, "ACT");
+      } else if (event.kind === "error") {
+        log("", "error", event.error, "ERR");
+      } else if (event.kind === "stopped") {
+        log("", "stopped", "", "STOP");
+        setRunning(false);
+      } else if (event.kind === "done") {
+        log("lime", "done", event.answer != null ? event.answer : "(no answer)", "DONE");
+        setRunning(false);
+      }
+    });
+    runBtn.addEventListener("click", () => {
+      const task = input.value.trim();
+      if (!task || running) {
+        return;
+      }
+      if (list) {
+        list.innerHTML = "";
+      }
+      log("cyan", task, "agent task", "RUNNING");
+      setRunning(true);
+      Promise.resolve(api.run(task)).catch(error => {
+        log("", "error", error && error.message ? error.message : String(error), "ERR");
+        setRunning(false);
+      });
+    });
+    stopBtn.addEventListener("click", () => {
+      try {
+        api.stop();
+      } catch (e) {}
+    });
+    return true;
+  };
+  if (!attach()) {
+    runBtn.disabled = true;
+    runBtn.title = "Kenoma agent unavailable in this context";
+    window.addEventListener("KenomaAgent:ready", () => {
+      runBtn.disabled = false;
+      runBtn.title = "Run as a Moonshine browser agent";
+      attach();
+    });
+  }
+}
+
 buildField();
 wireInteractions();
+wireAgent();
 updateClock();
 setInterval(updateClock, 15000);
 mountKineticWiremark();

@@ -601,6 +601,22 @@ let JSWINDOWACTORS = {
     remoteTypes: ["privilegedabout"],
   },
 
+  KenomaAgent: {
+    parent: {
+      esModuleURI: "resource:///actors/KenomaAgentParent.sys.mjs",
+    },
+    child: {
+      esModuleURI: "resource:///actors/KenomaAgentChild.sys.mjs",
+      events: {
+        // Instantiate early on about:kenoma so window.KenomaAgent is injected;
+        // on other pages the child only answers the parent's read/click queries.
+        DOMDocElementInserted: {},
+      },
+    },
+    matches: ["about:kenoma", "*://*/*"],
+    allFrames: false,
+  },
+
   LightweightTheme: {
     child: {
       esModuleURI: "resource:///actors/LightweightThemeChild.sys.mjs",
