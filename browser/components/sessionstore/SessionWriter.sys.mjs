@@ -6,6 +6,7 @@ const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
   sessionStoreLogger: "resource:///modules/sessionstore/SessionLogger.sys.mjs",
+  SessionStoreGnosis: "resource:///modules/sessionstore/SessionStoreGnosis.sys.mjs",
 });
 
 /**
@@ -179,6 +180,7 @@ const SessionWriterInternal = {
     }
 
     try {
+      let targetPath;
       if (this.state == STATE_CLEAN || this.state == STATE_EMPTY) {
         // The backups directory may not exist yet. In all other cases,
         // we have either already read from or already written to this
@@ -210,6 +212,7 @@ const SessionWriterInternal = {
         // originally present and valid, it has been moved to
         // $Paths.cleanBackup a long time ago. We can therefore write
         // with the guarantees that we erase no important data.
+        targetPath = this.Paths.clean;
         await IOUtils.writeJSON(this.Paths.clean, state, {
           tmpPath: this.Paths.clean + ".tmp",
           compress: true,
@@ -222,6 +225,7 @@ const SessionWriterInternal = {
         // way, $Paths.recovery is good. We can move $Path.backup to
         // $Path.recoveryBackup without erasing a good file with a bad
         // file.
+        targetPath = this.Paths.recovery;
         await IOUtils.writeJSON(this.Paths.recovery, state, {
           tmpPath: this.Paths.recovery + ".tmp",
           backupFile: this.Paths.recoveryBackup,
@@ -232,6 +236,7 @@ const SessionWriterInternal = {
         // In other cases, either $Path.recovery is not necessary, or
         // it doesn't exist or it has been corrupted. Regardless,
         // don't backup $Path.recovery.
+        targetPath = this.Paths.recovery;
         await IOUtils.writeJSON(this.Paths.recovery, state, {
           tmpPath: this.Paths.recovery + ".tmp",
           compress: true,
@@ -244,6 +249,24 @@ const SessionWriterInternal = {
       lazy.sessionStoreLogger.debug(
         `SessionWriter.write wrote ${telemetry.fileSizeBytes} bytes in ${telemetry.writeFileMs}ms`
       );
+      try {
+        telemetry.gnosis = await lazy.SessionStoreGnosis.recordWrite({
+          state,
+          options,
+          paths: this.Paths,
+          telemetry,
+          targetPath,
+        });
+      } catch (gnosisEx) {
+        lazy.sessionStoreLogger.warn(
+          "SessionWriter.write, Gnosis receipt failed:",
+          gnosisEx
+        );
+        telemetry.gnosis = {
+          recorded: false,
+          reason: "receipt-error",
+        };
+      }
     } catch (ex) {
       // Don't throw immediately
       lazy.sessionStoreLogger.warn(

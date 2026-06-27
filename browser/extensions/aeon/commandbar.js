@@ -17,6 +17,9 @@ function payloadFor(type) {
   if (type === "gnosis.storage.bench") {
     return { count: 64, bytesPerWrite: 2048 };
   }
+  if (type === "gnosis.entropy.bench") {
+    return { frames: 1024 };
+  }
   if (type === "aeon3d.render.bench") {
     return { vertices: 8192 };
   }

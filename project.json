@@ -192,6 +192,41 @@
         "command": "/opt/homebrew/bin/node native/forkjoin-aeon-bridge.mjs --storage-bench"
       }
     },
+    "native:entropy-bench": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node native/forkjoin-aeon-bridge.mjs --entropy-bench"
+      }
+    },
+    "entropy-bench": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node native/forkjoin-aeon-bridge.mjs --entropy-bench"
+      }
+    },
+    "native:victim-analysis": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node native/forkjoin-aeon-bridge.mjs --victim-analysis"
+      }
+    },
+    "victim-analysis": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node native/forkjoin-aeon-bridge.mjs --victim-analysis"
+      }
+    },
+    "test:sessionstore-gnosis": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "python3.12 ./mach --no-interactive xpcshell-test browser/components/sessionstore/test/unit/test_gnosis_sessionstore_receipts.js"
+      }
+    },
     "commandbar-smoke": {
       "executor": "a0:run-commands",
       "options": {

@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 const nativeDir = path.dirname(fileURLToPath(import.meta.url));
 const hostPath = path.join(nativeDir, "forkjoin-aeon-bridge");
 const BINARY_SENTINEL = "__aeonBinaryBase64";
+const REQUEST_TIMEOUT_MS = 30000;
 
 function binaryEnvelope(bytes) {
   return {
@@ -48,6 +49,7 @@ async function main() {
       return;
     }
     pending.delete(message.id);
+    clearTimeout(slot.timer);
     if (message.ok === false) {
       slot.reject(new Error(message.error || "native host error"));
       return;
@@ -55,12 +57,24 @@ async function main() {
     slot.resolve(message.result);
   });
   child.stderr.on("data", chunk => process.stderr.write(chunk));
+  child.on("exit", (code, signal) => {
+    const error = new Error(`native host exited ${code ?? signal ?? "unknown"}`);
+    for (const slot of pending.values()) {
+      clearTimeout(slot.timer);
+      slot.reject(error);
+    }
+    pending.clear();
+  });
 
   function request(type, payload) {
     const id = nextId++;
     writeMessage(child, { id, type, payload });
     return new Promise((resolve, reject) => {
-      pending.set(id, { resolve, reject });
+      const timer = setTimeout(() => {
+        pending.delete(id);
+        reject(new Error(`${type} timed out after ${REQUEST_TIMEOUT_MS}ms`));
+      }, REQUEST_TIMEOUT_MS);
+      pending.set(id, { resolve, reject, timer });
     });
   }
 

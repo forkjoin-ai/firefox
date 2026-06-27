@@ -24,6 +24,8 @@ pnpm run a0 -- run @a0n/firefox:native-install
 pnpm run a0 -- run @a0n/firefox:runtime-bench
 pnpm run a0 -- run @a0n/firefox:scheduler-bench
 pnpm run a0 -- run @a0n/firefox:storage-bench
+pnpm run a0 -- run @a0n/firefox:entropy-bench
+pnpm run a0 -- run @a0n/firefox:victim-analysis
 pnpm run a0 -- run @a0n/firefox:commandbar-smoke
 ```
 
@@ -54,6 +56,9 @@ open-source/firefox/build/forkjoin/Kenoma.app/Contents/MacOS/firefox
 
 Kenoma uses `open-source/aeon-ux/sigil-rs/out/keystone.svg` for the app icon
 and `open-source/aeon-ux/src/swag/svg/piece-knot-void.svg` for the home splash.
+The user-facing home URL is `about:kenoma`, registered through
+`browser/components/about/AboutRedirector.cpp`; the page itself is backed by the
+packaged `chrome://branding/content/kenoma-home.html` resource.
 Regenerate derived branding assets with:
 
 ```bash
@@ -128,8 +133,10 @@ for:
 - Gnosis runtime capability discovery, FRF run/bench, FOIL run/telemetry,
   runtime cache stats/clear, Moonshine command execution, amplituhedron cache lookup/prefetch,
   antiqueue scheduling telemetry, gnosis-antiqueue helix scheduler observe/plan/bench,
-  bitwise/knotchain/knotgraph storage observe/plan/bench, aeon-3d render status/bench,
-  Aether WASM-SIMD status/bench, x-gnosis status/bench, and gnosis-uring status/bench
+  bitwise/knotchain/knotgraph storage observe/plan/victims/bench, Fractal IAM / DID auth
+  observe/plan, entropy-garden browser mining observe/plan/bench, aeon-3d render
+  status/bench, Aether WASM-SIMD status/bench, x-gnosis status/bench, and
+  gnosis-uring status/bench
 
 It routes those calls to the native messaging host named
 `forkjoin-aeon-bridge`.
@@ -167,13 +174,26 @@ Native bridge capabilities:
 - gnosis-antiqueue helix scheduler harnesses that compare stock Firefox event
   ordering with an active safe lane for low-risk priorities only
 - storage-routing harnesses that compare temp-disk writes with bitwise binary
-  envelopes and knotgraph block packing, without touching profile data
+  envelopes and knotgraph block packing, plus ranked Firefox write-surface
+  victims for sessionstore, HTTP cache chunks, cache metadata, async SQLite,
+  quota origin operations, and profile JSON, without touching profile data
+- active sessionstore recovery writes now append privacy-preserving
+  `gnosis-sessionstore.knotchain.jsonl` receipts from
+  `SessionStoreGnosis.sys.mjs`; the legacy compressed sessionstore files remain
+  authoritative while the knotchain replay path grows parity coverage
+- DID-auth planning through `apps/fractal-iam` and `open-source/auth`, including
+  UCAN verification, browser handoff, and the `packages/edgework-sdk` wallet
+  auth lane for custodial wallet work
+- entropy-garden-compatible browser entropy receipts that can later credit
+  EDGEWORK for logged-in root DIDs or a house token for anonymous sessions
 
 Use `native-self-test` for direct handler verification and `native-probe` for
 Firefox native-message framing verification without launching the browser.
 Use `runtime-bench` for the lightweight runtime benchmark receipt and
-`scheduler-bench` / `storage-bench` for focused scheduler and storage receipts.
-Use `commandbar-smoke` to verify the bundled Moonshine command-bar popup is packaged.
+`scheduler-bench` / `storage-bench` / `entropy-bench` for focused receipts. Use
+`victim-analysis` to combine scheduler timing, disk-write replacement timing,
+and ranked Firefox write-surface victims. Use
+`commandbar-smoke` to verify the bundled Moonshine command-bar popup is packaged.
 
 Top-level `aeon://` navigation uses the stable resolver path by default. The
 experimental wall-backed page channel is gated behind
@@ -185,8 +205,14 @@ Gnosis runtime prefs live in `browser/app/profile/firefox.js`:
 - `forkjoin.gnosis.runtime.enabled` defaults on for bridge capability discovery.
 - `forkjoin.gnosis.commandbar.enabled` defaults on for the bundled Moonshine popup.
 - `forkjoin.gnosis.scheduler.observe.enabled` and
-  `forkjoin.gnosis.storage.observe.enabled` default on for bridge benchmarks.
+  `forkjoin.gnosis.storage.observe.enabled`,
+  `forkjoin.gnosis.auth.observe.enabled`, and
+  `forkjoin.gnosis.entropy.observe.enabled` default on for bridge benchmarks.
 - `forkjoin.gnosis.scheduler.enabled`, `forkjoin.gnosis.scheduler.active.enabled`,
-  `forkjoin.gnosis.storage.active.enabled`, and `forkjoin.gnosis.network.enabled`
-  default off until Gecko-internal scheduler/network harnesses prove semantic
-  parity and responsiveness wins.
+  `forkjoin.gnosis.storage.active.enabled`, `forkjoin.gnosis.auth.active.enabled`,
+  `forkjoin.gnosis.auth.custodial_wallet.enabled`,
+  `forkjoin.gnosis.entropy.active.enabled`, `forkjoin.gnosis.entropy.rewards.enabled`,
+  and `forkjoin.gnosis.network.enabled`
+  default on for the active Gnosis browser fork lane. Keep the bridge self-test,
+  runtime bench, scheduler/storage/entropy focused benches, and victim analysis
+  green when changing these paths.

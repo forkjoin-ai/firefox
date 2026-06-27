@@ -15,6 +15,8 @@ const browserApi = globalThis.browser;
 const NATIVE_HOST = "forkjoin-aeon-bridge";
 const BINARY_SENTINEL = "__aeonBinaryBase64";
 const BINARY_VIEW = "__aeonBinaryView";
+const DEFAULT_BRIDGE_TIMEOUT_MS = 30000;
+const MAX_BRIDGE_TIMEOUT_MS = 120000;
 const AEON_STREAMS = Object.freeze({
   pneumaBase: 0x07d0,
   pneumaInput: 0x07d0,
@@ -43,9 +45,13 @@ const SUPPORTED_TYPES = new Set([
   "gnosis.scheduler.bench",
   "gnosis.storage.observe",
   "gnosis.storage.plan",
+  "gnosis.storage.victims",
   "gnosis.storage.bench",
   "gnosis.auth.observe",
   "gnosis.auth.plan",
+  "gnosis.entropy.observe",
+  "gnosis.entropy.plan",
+  "gnosis.entropy.bench",
   "aeon3d.render.status",
   "aeon3d.render.bench",
   "aether.simd.status",
@@ -160,9 +166,19 @@ function handleLocalRequest(message) {
   return null;
 }
 
+function timeoutMsFor(message) {
+  const payload = isPlainObject(message.payload) ? message.payload : {};
+  const requested = Number(payload.timeoutMs);
+  if (!Number.isFinite(requested) || requested <= 0) {
+    return DEFAULT_BRIDGE_TIMEOUT_MS;
+  }
+  return Math.min(MAX_BRIDGE_TIMEOUT_MS, Math.max(1000, requested));
+}
+
 function closePending(message) {
   const error = new Error(message);
-  for (const { reject } of state.pending.values()) {
+  for (const { reject, timer } of state.pending.values()) {
+    clearTimeout(timer);
     reject(error);
   }
   state.pending.clear();
@@ -183,6 +199,7 @@ function attachNativePort(port) {
     }
 
     state.pending.delete(payload.id);
+    clearTimeout(pending.timer);
     if (payload.ok === false || typeof payload.error === "string") {
       pending.reject(new Error(payload.error || "Aeon native host error"));
       return;
@@ -238,11 +255,20 @@ function sendBridgeRequest(message) {
   };
 
   return new Promise((resolve, reject) => {
-    state.pending.set(id, { resolve, reject });
+    const timeoutMs = timeoutMsFor(message);
+    const timer = setTimeout(() => {
+      state.pending.delete(id);
+      reject(new Error(`Aeon native host timed out after ${timeoutMs}ms`));
+    }, timeoutMs);
+    state.pending.set(id, { resolve, reject, timer });
     try {
       port.postMessage(request);
     } catch (error) {
-      state.pending.delete(id);
+      const pending = state.pending.get(id);
+      if (pending) {
+        clearTimeout(pending.timer);
+        state.pending.delete(id);
+      }
       reject(error instanceof Error ? error : new Error(String(error)));
     }
   });

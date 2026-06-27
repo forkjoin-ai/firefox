@@ -250,8 +250,12 @@ function createWallBackedChannel(uri, loadInfo) {
   })();
 
   function writeAndClose(text) {
-    outputStream.write(text, text.length);
-    outputStream.close();
+    const converter = Cc[
+      "@mozilla.org/intl/converter-output-stream;1"
+    ].createInstance(Ci.nsIConverterOutputStream);
+    converter.init(outputStream, "UTF-8");
+    converter.writeString(text);
+    converter.close();
   }
 
   runWall(uri)

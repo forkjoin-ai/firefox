@@ -21,8 +21,8 @@ seeded PRNG path.
 - Forwarding the Gnosis runtime gateway:
   `gnosis.runtime.capabilities`, `gnosis.runtime.cache.*`, `gnosis.frf.*`, `gnosis.foil.*`,
   `gnosis.moonshine.*`, `gnosis.amplituhedron.*`, `gnosis.antiqueue.*`,
-  `gnosis.scheduler.*`, `gnosis.storage.*`, `aeon3d.render.*`, `aether.simd.*`,
-  `xgnosis.*`, and `gnosis.uring.*`.
+  `gnosis.scheduler.*`, `gnosis.storage.*`, `gnosis.auth.*`, `gnosis.entropy.*`,
+  `aeon3d.render.*`, `aether.simd.*`, `xgnosis.*`, and `gnosis.uring.*`.
 - Providing the Moonshine popup command bar, which sends commands through
   `gnosis.moonshine.exec` and runtime probes through the same native host.
 
@@ -63,4 +63,9 @@ The supported operation names intentionally mirror the package boundaries:
 - Gnosis: Lacey deterministic state operations.
 - Gnosis runtime: FRF, FOIL, Moonshine, amplituhedron cache, antiqueue,
   gnosis-antiqueue scheduler probes, bitwise/knotchain/knotgraph storage
-  probes, aeon-3d rendering probes, Aether WASM-SIMD probes, x-gnosis, and uring.
+  probes, Fractal IAM / open-source auth DID planning, entropy-garden browser
+  mining probes, aeon-3d rendering probes, Aether WASM-SIMD probes, x-gnosis,
+  and uring.
+- `gnosis.storage.victims` ranks the active disk-replacement targets inside
+  Firefox: sessionstore recovery, HTTP cache chunks, HTTP cache metadata,
+  async SQLite writes, quota origin operations, and small profile JSON rewrites.

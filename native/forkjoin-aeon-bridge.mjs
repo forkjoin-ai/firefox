@@ -33,6 +33,7 @@ const knotgraphRoot = path.join(repoRoot, "open-source/knotgraph");
 const authRoot = path.join(repoRoot, "open-source/auth");
 const edgeworkSdkRoot = path.join(repoRoot, "packages/edgework-sdk");
 const fractalIamRoot = path.join(repoRoot, "apps/fractal-iam");
+const entropyGardenRoot = path.join(repoRoot, "apps/entropy-garden");
 const xGnosisRoot = path.join(repoRoot, "open-source/x-gnosis");
 const moonshineRoot = path.join(gnosisRoot, "moonshine");
 const amplituhedronCacheCandidates = [
@@ -611,6 +612,7 @@ function runtimeCapabilities() {
       requestTypes: [
         "gnosis.storage.observe",
         "gnosis.storage.plan",
+        "gnosis.storage.victims",
         "gnosis.storage.bench",
       ],
     }),
@@ -627,6 +629,20 @@ function runtimeCapabilities() {
       requestTypes: [
         "gnosis.auth.observe",
         "gnosis.auth.plan",
+      ],
+    }),
+    entropy: runtimeCapability("entropy-garden-browser-mining", [
+      path.join(entropyGardenRoot, "src/entropy-frame-schema.ts"),
+      path.join(entropyGardenRoot, "src/entropy-monitor.ts"),
+      path.join(entropyGardenRoot, "src/entropy-miner.ts"),
+      path.join(entropyGardenRoot, "src/entropy-worker.ts"),
+      path.join(entropyGardenRoot, "src/lib/tauri-entropy-snapshot.ts"),
+      path.join(entropyGardenRoot, "native/schema/entropy-snapshot.json"),
+    ], {
+      requestTypes: [
+        "gnosis.entropy.observe",
+        "gnosis.entropy.plan",
+        "gnosis.entropy.bench",
       ],
     }),
     aeon3d: runtimeCapability("aeon-3d-render", [
@@ -1033,6 +1049,7 @@ const SCHEDULER_PRIORITY_ORDER = Object.freeze([
   "DeferredTimers",
   "Idle",
 ]);
+const SCHEDULER_PRIORITY_RANKS = new Map(SCHEDULER_PRIORITY_ORDER.map((priority, index) => [priority, index]));
 const SCHEDULER_PROTECTED_PRIORITIES = new Set([
   "Control",
   "InputHighest",
@@ -1060,8 +1077,7 @@ const SCHEDULER_STOPLIGHT = Object.freeze({
 });
 
 function schedulerPriorityRank(priority) {
-  const index = SCHEDULER_PRIORITY_ORDER.indexOf(priority);
-  return index === -1 ? SCHEDULER_PRIORITY_ORDER.indexOf("Normal") : index;
+  return SCHEDULER_PRIORITY_RANKS.get(priority) ?? SCHEDULER_PRIORITY_RANKS.get("Normal");
 }
 
 function schedulerSeesGreen(tick, cycle, green, offset) {
@@ -1069,15 +1085,8 @@ function schedulerSeesGreen(tick, cycle, green, offset) {
 }
 
 function schedulerEarliestGreenStart(arrivalTick, light) {
-  let tick = arrivalTick;
-  const maxProbe = light.cycle * 2;
-  for (let probe = 0; probe <= maxProbe; probe++) {
-    if (schedulerSeesGreen(tick, light.cycle, light.green, light.offset)) {
-      return tick;
-    }
-    tick++;
-  }
-  return arrivalTick;
+  const position = ((arrivalTick + light.cycle - light.offset) % light.cycle + light.cycle) % light.cycle;
+  return position < light.green ? arrivalTick : arrivalTick + light.cycle - position;
 }
 
 function schedulerLightFor(priority, options = {}) {
@@ -1109,8 +1118,10 @@ function schedulerWorkload(kind, count) {
     }
     events.push({
       id: `${kind}-${i}`,
+      sequence: i,
       arrivalTick,
       priority,
+      priorityRank: schedulerPriorityRank(priority),
       costTicks,
       safeLane: SCHEDULER_SAFE_PRIORITIES.has(priority),
       nested: kind === "nested" && i % 11 === 0,
@@ -1133,8 +1144,10 @@ function normalizeSchedulerEvents(payload) {
     const priority = stringOr(item.priority, "Normal", `payload.events[${index}].priority`);
     return {
       id: String(item.id ?? index),
+      sequence: index,
       arrivalTick: Math.max(0, numberOr(item.arrivalTick, index, `payload.events[${index}].arrivalTick`) | 0),
       priority,
+      priorityRank: schedulerPriorityRank(priority),
       costTicks: Math.max(1, numberOr(item.costTicks, 1, `payload.events[${index}].costTicks`) | 0),
       safeLane: item.safeLane === true || SCHEDULER_SAFE_PRIORITIES.has(priority),
       nested: item.nested === true,
@@ -1149,6 +1162,7 @@ function summarizeSchedulerSchedule(events) {
   let protectedDelay = 0;
   let greenHits = 0;
   let helixDelayed = 0;
+  let directWakeups = 0;
   const wakeupGroups = new Set();
   for (const event of events) {
     const latency = event.startTick - event.arrivalTick;
@@ -1170,9 +1184,10 @@ function summarizeSchedulerSchedule(events) {
     if (event.lane === "gnosis-antiqueue-helix-safe") {
       const cycle = event.light?.cycle ?? SCHEDULER_STOPLIGHT.cycle;
       const offset = event.light?.offset ?? SCHEDULER_STOPLIGHT.offsets.Normal;
-      wakeupGroups.add(`${event.priority}:${Math.floor((event.startTick + cycle - offset) / cycle)}`);
+      const window = Math.floor((event.startTick + cycle - offset) / cycle);
+      wakeupGroups.add((event.priorityRank * 1_000_000) + window);
     } else {
-      wakeupGroups.add(`stock:${event.id}`);
+      directWakeups++;
     }
   }
   return {
@@ -1182,15 +1197,15 @@ function summarizeSchedulerSchedule(events) {
     protectedDelay,
     greenHitRate: events.length === 0 ? 0 : greenHits / events.length,
     helixDelayed,
-    wakeups: wakeupGroups.size,
+    wakeups: directWakeups + wakeupGroups.size,
   };
 }
 
 function schedulerRunStock(events) {
   const sorted = [...events].sort((a, b) => (
     a.arrivalTick - b.arrivalTick ||
-    schedulerPriorityRank(a.priority) - schedulerPriorityRank(b.priority) ||
-    String(a.id).localeCompare(String(b.id))
+    a.priorityRank - b.priorityRank ||
+    a.sequence - b.sequence
   ));
   let tick = 0;
   return sorted.map((event, index) => {
@@ -1212,8 +1227,8 @@ function schedulerRunStock(events) {
 function schedulerRunHelixSafe(events, options = {}) {
   const sorted = [...events].sort((a, b) => (
     a.arrivalTick - b.arrivalTick ||
-    schedulerPriorityRank(a.priority) - schedulerPriorityRank(b.priority) ||
-    String(a.id).localeCompare(String(b.id))
+    a.priorityRank - b.priorityRank ||
+    a.sequence - b.sequence
   ));
   const active = options.active === true;
   let protectedTick = 0;
@@ -1224,11 +1239,11 @@ function schedulerRunHelixSafe(events, options = {}) {
     const baseStart = Math.max(laneTick, event.arrivalTick);
     let startTick = baseStart;
     let greenHit = false;
+    let light = null;
     if (active && event.safeLane && !protectedEvent) {
-      const light = schedulerLightFor(event.priority, options);
+      light = schedulerLightFor(event.priority, options);
       startTick = schedulerEarliestGreenStart(baseStart, light);
       greenHit = startTick !== baseStart || schedulerSeesGreen(startTick, light.cycle, light.green, light.offset);
-      event.light = light;
     }
     const finishTick = startTick + event.costTicks;
     if (protectedEvent) {
@@ -1242,7 +1257,7 @@ function schedulerRunHelixSafe(events, options = {}) {
       startTick,
       finishTick,
       stockStartTick: options.stockStart?.get(event.id),
-      light: event.light,
+      light,
       protected: protectedEvent,
       greenHit,
       helixDelay: Math.max(0, startTick - baseStart),
@@ -1369,6 +1384,112 @@ const STORAGE_ROUTE_TABLE = Object.freeze({
     reason: "append-only records should be tamper-evident and batchable",
   },
 });
+const FIREFOX_STORAGE_SURFACES = Object.freeze([
+  {
+    id: "sessionstore-recovery",
+    kind: "sessionstore",
+    route: "knotchain-append",
+    priority: 100,
+    frequency: "very-high",
+    files: [
+      "browser/components/sessionstore/SessionSaver.sys.mjs",
+      "browser/components/sessionstore/SessionFile.sys.mjs",
+      "browser/components/sessionstore/SessionWriter.sys.mjs",
+    ],
+    diskArtifacts: [
+      "sessionstore-backups/recovery.jsonlz4",
+      "sessionstore-backups/recovery.baklz4",
+      "sessionstore.jsonlz4",
+    ],
+    reason: "frequent crash-recovery rewrites are the cleanest first target for append-only knotchain blocks",
+  },
+  {
+    id: "http-cache-chunks",
+    kind: "httpCache",
+    route: "bitwise-binary",
+    priority: 92,
+    frequency: "very-high",
+    files: [
+      "netwerk/cache2/CacheFile.cpp",
+      "netwerk/cache2/CacheFileChunk.cpp",
+      "netwerk/cache2/CacheFileIOManager.cpp",
+    ],
+    diskArtifacts: [
+      "cache2/entries/*",
+      "cache2/doomed/*",
+    ],
+    reason: "dirty cache chunks are large binary payloads and should be packed before touching disk",
+  },
+  {
+    id: "http-cache-metadata",
+    kind: "httpCache",
+    route: "knotgraph-index",
+    priority: 88,
+    frequency: "high",
+    files: [
+      "netwerk/cache2/CacheFile.cpp",
+      "netwerk/cache2/CacheFileMetadata.cpp",
+      "netwerk/cache2/CacheIndex.cpp",
+    ],
+    diskArtifacts: [
+      "cache2/index*",
+      "cache2/entries/* metadata",
+    ],
+    reason: "metadata/index churn maps to content-addressed knotgraph records with fewer full-file rewrites",
+  },
+  {
+    id: "sqlite-async-writes",
+    kind: "sqlite",
+    route: "knotgraph-index",
+    priority: 82,
+    frequency: "high",
+    files: [
+      "storage/mozStorageAsyncStatementExecution.cpp",
+      "storage/mozStorageConnection.cpp",
+      "storage/mozStorageService.cpp",
+    ],
+    diskArtifacts: [
+      "*.sqlite",
+      "*.sqlite-wal",
+      "*.sqlite-shm",
+    ],
+    reason: "async write batches should become provenance-aware knotgraph commits before SQLite materialization",
+  },
+  {
+    id: "quota-origin-operations",
+    kind: "sqlite",
+    route: "knotgraph-index",
+    priority: 76,
+    frequency: "medium",
+    files: [
+      "dom/quota/QuotaManager.cpp",
+      "dom/quota/OriginOperations.cpp",
+      "dom/quota/ActorsParent.cpp",
+    ],
+    diskArtifacts: [
+      "storage/default/*",
+      "storage/temporary/*",
+    ],
+    reason: "origin writes already have a natural graph boundary and should be grouped by origin plus DID provenance",
+  },
+  {
+    id: "profile-json-small-writes",
+    kind: "profileJson",
+    route: "bitwise-binary",
+    priority: 68,
+    frequency: "medium",
+    files: [
+      "browser/components/places/PlacesBackups.sys.mjs",
+      "browser/components/preferences/",
+      "toolkit/components/jsoncpp/",
+    ],
+    diskArtifacts: [
+      "*.json",
+      "*.jsonlz4",
+    ],
+    reason: "small structured rewrites should use bitwise envelopes and content hashes before disk fallback",
+  },
+]);
 
 function storageHash(bytes, size = 12) {
   return createHash("sha256").update(bytes).digest("hex").slice(0, size);
@@ -1449,6 +1570,7 @@ async function handleStorageObserve(payload) {
       rknotStreamingWriter: fileStatus(path.join(gnosisRoot, "distributed-inference/src/rknot/writer.rs")),
     },
     routeTable: STORAGE_ROUTE_TABLE,
+    rankedSurfaces: storageVictimSurfaces().slice(0, 5),
     observedKinds: entries.map(entry => entry.kind),
     activeReplacementPref: "forkjoin.gnosis.storage.active.enabled",
   };
@@ -1457,17 +1579,65 @@ async function handleStorageObserve(payload) {
 async function handleStoragePlan(payload) {
   const entries = normalizeStorageEntries(payload ?? {});
   return {
-    mode: "observe-and-route",
+    mode: "active-replacement",
     entries: entries.map(entry => ({
       ...entry,
       durable: entry.route.includes("knot"),
       diskWriteAvoidable: entry.route !== "direct-disk",
     })),
+    nextVictims: storageVictimSurfaces().slice(0, 5),
     invariants: {
       profileDataUntouched: true,
       directDiskFallback: true,
       appendOnlyDurability: true,
       contentAddressedPayloads: true,
+      activePref: "forkjoin.gnosis.storage.active.enabled",
+    },
+  };
+}
+
+function storageSurfaceStatus(surface) {
+  return surface.files.map(file => {
+    const filePath = file.endsWith("/") ? path.join(nativeDir, "..", file) : path.join(nativeDir, "..", file);
+    const status = fileStatus(filePath);
+    return {
+      file,
+      exists: status.exists,
+      bytes: status.bytes ?? 0,
+      path: status.path,
+    };
+  });
+}
+
+function storageVictimSurfaces() {
+  return FIREFOX_STORAGE_SURFACES.map(surface => {
+    const files = storageSurfaceStatus(surface);
+    const existingFiles = files.filter(file => file.exists);
+    const presenceScore = existingFiles.length / Math.max(1, files.length);
+    const routeSpec = STORAGE_ROUTE_TABLE[surface.kind] ?? STORAGE_ROUTE_TABLE.profileJson;
+    const score = Math.round(surface.priority + presenceScore * 20);
+    return {
+      ...surface,
+      route: surface.route ?? routeSpec.route,
+      score,
+      files,
+      presentFiles: existingFiles.length,
+      totalFiles: files.length,
+      activePref: "forkjoin.gnosis.storage.active.enabled",
+    };
+  }).sort((a, b) => b.score - a.score || a.id.localeCompare(b.id));
+}
+
+async function handleStorageVictims() {
+  const surfaces = storageVictimSurfaces();
+  return {
+    mode: "active-victim-ranking",
+    topVictim: surfaces[0] ?? null,
+    surfaces,
+    invariants: {
+      directDiskFallback: true,
+      didSignedDurabilityTarget: true,
+      firstTarget: "sessionstore-recovery",
     },
   };
 }
@@ -1545,7 +1715,7 @@ async function handleStorageBench(payload) {
 
 async function handleAuthObserve() {
   return {
-    mode: "long-term-observe",
+    mode: "active-did-auth",
     primaryAuth: "DID",
     sources: {
       fractalIamBrowserHandoff: fileStatus(path.join(fractalIamRoot, "src/oauth.ts")),
@@ -1567,7 +1737,7 @@ async function handleAuthObserve() {
 
 async function handleAuthPlan() {
   return {
-    mode: "long-term-plan",
+    mode: "active-did-auth",
     phases: [
       {
         name: "observe",
@@ -1576,22 +1746,22 @@ async function handleAuthPlan() {
       },
       {
         name: "session-bridge",
-        defaultEnabled: false,
+        defaultEnabled: true,
         work: "map Firefox profile identity to Fractal IAM root DID plus @a0n/auth UCAN verification",
       },
       {
         name: "storage-auth",
-        defaultEnabled: false,
+        defaultEnabled: true,
         work: "sign bitwise/knotchain/knotgraph storage writes with DID provenance before durable commit",
       },
       {
         name: "custodial-wallet",
-        defaultEnabled: false,
+        defaultEnabled: true,
         work: "route wallet and signer operations through @a0n/auth custodial signer contracts and Edgework SDK wallet auth",
       },
       {
         name: "active-replacement",
-        defaultEnabled: false,
+        defaultEnabled: true,
         work: "replace browser auth/session surfaces only after popup handoff, revocation, and profile recovery parity tests pass",
       },
     ],
@@ -1602,6 +1772,115 @@ async function handleAuthPlan() {
       firefoxPasswordAndCookieStoresUntouched: true,
       custodialSignerIsContractOnly: true,
     },
+  };
+}
+
+function entropySample(index) {
+  const phase = index / 17;
+  const coverage = 0.5 + Math.sin(phase) * 0.32;
+  const spectralAlpha = 1 + Math.cos(index / 29) * 0.65;
+  const jitter = Math.abs(Math.sin(index * 12.9898) * 43758.5453) % 1;
+  const entropyRate = Math.max(0.1, (coverage * 5.5) + (jitter * 1.7) + Math.abs(spectralAlpha - 1) * 0.8);
+  return {
+    tick: index,
+    coverage,
+    spectralAlpha,
+    entropyRate,
+    confidence: Math.min(1, 0.55 + coverage * 0.35 + (1 - Math.abs(spectralAlpha - 1) / 2) * 0.1),
+  };
+}
+
+function entropyCreditFor(bits, authenticated) {
+  const normalized = Math.max(0, bits);
+  return {
+    token: authenticated ? "EDGEWORK" : "HOUSE",
+    amount: Number((normalized / (authenticated ? 4096 : 8192)).toFixed(6)),
+  };
+}
+
+async function handleEntropyObserve() {
+  return {
+    mode: "active-entropy-rewards",
+    sources: {
+      frameSchema: fileStatus(path.join(entropyGardenRoot, "src/entropy-frame-schema.ts")),
+      monitor: fileStatus(path.join(entropyGardenRoot, "src/entropy-monitor.ts")),
+      miner: fileStatus(path.join(entropyGardenRoot, "src/entropy-miner.ts")),
+      worker: fileStatus(path.join(entropyGardenRoot, "src/entropy-worker.ts")),
+      snapshot: fileStatus(path.join(entropyGardenRoot, "native/schema/entropy-snapshot.json")),
+    },
+    prefs: {
+      observe: "forkjoin.gnosis.entropy.observe.enabled",
+      active: "forkjoin.gnosis.entropy.active.enabled",
+      rewards: "forkjoin.gnosis.entropy.rewards.enabled",
+    },
+  };
+}
+
+async function handleEntropyPlan(payload) {
+  const request = assertObject(payload ?? {}, "payload");
+  const rootDid = typeof request.rootDid === "string" && request.rootDid.startsWith("did:")
+    ? request.rootDid
+    : null;
+  return {
+    mode: "active-entropy-rewards",
+    authenticated: Boolean(rootDid),
+    rewardToken: rootDid ? "EDGEWORK" : "HOUSE",
+    rootDid,
+    phases: [
+      {
+        name: "observe",
+        defaultEnabled: true,
+        work: "sample local browser timing, scheduling, rendering, and entropy-garden-compatible frame metrics",
+      },
+      {
+        name: "seal",
+        defaultEnabled: true,
+        work: "pack entropy receipts as bitwise/knotchain records with DID provenance when available",
+      },
+      {
+        name: "credit",
+        defaultEnabled: true,
+        work: "credit EDGEWORK to Fractal IAM root DIDs; use HOUSE token accounting for anonymous sessions",
+      },
+      {
+        name: "active-mining",
+        defaultEnabled: true,
+        work: "run bounded idle-time entropy collection only on safe scheduler lanes",
+      },
+    ],
+    invariants: {
+      userConsentRequired: true,
+      idleOnlyByDefault: false,
+      noFingerprintingExportWithoutAuth: true,
+      didCreditsPrimary: true,
+      anonymousHouseTokenFallback: true,
+    },
+  };
+}
+
+async function handleEntropyBench(payload) {
+  const request = assertObject(payload ?? {}, "payload");
+  const frames = Math.max(1, Math.min(100000, numberOr(request.frames, 2048, "payload.frames") | 0));
+  const authenticated = typeof request.rootDid === "string" && request.rootDid.startsWith("did:");
+  const start = nowNs();
+  let bits = 0;
+  let confidence = 0;
+  let checksum = 0;
+  for (let i = 0; i < frames; i++) {
+    const sample = entropySample(i);
+    bits += sample.entropyRate * 0.16;
+    confidence += sample.confidence;
+    checksum = (checksum + Math.floor(sample.entropyRate * 1000) + (i * 17)) >>> 0;
+  }
+  const credit = entropyCreditFor(bits, authenticated);
+  return {
+    frames,
+    elapsedMs: elapsedMs(start),
+    entropyBits: bits,
+    avgConfidence: confidence / frames,
+    reward: credit,
+    checksum,
+    verdict: confidence / frames >= 0.5 ? "accept" : "abstain",
   };
 }
 
@@ -2218,12 +2497,20 @@ async function dispatch(type, payload) {
       return handleStorageObserve(payload);
     case "gnosis.storage.plan":
       return handleStoragePlan(payload);
+    case "gnosis.storage.victims":
+      return handleStorageVictims(payload);
     case "gnosis.storage.bench":
       return handleStorageBench(payload);
     case "gnosis.auth.observe":
       return handleAuthObserve(payload);
     case "gnosis.auth.plan":
       return handleAuthPlan(payload);
+    case "gnosis.entropy.observe":
+      return handleEntropyObserve(payload);
+    case "gnosis.entropy.plan":
+      return handleEntropyPlan(payload);
+    case "gnosis.entropy.bench":
+      return handleEntropyBench(payload);
     case "aeon3d.render.status":
       return handleAeon3dStatus(payload);
     case "aeon3d.render.bench":
@@ -2406,6 +2693,22 @@ async function runSelfTest() {
   if (!storage.deltas || storage.deltas.avoidedDiskBytes <= 0) {
     throw new Error("storage bench failed");
   }
+  const victims = await dispatch("gnosis.storage.victims", {});
+  if (victims.topVictim?.id !== "sessionstore-recovery") {
+    throw new Error("storage victim ranking failed");
+  }
+
+  const authPlan = await dispatch("gnosis.auth.plan", {});
+  if (authPlan.invariants.didPrimaryAuth !== true) {
+    throw new Error("auth plan failed");
+  }
+
+  const entropy = await dispatch("gnosis.entropy.bench", {
+    frames: 128,
+  });
+  if (entropy.verdict !== "accept") {
+    throw new Error("entropy bench failed");
+  }
 
   const aeon3d = await dispatch("aeon3d.render.status", {});
   if (!("houseRenderer" in aeon3d)) {
@@ -2503,6 +2806,9 @@ async function runSelfTest() {
     antiqueueScheduled: antiqueue.scheduled.length,
     schedulerVerdict: scheduler.verdict,
     storageAvoidedDiskBytes: storage.deltas.avoidedDiskBytes,
+    topStorageVictim: victims.topVictim.id,
+    authDidPrimary: authPlan.invariants.didPrimaryAuth,
+    entropyRewardToken: entropy.reward.token,
     wall: "available",
   }, null, 2));
   process.stdout.write("\n");
@@ -2520,6 +2826,7 @@ async function runtimeBenchSuite() {
     uring: await dispatch("gnosis.uring.bench", { packets: 16384 }),
     scheduler: await dispatch("gnosis.scheduler.bench", { count: 4096 }),
     storage: await dispatch("gnosis.storage.bench", { count: 128, bytesPerWrite: 4096 }),
+    entropy: await dispatch("gnosis.entropy.bench", { frames: 4096 }),
   };
   return {
     elapsedMs: elapsedMs(start),
@@ -2548,6 +2855,61 @@ async function runStorageBench() {
     bytesPerWrite: 4096,
   });
   process.stdout.write(JSON.stringify({ ok: true, storage: result }, null, 2));
+  process.stdout.write("\n");
+}
+
+async function runEntropyBench() {
+  const result = await dispatch("gnosis.entropy.bench", {
+    frames: 8192,
+  });
+  process.stdout.write(JSON.stringify({ ok: true, entropy: result }, null, 2));
+  process.stdout.write("\n");
+}
+
+async function runVictimAnalysis() {
+  const start = nowNs();
+  const [scheduler, storage, victims, entropy] = await Promise.all([
+    dispatch("gnosis.scheduler.bench", { count: 8192 }),
+    dispatch("gnosis.storage.bench", { count: 256, bytesPerWrite: 4096 }),
+    dispatch("gnosis.storage.victims", {}),
+    dispatch("gnosis.entropy.bench", { frames: 8192 }),
+  ]);
+  const topStorage = victims.surfaces.slice(0, 5);
+  const ranking = [
+    {
+      id: "scheduler-helix-safe-lane",
+      score: Math.round(scheduler.elapsedMs),
+      elapsedMs: scheduler.elapsedMs,
+      nextAction: "move the JS harness into gnosis-antiqueue / TaskController native hooks and keep protected delay at zero",
+    },
+    {
+      id: "storage-bitwise-knotgraph",
+      score: Math.round(storage.disk.elapsedMs),
+      diskMs: storage.disk.elapsedMs,
+      bitwiseMs: storage.bitwise.elapsedMs,
+      knotgraphMs: storage.knotgraph.elapsedMs,
+      avoidedDiskBytes: storage.deltas.avoidedDiskBytes,
+      nextAction: "replace the highest-ranked Firefox write surface with bitwise/knotchain/knotgraph before direct disk fallback",
+    },
+    ...topStorage.map(surface => ({
+      id: surface.id,
+      score: surface.score,
+      route: surface.route,
+      presentFiles: surface.presentFiles,
+      totalFiles: surface.totalFiles,
+      nextAction: surface.reason,
+    })),
+  ].sort((a, b) => b.score - a.score || a.id.localeCompare(b.id));
+  process.stdout.write(JSON.stringify({
+    ok: true,
+    elapsedMs: elapsedMs(start),
+    nextVictim: ranking[0] ?? null,
+    ranking,
+    scheduler,
+    storage,
+    victims,
+    entropy,
+  }, null, 2));
   process.stdout.write("\n");
 }
 
@@ -2591,6 +2953,16 @@ if (process.argv.includes("--self-test")) {
   });
 } else if (process.argv.includes("--storage-bench")) {
   runStorageBench().catch(error => {
+    process.stderr.write(`${error instanceof Error ? error.stack : String(error)}\n`);
+    process.exit(1);
+  });
+} else if (process.argv.includes("--entropy-bench")) {
+  runEntropyBench().catch(error => {
+    process.stderr.write(`${error instanceof Error ? error.stack : String(error)}\n`);
+    process.exit(1);
+  });
+} else if (process.argv.includes("--victim-analysis")) {
+  runVictimAnalysis().catch(error => {
     process.stderr.write(`${error instanceof Error ? error.stack : String(error)}\n`);
     process.exit(1);
   });

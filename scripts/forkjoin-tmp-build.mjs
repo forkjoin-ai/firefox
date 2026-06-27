@@ -113,6 +113,8 @@ function ensureTmpClone() {
 
 function syncForkjoinFiles() {
   copyPath("mozconfig");
+  copyPath("browser/components/about/AboutRedirector.cpp");
+  copyPath("browser/components/about/components.conf");
   copyPath("browser/extensions/aeon");
   copyPath("browser/components/aeonprotocol");
   copyPath("browser/app/profile/firefox.js");
@@ -202,8 +204,8 @@ function verifyBuiltArtifact() {
     console.error("Built policies.json does not contain the Wiki search template.");
     process.exit(1);
   }
-  if (!policies.includes("chrome://branding/content/kenoma-home.html")) {
-    console.error("Built policies.json does not contain the Kenoma home splash.");
+  if (!policies.includes("about:kenoma")) {
+    console.error("Built policies.json does not contain the Kenoma about page.");
     process.exit(1);
   }
 
@@ -224,7 +226,7 @@ function verifyBuiltArtifact() {
     'pref("browser.newtabpage.activity-stream.discoverystream.enabled", false);',
     'pref("browser.topsites.contile.enabled", false);',
     'pref("browser.urlbar.suggest.weather", false);',
-    'pref("browser.startup.homepage", "chrome://branding/content/kenoma-home.html");',
+    'pref("browser.startup.homepage", "about:kenoma");',
   ]) {
     if (!prefs.includes(marker)) {
       console.error(`Packaged prefs missing marker: ${marker}`);
@@ -232,10 +234,10 @@ function verifyBuiltArtifact() {
     }
   }
 
-  console.log(`Nightly app: ${appPath}`);
+  console.log(`Kenoma app: ${appPath}`);
   console.log(`Executable: ${appExecutable}`);
   console.log(`Packaged prefs: ${prefPath}`);
-  console.log("Forkjoin Firefox artifact verification passed.");
+  console.log("Kenoma artifact verification passed.");
 }
 
 function mirrorBuiltAppToMonorepo() {
@@ -248,7 +250,7 @@ function mirrorBuiltAppToMonorepo() {
   mkdirSync(monorepoArtifactRoot, { recursive: true });
   rmSync(monorepoAppPath, { recursive: true, force: true });
   cpSync(appPath, monorepoAppPath, { recursive: true });
-  console.log(`Monorepo Nightly app: ${monorepoAppPath}`);
+  console.log(`Monorepo Kenoma app: ${monorepoAppPath}`);
   console.log(`Monorepo executable: ${monorepoAppExecutable}`);
 }
 

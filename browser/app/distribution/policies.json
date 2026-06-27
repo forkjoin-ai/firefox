@@ -106,14 +106,14 @@
       "Locked": true
     },
     "Homepage": {
-      "URL": "chrome://branding/content/kenoma-home.html",
+      "URL": "about:kenoma",
       "StartPage": "homepage",
       "Locked": false
     },
     "NetworkPrediction": false,
     "NoDefaultBookmarks": true,
     "OfferToSaveLoginsDefault": false,
-    "OverrideFirstRunPage": "chrome://branding/content/kenoma-home.html",
+    "OverrideFirstRunPage": "about:kenoma",
     "OverridePostUpdatePage": "",
     "Preferences": {
       "browser.ml.enable": {
@@ -125,7 +125,7 @@
         "Status": "default"
       },
       "browser.startup.homepage": {
-        "Value": "chrome://branding/content/kenoma-home.html",
+        "Value": "about:kenoma",
         "Status": "default"
       }
     },
