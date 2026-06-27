@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- about:fact loads from chrome://branding and talks cross-origin to
+         fact.forkjoin.ai (Fractal Fact — facts / verification feed). Mirror
+         kenoma-home's inline style/script approach but open connect-src to the
+         fractal-fact backend over HTTPS. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self' chrome:; img-src 'self' chrome: data:; style-src 'self' chrome: 'unsafe-inline'; script-src 'self' chrome:; font-src 'self' chrome:; connect-src https://fact.forkjoin.ai;">
+    <title>Fractal Fact</title>
+    <link rel="stylesheet" href="chrome://branding/content/fact-home.css">
+    <script defer src="chrome://branding/content/fact-home.js"></script>
+  </head>
+  <body>
+    <div class="operator-shell" data-theme="dark">
+      <div class="field" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <a class="brand" href="about:fact" aria-label="Fractal Fact home">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="chrome://branding/content/kenoma-sigil.svg" alt="">
+          </span>
+          <span class="brand-copy">
+            <strong>Fractal Fact</strong>
+            <span>verify</span>
+          </span>
+        </a>
+
+        <nav class="status-rail" aria-label="Session status">
+          <span class="pill" id="identity-pill" title="Your ForkJoin identity badge">
+            <span class="dot dot-memory" aria-hidden="true"></span>
+            <span id="identity-name">resolving…</span>
+          </span>
+          <button class="loc-btn" id="signin-btn" type="button" hidden>Sign in</button>
+          <span class="pill" id="integrity-pill" title="Graph integrity">
+            <span class="dot" id="integrity-dot" aria-hidden="true"></span>
+            <span id="integrity-text">loading</span>
+          </span>
+          <time class="clock" id="clock">--:--</time>
+        </nav>
+      </header>
+
+      <main class="workspace">
+        <section class="board" aria-label="Fact board">
+          <aside class="sidecol" aria-label="Entropy and anchoring">
+            <div class="panel">
+              <div class="panel-head"><span>Entropy</span></div>
+              <div class="metrics" id="metrics" aria-live="polite">
+                <div class="metric"><strong id="m-total">--</strong><small>facts</small></div>
+                <div class="metric"><strong id="m-verified">--</strong><small>verified</small></div>
+                <div class="metric"><strong id="m-pending">--</strong><small>pending</small></div>
+                <div class="metric"><strong id="m-disputed">--</strong><small>disputed</small></div>
+              </div>
+              <div class="gauge" aria-hidden="true"><div class="gauge-fill" id="gauge-fill"></div></div>
+              <p class="gauge-label" id="gauge-label">verification rate --</p>
+              <dl class="kv">
+                <div><dt>Shannon entropy</dt><dd id="m-shannon">--</dd></div>
+                <div><dt>Negentropy</dt><dd id="m-negentropy">--</dd></div>
+              </dl>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head"><span>Anchoring</span></div>
+              <ul class="anchor-list" id="anchor-list" aria-label="Anchor batches"></ul>
+            </div>
+          </aside>
+
+          <section class="feedcol" aria-label="Fact feed">
+            <header class="feed-head">
+              <div class="feed-title">
+                <strong id="feed-label">Fact feed</strong>
+                <small id="feed-sublabel">default space</small>
+              </div>
+              <form class="searchbar" id="search-form">
+                <input
+                  id="search-input"
+                  type="search"
+                  autocomplete="off"
+                  maxlength="120"
+                  placeholder="Search claims…"
+                >
+              </form>
+            </header>
+
+            <ol class="facts" id="facts" aria-live="polite" aria-label="Facts"></ol>
+          </section>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <a href="https://fact.forkjoin.ai">fractal fact · facts &amp; verification</a>
+        <span id="footer-status">fact.forkjoin.ai · read-only thin client</span>
+      </footer>
+    </div>
+  </body>
+</html>

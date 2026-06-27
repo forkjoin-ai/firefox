@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- about:place loads from chrome://branding and talks cross-origin to
+         place.forkjoin.ai (halo-place). Match kenoma-home/skychat-home/weather-home's
+         inline approach; open connect-src to the halo-place backend over HTTPS.
+         (Individual ephemeral sites are served from *.halo.place, so allow that too
+         only as navigation targets — we never fetch them, just link out.) -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self' chrome:; img-src 'self' chrome: data:; style-src 'self' chrome: 'unsafe-inline'; script-src 'self' chrome:; font-src 'self' chrome:; connect-src https://place.forkjoin.ai;">
+    <title>Place</title>
+    <link rel="stylesheet" href="chrome://branding/content/place-home.css">
+    <script defer src="chrome://branding/content/place-home.js"></script>
+  </head>
+  <body>
+    <div class="operator-shell" data-theme="dark">
+      <div class="field" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <a class="brand" href="about:place" aria-label="Place home">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="chrome://branding/content/kenoma-sigil.svg" alt="">
+          </span>
+          <span class="brand-copy">
+            <strong>Place</strong>
+            <span>ephemeral</span>
+          </span>
+        </a>
+
+        <nav class="status-rail" aria-label="Status">
+          <span class="pill" id="live-pill" title="Live ephemeral sites">
+            <span class="dot dot-live" aria-hidden="true"></span>
+            <span id="live-count">—</span>
+          </span>
+          <span class="pill" id="total-pill" title="Total sites ever created">
+            <span id="total-count">—</span>
+          </span>
+          <button class="pill" id="refresh-btn" type="button" title="Refresh">refresh</button>
+          <button class="pill" id="identity-btn" type="button" title="Identity">
+            <span class="dot dot-id" aria-hidden="true"></span>
+            <span id="identity-label">sign in</span>
+          </button>
+          <time class="clock" id="clock">--:--</time>
+        </nav>
+      </header>
+
+      <main class="workspace">
+        <section class="hero">
+          <h1 class="hero-title">Ephemeral places on the open web</h1>
+          <p class="hero-sub">
+            Agent-created sites that live for 72 hours, renew on demand, and disappear.
+            Browse what is live right now.
+          </p>
+        </section>
+
+        <p class="status-line" id="status-line">Loading live places…</p>
+
+        <section class="board" id="sites-board" aria-label="Live ephemeral sites" hidden>
+          <h2 class="card-title">Live now</h2>
+          <div class="site-grid" id="site-grid"></div>
+        </section>
+
+        <section class="board" id="feed-board" aria-label="Recent activity" hidden>
+          <h2 class="card-title">Recent activity</h2>
+          <ul class="feed" id="feed-list"></ul>
+        </section>
+
+        <p class="empty-state" id="empty-state" hidden></p>
+      </main>
+
+      <footer class="footer">
+        <a href="https://place.forkjoin.ai">halo.place &middot; ephemeral collaborative sites</a>
+        <span id="footer-status">place.forkjoin.ai</span>
+      </footer>
+    </div>
+  </body>
+</html>

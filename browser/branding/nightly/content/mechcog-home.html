@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- about:mechcog loads from chrome://branding and talks cross-origin to
+         mech.forkjoin.ai (the affectively-mechcog-app worker). Thin vanilla
+         client: no React/bundler. CSP opens connect-src to the prod host only. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self' chrome:; img-src 'self' chrome: data:; style-src 'self' chrome: 'unsafe-inline'; script-src 'self' chrome:; font-src 'self' chrome:; connect-src https://mech.forkjoin.ai;">
+    <title>MechCog — Mechacognition</title>
+    <link rel="stylesheet" href="chrome://branding/content/mechcog-home.css">
+    <script defer src="chrome://branding/content/mechcog-home.js"></script>
+  </head>
+  <body>
+    <div class="shell" data-theme="dark">
+      <div class="field" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <a class="brand" href="about:mechcog" aria-label="MechCog home">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="chrome://branding/content/kenoma-sigil.svg" alt="">
+          </span>
+          <span class="brand-copy">
+            <strong>MechCog</strong>
+            <span>mechacognition</span>
+          </span>
+        </a>
+
+        <nav class="status-rail" aria-label="Session status">
+          <span class="pill" id="presence-pill" title="Minds exploring right now">
+            <span class="dot dot-live" aria-hidden="true"></span>
+            <span id="presence-text">connecting…</span>
+          </span>
+          <span class="pill" id="identity-pill" hidden title="Your Kenoma identity">
+            <span class="dot dot-id" aria-hidden="true"></span>
+            <span id="identity-name">guest</span>
+          </span>
+          <button class="pill pill-btn" id="signin-btn" hidden>Sign in</button>
+        </nav>
+      </header>
+
+      <main class="stage">
+        <section class="hero">
+          <p class="eyebrow">Mechacognition</p>
+          <h1>
+            You know who you want to be.
+            <span class="accent">We help you get there.</span>
+          </h1>
+          <p class="lede">
+            Your clearest thinking, captured and accessible — even in your
+            hardest moments. Emotion wheels and cognitive topologies, mapped
+            to your own words and values.
+          </p>
+          <div class="cta-row">
+            <a class="btn btn-primary" id="cta-start" href="https://mech.forkjoin.ai" target="_blank" rel="noopener noreferrer">
+              Get started
+            </a>
+            <a class="btn btn-ghost" href="https://mech.forkjoin.ai#protocol" target="_blank" rel="noopener noreferrer">
+              How it works
+            </a>
+          </div>
+        </section>
+
+        <section class="bodies" aria-labelledby="arch-h">
+          <p class="eyebrow" id="arch-h">The architecture · three versions of you</p>
+          <div class="cards">
+            <article class="card">
+              <p class="card-step">01 — The you right now</p>
+              <p class="card-body">
+                Where stress shows up as a tight chest, where joy feels like
+                warmth. Your body doesn't lie. <span class="accent">Learning
+                to listen here is where growth begins.</span>
+              </p>
+            </article>
+            <article class="card card-lead">
+              <p class="card-step">02 — Your wisest self</p>
+              <p class="card-body">
+                The you who shows up after a good night's sleep. We call this
+                your <span class="accent">Halogram</span> — a living portrait of
+                your best thinking, built from your own words and values. Not AI
+                pretending to be you; your actual intelligence, made accessible.
+              </p>
+            </article>
+            <article class="card">
+              <p class="card-step">03 — The bridge between</p>
+              <p class="card-body">
+                Your wisest self thinks slowly. Life moves fast. The bridge is
+                <span class="accent">Cyrano</span> — it translates your deep
+                wisdom into immediate guidance, available even in your worst
+                moments.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="livecount" aria-label="Live presence">
+          <span class="livecount-num" id="livecount-num">—</span>
+          <span class="livecount-label" id="livecount-label">checking who's exploring…</span>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span id="status-line">about:mechcog · thin client of mech.forkjoin.ai</span>
+      </footer>
+    </div>
+  </body>
+</html>

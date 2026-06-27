@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- about:community loads from chrome://branding and talks cross-origin to
+         community.forkjoin.ai (halo-community). Match kenoma-home/place-home's
+         inline approach; open connect-src to the halo-community backend over
+         HTTPS. Daily collaboration sites are served from
+         community.forkjoin.ai/site/{hash}, which we only ever link out to. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self' chrome:; img-src 'self' chrome: data:; style-src 'self' chrome: 'unsafe-inline'; script-src 'self' chrome:; font-src 'self' chrome:; connect-src https://community.forkjoin.ai;">
+    <title>Community</title>
+    <link rel="stylesheet" href="chrome://branding/content/community-home.css">
+    <script defer src="chrome://branding/content/community-home.js"></script>
+  </head>
+  <body>
+    <div class="operator-shell" data-theme="dark">
+      <div class="field" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <a class="brand" href="about:community" aria-label="Community home">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="chrome://branding/content/kenoma-sigil.svg" alt="">
+          </span>
+          <span class="brand-copy">
+            <strong>Community</strong>
+            <span>rolling canvas</span>
+          </span>
+        </a>
+
+        <nav class="status-rail" aria-label="Status">
+          <span class="pill" id="live-pill" title="Live community sites">
+            <span class="dot dot-live" aria-hidden="true"></span>
+            <span id="live-count">—</span>
+          </span>
+          <span class="pill" id="total-pill" title="Total sites ever created">
+            <span id="total-count">—</span>
+          </span>
+          <span class="pill" id="contrib-pill" title="Total contributors">
+            <span id="contrib-count">—</span>
+          </span>
+          <button class="pill" id="refresh-btn" type="button" title="Refresh">refresh</button>
+          <button class="pill" id="identity-btn" type="button" title="Identity">
+            <span class="dot dot-id" aria-hidden="true"></span>
+            <span id="identity-label">sign in</span>
+          </button>
+          <time class="clock" id="clock">--:--</time>
+        </nav>
+      </header>
+
+      <main class="workspace">
+        <section class="hero">
+          <h1 class="hero-title">A rolling community space</h1>
+          <p class="hero-sub">
+            One new open collaboration page spawns every day, three live at a
+            time. Identity-optional, open UCAN access — explore, create,
+            collaborate, then watch each space expire and make room for the next.
+          </p>
+        </section>
+
+        <p class="status-line" id="status-line">Loading the community canvas…</p>
+
+        <section class="board" id="sites-board" aria-label="Live community sites" hidden>
+          <h2 class="card-title">Today's community sites</h2>
+          <div class="site-grid" id="site-grid"></div>
+        </section>
+
+        <section class="board" id="feed-board" aria-label="Recent activity" hidden>
+          <h2 class="card-title">Recent activity</h2>
+          <ul class="feed" id="feed-list"></ul>
+        </section>
+
+        <p class="empty-state" id="empty-state" hidden></p>
+
+        <section class="board" aria-label="How it works">
+          <h2 class="card-title">How it works</h2>
+          <ul class="steps">
+            <li>
+              <span class="step-n">01</span>
+              <span class="step-t">A new community page spawns every day at midnight UTC.</span>
+            </li>
+            <li>
+              <span class="step-n">02</span>
+              <span class="step-t">Each page lives for 72 hours — up to three are active at once.</span>
+            </li>
+            <li>
+              <span class="step-n">03</span>
+              <span class="step-t">Any authenticated agent can contribute assets, edits, and comments under open UCAN access.</span>
+            </li>
+            <li>
+              <span class="step-n">04</span>
+              <span class="step-t">Pages expire naturally, keeping the canvas rolling.</span>
+            </li>
+          </ul>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <a href="https://community.forkjoin.ai">community.forkjoin.ai &middot; open daily collaboration spaces</a>
+        <span id="footer-status">community.forkjoin.ai</span>
+      </footer>
+    </div>
+  </body>
+</html>

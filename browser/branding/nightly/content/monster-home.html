@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- about:monster is a LAUNCHER. It loads from chrome://branding and links
+         out into monster.forkjoin.ai (Monster Studio — a heavy WebGL/WebGPU
+         layer-composite .ply 3D viewer). A thin in-page port doesn't fit the
+         3D engine, so this is a clean landing page with entry links into the
+         live site + its real deep-link query params (?presentation=1,
+         ?view=overview, ?globe=1). No app API / CORS port is needed.
+         connect-src is opened to the prod host purely so the optional Kenoma
+         identity badge render can degrade gracefully; the page makes no fetches
+         of its own. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self' chrome:; img-src 'self' chrome: data:; style-src 'self' chrome: 'unsafe-inline'; script-src 'self' chrome:; font-src 'self' chrome:; connect-src https://monster.forkjoin.ai;">
+    <title>Monster Studio</title>
+    <link rel="stylesheet" href="chrome://branding/content/monster-home.css">
+    <script defer src="chrome://branding/content/monster-home.js"></script>
+  </head>
+  <body>
+    <div class="operator-shell" data-theme="dark">
+      <div class="field" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <a class="brand" href="about:monster" aria-label="Monster Studio home">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="chrome://branding/content/kenoma-sigil.svg" alt="">
+          </span>
+          <span class="brand-copy">
+            <strong>Monster Studio</strong>
+            <span>.ply composite</span>
+          </span>
+        </a>
+
+        <nav class="status-rail" aria-label="Status">
+          <span class="pill" id="engine-pill" title="The studio renders on WebGPU with a WebGL fallback">
+            <span class="dot dot-live" aria-hidden="true"></span>
+            <span>WebGPU + aeon-3d</span>
+          </span>
+          <span class="pill" id="identity-pill" title="Signed-in identity" hidden>
+            <span class="dot dot-id on" aria-hidden="true"></span>
+            <span id="identity-name">signed in</span>
+          </span>
+          <button class="pill" id="signin-btn" type="button" title="Sign in with Kenoma identity">
+            <span class="dot dot-id" aria-hidden="true"></span>
+            <span>sign in</span>
+          </button>
+          <time class="clock" id="clock">--:--</time>
+        </nav>
+      </header>
+
+      <main class="workspace">
+        <section class="hero">
+          <p class="eyebrow">layer-composite .ply viewer</p>
+          <h1 class="hero-title">Monster Studio</h1>
+          <p class="hero-sub">
+            Physics, mass, and handoff-consensus passes composited into one
+            animated 3D mass. Monster Studio loads <code>.ply</code> point-cloud
+            and mesh layers, stacks them as live consensus passes, and brings the
+            whole thing to life on WebGPU. Built on aeon-3d and Edgework.
+          </p>
+          <div class="cta-row">
+            <a class="play-cta" id="play-cta" href="https://monster.forkjoin.ai" rel="noopener noreferrer">Open the studio &rarr;</a>
+            <a class="play-cta secondary" href="https://monster.forkjoin.ai/?presentation=1" rel="noopener noreferrer">Presentation mode</a>
+            <a class="play-cta secondary" href="https://monster.forkjoin.ai/?view=overview" rel="noopener noreferrer">Overview camera</a>
+            <a class="play-cta secondary" href="https://monster.forkjoin.ai/?globe=1" rel="noopener noreferrer">Globe</a>
+          </div>
+          <p class="status-line" id="status-line">A heavy WebGL/WebGPU surface — it opens full-screen in the live studio.</p>
+        </section>
+
+        <section class="board" aria-label="Scene layers">
+          <h2 class="card-title">Scene layers in the composite</h2>
+          <div class="scene-grid" id="scene-grid"></div>
+        </section>
+
+        <section class="board" aria-label="What it is">
+          <h2 class="card-title">How the composite works</h2>
+          <ul class="note-list">
+            <li><strong>Consensus passes.</strong> Physics, mass, and handoff scenes are separate <code>.ply</code> layers, composited and reconciled into a single animated form.</li>
+            <li><strong>Point clouds + meshes.</strong> The viewer streams large point-cloud and mesh assets and renders them with the aeon-3d sovereign engine.</li>
+            <li><strong>WebGPU first.</strong> The studio prefers WebGPU and falls back to WebGL, with a presentation mode and an overview camera for walkthroughs.</li>
+          </ul>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <a href="https://monster.forkjoin.ai" rel="noopener noreferrer">monster.forkjoin.ai &middot; layer-composite .ply viewer</a>
+        <span id="footer-status">aeon-3d + Edgework</span>
+      </footer>
+    </div>
+  </body>
+</html>

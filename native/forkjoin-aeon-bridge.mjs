@@ -988,6 +988,55 @@ async function handleMoonshineServe(payload) {
   };
 }
 
+const BROWSER_STEP_ACTIONS = new Set(["open", "navigate", "click", "type", "read", "done"]);
+
+function parseBrowserAction(stdout) {
+  const lines = String(stdout ?? "").split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const line = lines[i];
+    if (!line.startsWith("{")) {
+      continue;
+    }
+    try {
+      const obj = JSON.parse(line);
+      if (isPlainObject(obj) && typeof obj.action === "string" && BROWSER_STEP_ACTIONS.has(obj.action)) {
+        return obj;
+      }
+    } catch (_) {
+      // Not the action line (mesh logs share stdout); keep scanning upward.
+    }
+  }
+  return { action: "done", answer: "(no action parsed)" };
+}
+
+async function handleAgentBrowserStep(payload) {
+  const request = assertObject(payload ?? {}, "payload");
+  const binary = firstExisting(moonshineCandidates);
+  if (!binary) {
+    throw new Error(`moonshine binary not found; expected one of ${moonshineCandidates.join(", ")}`);
+  }
+  const task = stringOr(request.task, "", "payload.task");
+  const observation = request.observation ?? {};
+  const start = nowNs();
+  const result = await runProcess(binary, ["-c", `browser-step ${task}`], {
+    cwd: stringOr(request.cwd, repoRoot, "payload.cwd"),
+    timeoutMs: numberOr(request.timeoutMs, 60000, "payload.timeoutMs"),
+    env: { MOONSHINE_BROWSER_OBSERVATION: JSON.stringify(observation) },
+  });
+  const action = parseBrowserAction(result.stdout);
+  return {
+    action,
+    task,
+    raw: result.stdout,
+    telemetry: {
+      backend: "moonshine-browser-step",
+      latencyMs: elapsedMs(start),
+      fallback: action.answer === "(no action parsed)",
+      verdict: result.code === 0 ? "accept" : "decline",
+    },
+  };
+}
+
 function readAmplituhedronCache() {
   const cachePath = firstExisting(amplituhedronCacheCandidates);
   if (!cachePath || !cachePath.endsWith(".json")) {
@@ -2668,6 +2717,8 @@ async function dispatch(type, payload) {
       return handleMoonshineExec(payload);
     case "gnosis.moonshine.serve":
       return handleMoonshineServe(payload);
+    case "agent.browserStep":
+      return handleAgentBrowserStep(payload);
     case "gnosis.amplituhedron.lookup":
       return handleAmplituhedronLookup(payload);
     case "gnosis.amplituhedron.prefetch":

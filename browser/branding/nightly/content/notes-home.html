@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The page loads from chrome://branding (about:notes) and talks cross-origin
+         to note.forkjoin.ai. Match kenoma-home / skychat-home's inline CSP approach
+         but open connect-src to the fractal-note backend over HTTPS. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self' chrome:; img-src 'self' chrome: data:; style-src 'self' chrome: 'unsafe-inline'; script-src 'self' chrome:; font-src 'self' chrome:; connect-src https://note.forkjoin.ai;">
+    <title>Fractal Notes</title>
+    <link rel="stylesheet" href="chrome://branding/content/notes-home.css">
+    <script defer src="chrome://branding/content/notes-home.js"></script>
+  </head>
+  <body>
+    <div class="operator-shell" data-theme="dark">
+      <div class="field" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <a class="brand" href="about:notes" aria-label="Fractal Notes home">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="chrome://branding/content/kenoma-sigil.svg" alt="">
+          </span>
+          <span class="brand-copy">
+            <strong>Fractal Notes</strong>
+            <span>recursive note authority</span>
+          </span>
+        </a>
+
+        <nav class="status-rail" aria-label="Session status">
+          <span class="pill" id="identity-pill" title="Your Kenoma identity">
+            <span class="dot dot-memory" aria-hidden="true"></span>
+            <span id="identity-name">signed out</span>
+          </span>
+          <button class="auth-btn" id="auth-btn" type="button">Sign in</button>
+          <span class="pill" id="feed-pill">
+            <span class="dot dot-weather" aria-hidden="true"></span>
+            <span id="feed-text">loading…</span>
+          </span>
+          <time class="clock" id="clock">--:--</time>
+        </nav>
+      </header>
+
+      <main class="workspace">
+        <section class="feed-shell" aria-label="Notes feed">
+          <div class="feed-head">
+            <div class="feed-title">
+              <strong id="view-label">Public notes</strong>
+              <small id="view-sublabel">latest across note.forkjoin.ai</small>
+            </div>
+            <div class="feed-tabs" role="tablist" aria-label="Feed view">
+              <button class="tab active" id="tab-public" type="button" role="tab">Public</button>
+              <button class="tab" id="tab-mine" type="button" role="tab" disabled>Mine</button>
+              <button class="tab" id="tab-shared" type="button" role="tab" disabled>Shared</button>
+            </div>
+          </div>
+
+          <form class="search" id="search-form">
+            <input
+              id="search-input"
+              type="search"
+              autocomplete="off"
+              maxlength="120"
+              placeholder="Search notes by title or text…"
+            >
+            <button type="submit">Search</button>
+          </form>
+
+          <ol class="notes" id="notes" aria-live="polite" aria-label="Notes"></ol>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <a href="https://note.forkjoin.ai">note.forkjoin.ai · recursive notes</a>
+        <span id="footer-status">note.forkjoin.ai · public feed + identity · thin client</span>
+      </footer>
+    </div>
+  </body>
+</html>

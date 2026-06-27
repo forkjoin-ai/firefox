@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The page loads from chrome://branding (about:memex) and talks cross-origin
+         to memory.forkjoin.ai (the Fractal Memory fabric, mounted on /api/*).
+         Match kenoma-home/skychat-home/weather-home's inline-asset approach but open
+         connect-src to the fractal-memory backend over HTTPS. No WebSocket: the
+         collaborative-stack live channel (CRDT collab DO) is intentionally skipped. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self' chrome:; img-src 'self' chrome: data:; style-src 'self' chrome: 'unsafe-inline'; script-src 'self' chrome:; font-src 'self' chrome:; connect-src https://memory.forkjoin.ai;">
+    <title>Memory</title>
+    <link rel="stylesheet" href="chrome://branding/content/memory-home.css">
+    <script defer src="chrome://branding/content/memory-home.js"></script>
+  </head>
+  <body>
+    <div class="operator-shell" data-theme="dark">
+      <div class="field" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <a class="brand" href="about:memex" aria-label="Memory home">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="chrome://branding/content/kenoma-sigil.svg" alt="">
+          </span>
+          <span class="brand-copy">
+            <strong>Memory</strong>
+            <span>workspace</span>
+          </span>
+        </a>
+
+        <nav class="status-rail" aria-label="Status">
+          <span class="pill" id="space-pill" title="Active memory space">
+            <span class="dot dot-memory" aria-hidden="true"></span>
+            <span id="space-name">global</span>
+          </span>
+          <span class="pill" id="badge-pill" title="Identity" hidden>
+            <span class="dot dot-id" aria-hidden="true"></span>
+            <span id="badge-label">signed out</span>
+          </span>
+          <button class="pill" id="signin-btn" type="button" title="Sign in with ForkJoin">sign in</button>
+          <button class="pill" id="signout-btn" type="button" title="Sign out" hidden>sign out</button>
+          <button class="pill" id="refresh-btn" type="button" title="Refresh">refresh</button>
+          <time class="clock" id="clock">--:--</time>
+        </nav>
+      </header>
+
+      <main class="workspace">
+        <form class="search" id="space-form" role="search">
+          <input
+            id="space-input"
+            type="text"
+            autocomplete="off"
+            maxlength="120"
+            placeholder="Memory space id (e.g. global)…"
+            value="global"
+          >
+          <button type="submit">Open</button>
+        </form>
+
+        <p class="status-line" id="status-line">Connecting to the memory fabric…</p>
+
+        <section class="meta-card" id="meta-card" aria-label="Fabric status" hidden>
+          <div class="meta-head">
+            <strong id="meta-service">fractal-memory</strong>
+            <span class="meta-sub" id="meta-sub">—</span>
+          </div>
+          <dl class="meta-stats" id="meta-stats"></dl>
+        </section>
+
+        <section class="auth-note" id="auth-note" hidden>
+          <strong id="auth-note-title">Sign in to load your memory workspace</strong>
+          <p id="auth-note-body">
+            The memory pool, pins, and activity feed are scoped to your identity
+            (a UCAN-capability session). Public fabric status is shown above.
+          </p>
+          <button class="cta" id="auth-note-btn" type="button">Sign in</button>
+        </section>
+
+        <section class="mem-card" id="pinned-card" aria-label="Pinned memory" hidden>
+          <h2 class="card-title">Pinned <span class="count" id="pinned-count"></span></h2>
+          <ul class="entry-list" id="pinned-list"></ul>
+        </section>
+
+        <section class="mem-card" id="recent-card" aria-label="Recent memory" hidden>
+          <h2 class="card-title">Recent <span class="count" id="recent-count"></span></h2>
+          <ul class="entry-list" id="recent-list"></ul>
+        </section>
+
+        <section class="mem-card" id="feed-card" aria-label="Activity feed" hidden>
+          <h2 class="card-title">Activity <span class="count" id="feed-count"></span></h2>
+          <ul class="feed-list" id="feed-list"></ul>
+        </section>
+
+        <p class="empty-state" id="empty-state" hidden></p>
+      </main>
+
+      <footer class="footer">
+        <a href="https://memory.forkjoin.ai">memory.forkjoin.ai &middot; Fractal Memory</a>
+        <span id="footer-status">shared memory fabric</span>
+      </footer>
+    </div>
+  </body>
+</html>

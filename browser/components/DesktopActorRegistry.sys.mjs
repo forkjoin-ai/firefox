@@ -570,6 +570,37 @@ let JSWINDOWACTORS = {
     safeForUntrustedWebProcess: true,
   },
 
+  KenomaIdentity: {
+    parent: {
+      esModuleURI: "resource:///actors/KenomaIdentityParent.sys.mjs",
+    },
+    child: {
+      esModuleURI: "resource:///actors/KenomaIdentityChild.sys.mjs",
+      events: {
+        // Instantiate the actor as soon as the document element exists so the
+        // injected window.KenomaIdentity API is available to inline page js.
+        DOMDocElementInserted: {},
+      },
+    },
+    matches: [
+      "about:id",
+      "about:kenoma",
+      "about:skychat",
+      "about:todo",
+      "about:notes",
+      "about:fact",
+      "about:memex",
+      "about:them",
+      "about:affectively",
+      "about:place",
+      "about:hexwar",
+      "about:mechcog",
+      "about:community",
+      "about:monster",
+    ],
+    remoteTypes: ["privilegedabout"],
+  },
+
   LightweightTheme: {
     child: {
       esModuleURI: "resource:///actors/LightweightThemeChild.sys.mjs",

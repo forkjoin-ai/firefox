@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- about:todo loads from chrome://branding and talks cross-origin to
+         todo.forkjoin.ai (the Fractal Todo / task.yoga task graph). The headline
+         surface is the PUBLIC "global" task graph: we mint a guest UCAN via
+         POST /auth/ucan/global (anon) then GET /api/graph/global.
+         Identity comes from the shared Kenoma SSO bridge (window.KenomaIdentity);
+         card.yoga is the fractal-iam authority for the badge readout.
+         SKIPPED (thin client): write ops (add/clone/vote), AI flow/enrich/decompose,
+         attachments, presence/WebTransport sync, federation/mesh, and the
+         personal (signed-in Google) space — the app authenticates personal todos
+         with a Google OAuth session, not the fractal-iam badge, so personal data
+         needs app-side badge acceptance (see notes). -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self' chrome:; img-src 'self' chrome: data:; style-src 'self' chrome: 'unsafe-inline'; script-src 'self' chrome:; font-src 'self' chrome:; connect-src https://todo.forkjoin.ai https://card.yoga;">
+    <title>todo · fractal task graph</title>
+    <link rel="stylesheet" href="chrome://branding/content/todo-home.css">
+    <script defer src="chrome://branding/content/todo-home.js"></script>
+  </head>
+  <body>
+    <div class="operator-shell" data-theme="dark">
+      <div class="field" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <a class="brand" href="about:todo" aria-label="todo home">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="chrome://branding/content/kenoma-sigil.svg" alt="">
+          </span>
+          <span class="brand-copy">
+            <strong>todo</strong>
+            <span>fractal task graph</span>
+          </span>
+        </a>
+
+        <nav class="status-rail" aria-label="Session status">
+          <span class="pill" id="identity-pill" title="Your Kenoma identity">
+            <span class="dot dot-memory" aria-hidden="true"></span>
+            <span id="identity-name">resolving…</span>
+          </span>
+          <span class="pill" id="kind-pill" hidden>
+            <span class="dot dot-violet" aria-hidden="true"></span>
+            <span id="kind-text">—</span>
+          </span>
+          <button class="auth-btn" id="auth-btn" type="button" hidden>Sign in</button>
+          <span class="pill" id="graph-pill">
+            <span class="dot" id="graph-dot" aria-hidden="true"></span>
+            <span id="graph-text">connecting</span>
+          </span>
+          <time class="clock" id="clock">--:--</time>
+        </nav>
+      </header>
+
+      <main class="workspace">
+        <section class="board" aria-label="Task graph">
+          <aside class="domains" aria-label="Domains">
+            <div class="domains-head">
+              <span>Domains</span>
+              <span class="count" id="domains-count">—</span>
+            </div>
+            <p class="domains-status" id="domains-status">Loading global graph…</p>
+            <ul class="domain-list" id="domain-list" aria-label="Domain list"></ul>
+          </aside>
+
+          <section class="detail" aria-label="Tasks">
+            <header class="detail-head">
+              <div class="detail-title">
+                <strong id="detail-name">Global task graph</strong>
+                <small id="detail-sub">pick a domain to inspect its tasks</small>
+              </div>
+              <span class="progress" id="progress-chip" hidden>
+                <span class="progress-score" id="progress-score">—</span>
+                <span class="progress-label">done</span>
+              </span>
+            </header>
+
+            <ol class="tasks" id="task-list" aria-live="polite" aria-label="Task list"></ol>
+
+            <p class="detail-empty" id="detail-empty">
+              The public global graph loads automatically. Sign in to bring your
+              Kenoma identity (personal space is a follow-up — see notes).
+            </p>
+          </section>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <a href="https://todo.forkjoin.ai">todo · sovereign fractal task graph</a>
+        <span id="footer-status">todo.forkjoin.ai · global space (read-only)</span>
+      </footer>
+    </div>
+  </body>
+</html>

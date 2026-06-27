@@ -19,6 +19,9 @@ browser.jar:
   content/branding/icon48.png                    (../default48.png)
   content/branding/icon64.png                    (../default64.png)
   content/branding/icon128.png                   (../default128.png)
+  content/branding/id-home.css
+  content/branding/id-home.html
+  content/branding/id-home.js
   content/branding/kenoma-home.css
   content/branding/kenoma-home.html
   content/branding/kenoma-home.js
@@ -30,6 +33,39 @@ browser.jar:
   content/branding/weather-home.css
   content/branding/weather-home.html
   content/branding/weather-home.js
+  content/branding/todo-home.css
+  content/branding/todo-home.html
+  content/branding/todo-home.js
+  content/branding/notes-home.css
+  content/branding/notes-home.html
+  content/branding/notes-home.js
+  content/branding/fact-home.css
+  content/branding/fact-home.html
+  content/branding/fact-home.js
+  content/branding/memory-home.css
+  content/branding/memory-home.html
+  content/branding/memory-home.js
+  content/branding/them-home.css
+  content/branding/them-home.html
+  content/branding/them-home.js
+  content/branding/place-home.css
+  content/branding/place-home.html
+  content/branding/place-home.js
+  content/branding/hexwar-home.css
+  content/branding/hexwar-home.html
+  content/branding/hexwar-home.js
+  content/branding/affectively-home.css
+  content/branding/affectively-home.html
+  content/branding/affectively-home.js
+  content/branding/mechcog-home.css
+  content/branding/mechcog-home.html
+  content/branding/mechcog-home.js
+  content/branding/community-home.css
+  content/branding/community-home.html
+  content/branding/community-home.js
+  content/branding/monster-home.css
+  content/branding/monster-home.html
+  content/branding/monster-home.js
   content/branding/operator-tab/fonts/AtkinsonHyperlegible-Bold.ttf (operator-tab/fonts/AtkinsonHyperlegible-Bold.ttf)
   content/branding/operator-tab/fonts/AtkinsonHyperlegible-Regular.ttf (operator-tab/fonts/AtkinsonHyperlegible-Regular.ttf)
   content/branding/operator-tab/fonts/AtkinsonHyperlegibleMono-VariableFont_wght.ttf (operator-tab/fonts/AtkinsonHyperlegibleMono-VariableFont_wght.ttf)

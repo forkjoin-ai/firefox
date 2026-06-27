@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- about:hexwar loads from chrome://branding and talks cross-origin to
+         hexwar.forkjoin.ai (the HexWar hex-globe strategy game). Match
+         kenoma-home/place-home/skychat-home's inline approach; open connect-src
+         to the hexwar backend over HTTPS. The board is a public read surface,
+         so no identity is required (the page degrades to public). -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self' chrome:; img-src 'self' chrome: data:; style-src 'self' chrome: 'unsafe-inline'; script-src 'self' chrome:; font-src 'self' chrome:; connect-src https://hexwar.forkjoin.ai;">
+    <title>HexWar</title>
+    <link rel="stylesheet" href="chrome://branding/content/hexwar-home.css">
+    <script defer src="chrome://branding/content/hexwar-home.js"></script>
+  </head>
+  <body>
+    <div class="operator-shell" data-theme="dark">
+      <div class="field" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <a class="brand" href="about:hexwar" aria-label="HexWar home">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="chrome://branding/content/kenoma-sigil.svg" alt="">
+          </span>
+          <span class="brand-copy">
+            <strong>HexWar</strong>
+            <span>territory</span>
+          </span>
+        </a>
+
+        <nav class="status-rail" aria-label="Status">
+          <span class="pill" id="viewers-pill" title="Players watching the board live">
+            <span class="dot dot-live" aria-hidden="true"></span>
+            <span id="viewers-count">—</span>
+          </span>
+          <span class="pill" id="tick-pill" title="Last hourly tick resolution">
+            <span id="tick-label">tick —</span>
+          </span>
+          <button class="pill" id="refresh-btn" type="button" title="Refresh">refresh</button>
+          <button class="pill" id="identity-btn" type="button" title="Identity">
+            <span class="dot dot-id" aria-hidden="true"></span>
+            <span id="identity-label">sign in</span>
+          </button>
+          <time class="clock" id="clock">--:--</time>
+        </nav>
+      </header>
+
+      <main class="workspace">
+        <section class="hero">
+          <h1 class="hero-title">Claim the hex globe</h1>
+          <p class="hero-sub">
+            HexWar is a sovereign territory game played on a hex globe. Claim root
+            cells, bind them into allied phyles, call rallies, and hold your borders
+            as an hourly tick resolves surges, captures, and entrenchment. This is the
+            live frontier, right now.
+          </p>
+          <a class="play-cta" id="play-cta" href="https://hexwar.forkjoin.ai" rel="noopener noreferrer">Open the live board &rarr;</a>
+        </section>
+
+        <p class="status-line" id="status-line">Loading the frontier…</p>
+
+        <section class="board" id="stats-board" aria-label="Board state" hidden>
+          <h2 class="card-title">Frontier state</h2>
+          <div class="stat-grid" id="stat-grid"></div>
+        </section>
+
+        <section class="board" id="leaderboard-board" aria-label="Top roots by energy" hidden>
+          <h2 class="card-title">Leaderboard &middot; strongest roots</h2>
+          <ol class="lb-list" id="lb-list"></ol>
+        </section>
+
+        <section class="board" id="feed-board" aria-label="Recent activity" hidden>
+          <h2 class="card-title">Recent frontier activity</h2>
+          <ul class="feed" id="feed-list"></ul>
+        </section>
+
+        <p class="empty-state" id="empty-state" hidden></p>
+      </main>
+
+      <footer class="footer">
+        <a href="https://hexwar.forkjoin.ai">hexwar.forkjoin.ai &middot; hex-globe territory strategy</a>
+        <span id="footer-status">hexwar.forkjoin.ai</span>
+      </footer>
+    </div>
+  </body>
+</html>

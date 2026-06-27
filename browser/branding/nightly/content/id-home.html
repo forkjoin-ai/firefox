@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- about:id loads from chrome://branding and talks cross-origin to
+         card.yoga (fractal-iam) for the browser-auth + badge-issue flow.
+         The shared badge is read/written through the privileged
+         window.KenomaIdentity bridge (KenomaIdentity{Child,Parent} actor),
+         not localStorage, so it is shared across every about: origin. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self' chrome:; img-src 'self' chrome: data: https:; style-src 'self' chrome: 'unsafe-inline'; script-src 'self' chrome:; font-src 'self' chrome:; connect-src https://card.yoga;">
+    <title>ForkJoin Identity</title>
+    <link rel="stylesheet" href="chrome://branding/content/id-home.css">
+    <script defer src="chrome://branding/content/id-home.js"></script>
+  </head>
+  <body>
+    <div class="operator-shell" data-theme="dark">
+      <div class="field" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <a class="brand" href="about:id" aria-label="ForkJoin identity home">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="chrome://branding/content/kenoma-sigil.svg" alt="">
+          </span>
+          <span class="brand-copy">
+            <strong>ForkJoin</strong>
+            <span>identity</span>
+          </span>
+        </a>
+
+        <nav class="status-rail" aria-label="Session status">
+          <span class="pill" id="status-pill">
+            <span class="dot" id="status-dot" aria-hidden="true"></span>
+            <span id="status-text">checking…</span>
+          </span>
+          <time class="clock" id="clock">--:--</time>
+        </nav>
+      </header>
+
+      <main class="workspace">
+        <section class="id-card" aria-live="polite">
+          <!-- Signed-out -->
+          <div class="view view-out" id="view-out" hidden>
+            <p class="eyebrow">single sign-on</p>
+            <h1>Sign in</h1>
+            <p class="lede">
+              One ForkJoin identity, shared across every Kenoma page. Sign in
+              once and your verifiable badge travels with you.
+            </p>
+            <button class="primary" id="signin-btn" type="button">
+              Sign in with ForkJoin
+            </button>
+            <p class="hint" id="out-hint"></p>
+          </div>
+
+          <!-- Signed-in -->
+          <div class="view view-in" id="view-in" hidden>
+            <header class="id-head">
+              <img class="avatar" id="avatar" alt="" hidden>
+              <div class="id-who">
+                <strong id="display-name">—</strong>
+                <span id="email"></span>
+              </div>
+              <span class="verify" id="verify-chip" title="Badge signature">
+                <span id="verify-text">verifying…</span>
+              </span>
+            </header>
+
+            <dl class="id-grid">
+              <div><dt>DID</dt><dd id="did" class="mono">—</dd></div>
+              <div><dt>Kind</dt><dd id="kind">—</dd></div>
+              <div><dt>Issuer</dt><dd id="issuer" class="mono">—</dd></div>
+              <div><dt>Expires</dt><dd id="expiry">—</dd></div>
+            </dl>
+
+            <section class="caps">
+              <p class="caps-label">Capabilities</p>
+              <ul class="cap-list" id="cap-list"></ul>
+            </section>
+
+            <button class="ghost" id="signout-btn" type="button">Sign out</button>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <a href="https://card.yoga">card.yoga · fractal-iam</a>
+        <span id="footer-status">about:id · shared identity bridge</span>
+      </footer>
+    </div>
+  </body>
+</html>

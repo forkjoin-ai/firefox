@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- about:affectively loads from chrome://branding and talks cross-origin to
+         self.forkjoin.ai (the AFFECTIVELY emotional-intelligence platform, served
+         by edge-web-app / affectively-app-production). HTTPS only, no WebSocket. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self' chrome:; img-src 'self' chrome: data:; style-src 'self' chrome: 'unsafe-inline'; script-src 'self' chrome:; font-src 'self' chrome:; connect-src https://self.forkjoin.ai;">
+    <title>AFFECTIVELY</title>
+    <link rel="stylesheet" href="chrome://branding/content/affectively-home.css">
+    <script defer src="chrome://branding/content/affectively-home.js"></script>
+  </head>
+  <body>
+    <div class="operator-shell" data-theme="dark">
+      <div class="field" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <a class="brand" href="about:affectively" aria-label="AFFECTIVELY home">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="chrome://branding/content/kenoma-sigil.svg" alt="">
+          </span>
+          <span class="brand-copy">
+            <strong>AFFECTIVELY</strong>
+            <span>self</span>
+          </span>
+        </a>
+
+        <nav class="status-rail" aria-label="Session status">
+          <span class="pill" id="identity-pill" title="Your Kenoma identity">
+            <span class="dot off" aria-hidden="true"></span>
+            <span id="identity-name">resolving…</span>
+          </span>
+          <span class="pill" id="kind-pill" hidden>
+            <span class="dot dot-violet" aria-hidden="true"></span>
+            <span id="kind-text">human</span>
+          </span>
+          <button class="auth-btn" id="auth-btn" type="button" hidden>Sign in</button>
+          <span class="clock" id="clock">--:--</span>
+        </nav>
+      </header>
+
+      <main class="workspace">
+        <section class="self-panel" id="self-panel" hidden>
+          <div class="self-head">
+            <h2>Your check-ins</h2>
+            <span class="count" id="self-status">—</span>
+          </div>
+          <div class="self-stats" id="self-stats"></div>
+          <ul class="rows" id="self-rows"></ul>
+        </section>
+
+        <section class="atlas">
+          <aside class="families">
+            <div class="families-head">
+              <span>Families</span>
+              <span class="count" id="atlas-total">—</span>
+            </div>
+            <p class="families-status" id="atlas-status">Loading the emotion atlas…</p>
+            <ul class="family-list" id="family-list"></ul>
+          </aside>
+
+          <div class="detail">
+            <div class="detail-head">
+              <div class="detail-title">
+                <strong id="detail-name">The emotion atlas</strong>
+                <span class="detail-sub" id="detail-sub">track, understand and grow emotional intelligence</span>
+              </div>
+              <label class="search">
+                <input id="search" type="search" placeholder="search emotions…" autocomplete="off">
+              </label>
+            </div>
+            <div class="cards" id="cards"></div>
+            <p class="detail-empty" id="detail-empty" hidden></p>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span>about:affectively · thin client of <a href="https://self.forkjoin.ai">self.forkjoin.ai</a></span>
+        <span id="source-tag">emotion atlas</span>
+      </footer>
+    </div>
+  </body>
+</html>
