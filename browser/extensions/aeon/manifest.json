@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "Aeon Bridge",
+  "version": "0.1.0",
+  "description": "Bridge Aeon Flow frames, Bitwise pneuma codecs, UDP transport, and Lacey state through a native host.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "aeon@forkjoin.ai"
+    }
+  },
+  "permissions": [
+    "nativeMessaging",
+    "storage"
+  ],
+  "background": {
+    "scripts": ["run.js"]
+  }
+}
