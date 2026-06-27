@@ -9,6 +9,12 @@
 
 namespace mozilla {
 
+struct TaskControllerGnosisAdmission {
+  bool mAdmitted = true;
+  bool mProtected = false;
+  bool mSafeLane = false;
+};
+
 struct TaskControllerGnosisSnapshot {
   uint64_t mQueued = 0;
   uint64_t mMainThreadQueued = 0;
@@ -22,12 +28,17 @@ struct TaskControllerGnosisSnapshot {
   uint64_t mManagedSelected = 0;
   uint64_t mSafeLaneCompleted = 0;
   uint64_t mSafeLaneRequeued = 0;
+  uint64_t mAdmissionDecisions = 0;
+  uint64_t mProtectedAdmitted = 0;
+  uint64_t mSafeLaneAdmitted = 0;
+  uint64_t mSafeLaneHeld = 0;
 };
 
 class TaskControllerGnosisTelemetry {
  public:
   static void RecordTaskQueued(uint32_t aPriority, bool aMainThread,
                                bool aManaged);
+  static TaskControllerGnosisAdmission AdmitMainThreadTask(uint32_t aPriority);
   static void RecordMainThreadTaskSelected(uint32_t aPriority, bool aManaged);
   static void RecordMainThreadTaskFinished(uint32_t aPriority, bool aComplete);
   static TaskControllerGnosisSnapshot Snapshot();

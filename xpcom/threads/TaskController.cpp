@@ -1300,12 +1300,18 @@ bool TaskController::DoExecuteNextTaskOnlyMainThreadInternal(
         continue;
       }
 
+      const uint32_t selectedPriority = task->GetPriority();
+      const TaskControllerGnosisAdmission admission =
+          TaskControllerGnosisTelemetry::AdmitMainThreadTask(selectedPriority);
+      if (!admission.mAdmitted) {
+        continue;
+      }
+
       mCurrentTasksMT.push(task);
       mMainThreadTasks.erase(task->mIterator);
       task->mIterator = mMainThreadTasks.end();
       task->mInProgress = true;
       TaskManager* manager = task->GetManager();
-      const uint32_t selectedPriority = task->GetPriority();
       TaskControllerGnosisTelemetry::RecordMainThreadTaskSelected(
           selectedPriority, manager != nullptr);
       bool result = false;

@@ -145,6 +145,29 @@ function findBuiltAppExecutable() {
 }
 
 function findDistResources() {
+  const resourceCandidates = [
+    join(tmpRoot, objectDir, "dist", "Kenoma.app", "Contents", "Resources"),
+    join(findBuiltAppPath(), "Contents", "Resources"),
+    join(tmpRoot, objectDir, "dist", "bin"),
+    join(tmpRoot, objectDir, "dist", "Nightly.app", "Contents", "Resources"),
+  ];
+  for (const candidate of resourceCandidates) {
+    if (
+      existsSync(
+        join(
+          candidate,
+          "browser",
+          "chrome",
+          "browser",
+          "content",
+          "branding",
+          "kenoma-home.html"
+        )
+      )
+    ) {
+      return candidate;
+    }
+  }
   return join(findBuiltAppPath(), "Contents", "Resources");
 }
 
@@ -203,6 +226,12 @@ function syncForkjoinFiles() {
   copyPath("browser/branding/nightly/content/kenoma-home.css");
   copyPath("browser/branding/nightly/content/kenoma-home.html");
   copyPath("browser/branding/nightly/content/kenoma-home.js");
+  copyPath("browser/branding/nightly/content/skychat-home.css");
+  copyPath("browser/branding/nightly/content/skychat-home.html");
+  copyPath("browser/branding/nightly/content/skychat-home.js");
+  copyPath("browser/branding/nightly/content/weather-home.css");
+  copyPath("browser/branding/nightly/content/weather-home.html");
+  copyPath("browser/branding/nightly/content/weather-home.js");
   copyPath("browser/branding/nightly/content/operator-tab");
   ensureForkjoinBuildEntries();
   syncBuiltSessionstoreArtifacts();
@@ -362,6 +391,24 @@ function verifyBuiltArtifact() {
       "content",
       "branding",
       "kenoma-home.js"
+    ),
+    join(
+      distResources,
+      "browser",
+      "chrome",
+      "browser",
+      "content",
+      "branding",
+      "skychat-home.html"
+    ),
+    join(
+      distResources,
+      "browser",
+      "chrome",
+      "browser",
+      "content",
+      "branding",
+      "weather-home.html"
     ),
     join(
       distResources,

@@ -24,6 +24,12 @@ browser.jar:
   content/branding/kenoma-home.js
   content/branding/kenoma-sigil.svg
   content/branding/kenoma-splash.svg
+  content/branding/skychat-home.css
+  content/branding/skychat-home.html
+  content/branding/skychat-home.js
+  content/branding/weather-home.css
+  content/branding/weather-home.html
+  content/branding/weather-home.js
   content/branding/operator-tab/fonts/AtkinsonHyperlegible-Bold.ttf (operator-tab/fonts/AtkinsonHyperlegible-Bold.ttf)
   content/branding/operator-tab/fonts/AtkinsonHyperlegible-Regular.ttf (operator-tab/fonts/AtkinsonHyperlegible-Regular.ttf)
   content/branding/operator-tab/fonts/AtkinsonHyperlegibleMono-VariableFont_wght.ttf (operator-tab/fonts/AtkinsonHyperlegibleMono-VariableFont_wght.ttf)

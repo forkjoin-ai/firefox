@@ -48,76 +48,191 @@ function buildField() {
   field.innerHTML = `<svg viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" aria-hidden="true">${out}</svg>`;
 }
 
-function drawWiremark(time = 0) {
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function lerp(from, to, t) {
+  return from + (to - from) * t;
+}
+
+function drawKineticWiremark(ctx, width, height, state, time) {
+  const cx = width / 2;
+  const cy = height * 0.54;
+  const hover = state.hover;
+  const pulse = state.burst;
+  const crank = state.wind;
+  ctx.clearRect(0, 0, width, height);
+  ctx.save();
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+
+  const glow = ctx.createRadialGradient(cx, cy, 10, cx, cy, Math.min(width, height) * 0.52);
+  glow.addColorStop(0, `rgba(56,189,248,${0.28 + pulse * 0.15})`);
+  glow.addColorStop(0.48, "rgba(56,189,248,0.08)");
+  glow.addColorStop(1, "rgba(56,189,248,0)");
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, width, height);
+
+  const layers = 11;
+  const points = [];
+  for (let layer = 0; layer < layers; layer++) {
+    const progress = layer / (layers - 1);
+    const centered = progress - 0.5;
+    const twist = time * 0.00018 + layer * 0.18 + state.spin * (0.7 + progress);
+    const radius = Math.min(width, height) * (0.16 + (1 - Math.abs(centered)) * 0.17);
+    const ySkew = 0.58 + Math.abs(centered) * 0.45;
+    const spread = Math.abs(crank) * 23 * (layer % 2 === 0 ? 1 : -1);
+    const layerPoints = [];
+    for (let corner = 0; corner < 4; corner++) {
+      const angle = Math.PI / 4 + corner * Math.PI / 2 + twist;
+      const ripple = Math.sin(time * 0.0011 + layer * 0.9 + corner * 1.7) * (3 + hover * 5);
+      layerPoints.push({
+        x: cx + Math.cos(angle) * (radius + ripple) + centered * state.pointerX * 34 + spread * centered,
+        y: cy + Math.sin(angle) * (radius + ripple) * ySkew + centered * Math.min(width, height) * 0.56 + state.pointerY * 18,
+      });
+    }
+    points.push(layerPoints);
+  }
+
+  ctx.globalCompositeOperation = "lighter";
+  ctx.fillStyle = "rgba(214,251,255,0.28)";
+  for (let i = 0; i < 150; i++) {
+    const angle = i * 2.399963 + time * 0.00007;
+    const radius = Math.min(width, height) * (0.18 + (i % 29) * 0.011);
+    const x = cx + Math.cos(angle) * radius + Math.sin(time * 0.0003 + i) * 9 + state.pointerX * ((i % 7) - 3);
+    const y = cy + Math.sin(angle) * radius * 0.72 + Math.cos(time * 0.00021 + i) * 13 + state.pointerY * ((i % 5) - 2);
+    ctx.globalAlpha = 0.08 + (i % 11) * 0.008 + pulse * 0.08;
+    ctx.beginPath();
+    ctx.arc(x, y, 0.6 + (i % 3) * 0.22, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  const strokeLine = (a, b, color, alpha, lineWidth) => {
+    ctx.strokeStyle = color;
+    ctx.globalAlpha = alpha;
+    ctx.lineWidth = lineWidth * 2.1;
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+    ctx.stroke();
+    ctx.globalAlpha = Math.min(1, alpha * 0.22);
+    ctx.lineWidth = lineWidth * 6.4;
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+    ctx.stroke();
+  };
+
+  for (let layer = 0; layer < layers - 1; layer++) {
+    for (let corner = 0; corner < 4; corner++) {
+      strokeLine(points[layer][corner], points[layer + 1][corner], "#2f7fa3", 0.12 + pulse * 0.05, 0.7);
+    }
+    strokeLine(points[layer][0], points[layer + 1][1], "#2f7fa3", 0.08 + hover * 0.05, 0.55);
+    strokeLine(points[layer][2], points[layer + 1][3], "#2f7fa3", 0.08 + hover * 0.05, 0.55);
+  }
+  for (let layer = 0; layer < layers; layer++) {
+    const alpha = 0.3 + hover * 0.1 + (layer === 0 || layer === layers - 1 ? 0.13 : 0);
+    for (let corner = 0; corner < 4; corner++) {
+      strokeLine(points[layer][corner], points[layer][(corner + 1) % 4], "#74f6ff", alpha, 1.2);
+    }
+  }
+  strokeLine(points[0][3], points[6][1], "#d2fbff", 0.12 + Math.abs(crank) * 0.16 + pulse * 0.14, 1.4);
+  strokeLine(points[1][0], points[8][2], "#d2fbff", 0.12 + Math.abs(crank) * 0.16 + pulse * 0.14, 1.4);
+  strokeLine(points[2][2], points[10][0], "#d2fbff", 0.12 + Math.abs(crank) * 0.16 + pulse * 0.14, 1.4);
+  ctx.restore();
+}
+
+function mountKineticWiremark() {
   const canvas = qs("#wiremark");
   if (!(canvas instanceof HTMLCanvasElement)) {
     return;
-  }
-  const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-  const size = 240;
-  if (canvas.width !== size * dpr || canvas.height !== size * dpr) {
-    canvas.width = size * dpr;
-    canvas.height = size * dpr;
   }
   const ctx = canvas.getContext("2d");
   if (!ctx) {
     return;
   }
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.clearRect(0, 0, size, size);
-
-  const cx = size / 2;
-  const cy = size / 2;
-  const pulse = 0.5 + Math.sin(time / 1100) * 0.5;
-  ctx.lineCap = "round";
-  ctx.lineJoin = "round";
-
-  const gradient = ctx.createRadialGradient(cx, cy, 8, cx, cy, 112);
-  gradient.addColorStop(0, "rgba(56,189,248,0.42)");
-  gradient.addColorStop(0.5, "rgba(56,189,248,0.14)");
-  gradient.addColorStop(1, "rgba(56,189,248,0)");
-  ctx.fillStyle = gradient;
-  ctx.beginPath();
-  ctx.arc(cx, cy, 112, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.strokeStyle = `rgba(56,189,248,${0.28 + pulse * 0.12})`;
-  ctx.lineWidth = 1.2;
-  for (let i = 0; i < 11; i++) {
-    ctx.beginPath();
-    ctx.arc(cx, cy, 24 + i * 8, 0.18 * i + time / 9000, Math.PI * 1.55 + 0.18 * i + time / 9000);
-    ctx.stroke();
-  }
-
-  ctx.strokeStyle = "rgba(210,251,255,0.86)";
-  ctx.lineWidth = 2.3;
-  for (let i = 0; i < 4; i++) {
-    const rotation = time / 3200 + (Math.PI / 2) * i;
-    ctx.beginPath();
-    for (let step = 0; step <= 180; step++) {
-      const a = (step / 180) * Math.PI * 2;
-      const r = 52 + Math.sin(a * 3 + rotation) * 17;
-      const x = cx + Math.cos(a + rotation) * r;
-      const y = cy + Math.sin(a + rotation) * r * 0.78;
-      if (step === 0) {
-        ctx.moveTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
+  const state = { pointerX: 0, pointerY: 0, smoothX: 0, smoothY: 0, hover: 0, burst: 0, wind: 0, spin: 0, pressed: false, lastAngle: null };
+  let width = 1;
+  let height = 1;
+  const resize = () => {
+    const rect = canvas.getBoundingClientRect();
+    width = Math.max(1, rect.width);
+    height = Math.max(1, rect.height);
+    const dpr = Math.min(window.devicePixelRatio || 1, 3);
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+  const updatePointer = (event) => {
+    const rect = canvas.getBoundingClientRect();
+    state.pointerX = clamp(((event.clientX - rect.left) / Math.max(rect.width, 1)) * 2 - 1, -1.7, 1.7);
+    state.pointerY = clamp(((event.clientY - rect.top) / Math.max(rect.height, 1)) * 2 - 1, -1.7, 1.7);
+  };
+  const moveCrank = (event) => {
+    updatePointer(event);
+    const rect = canvas.getBoundingClientRect();
+    const angle = Math.atan2(event.clientY - (rect.top + rect.height / 2), event.clientX - (rect.left + rect.width / 2));
+    if (state.lastAngle !== null) {
+      let delta = angle - state.lastAngle;
+      while (delta > Math.PI) {
+        delta -= Math.PI * 2;
       }
+      while (delta < -Math.PI) {
+        delta += Math.PI * 2;
+      }
+      state.wind = clamp(state.wind + delta * 1.1, -2.8, 2.8);
+      state.spin += delta * (state.pressed ? 0.9 : 0.5);
+      state.burst = Math.min(1, state.burst + Math.abs(delta) * 0.04);
     }
-    ctx.stroke();
-  }
+    state.lastAngle = angle;
+  };
+  const render = (time) => {
+    state.smoothX = lerp(state.smoothX, state.pointerX, 0.08);
+    state.smoothY = lerp(state.smoothY, state.pointerY, 0.08);
+    state.hover = lerp(state.hover, canvas.matches(":hover") ? 1 : 0, 0.08);
+    state.burst = lerp(state.burst, 0, 0.025);
+    if (!state.pressed) {
+      state.wind = lerp(state.wind, 0, 0.015);
+      state.spin += state.wind * 0.005;
+    }
+    drawKineticWiremark(ctx, width, height, {
+      pointerX: state.smoothX,
+      pointerY: state.smoothY,
+      hover: state.hover,
+      burst: state.burst,
+      wind: state.wind,
+      spin: state.spin,
+    }, time);
+    requestAnimationFrame(render);
+  };
 
-  ctx.fillStyle = "rgba(255,209,102,0.72)";
-  for (let i = 0; i < 24; i++) {
-    const a = i * 2.399963 + time / 2400;
-    const r = 76 + (i % 5) * 5;
-    ctx.beginPath();
-    ctx.arc(cx + Math.cos(a) * r, cy + Math.sin(a) * r, 1.2, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  requestAnimationFrame(drawWiremark);
+  resize();
+  window.addEventListener("resize", resize);
+  canvas.addEventListener("pointerenter", () => {
+    state.lastAngle = null;
+  });
+  canvas.addEventListener("pointermove", moveCrank);
+  canvas.addEventListener("pointerdown", event => {
+    state.pressed = true;
+    state.lastAngle = null;
+    canvas.setPointerCapture(event.pointerId);
+    moveCrank(event);
+  });
+  canvas.addEventListener("pointerup", event => {
+    state.pressed = false;
+    state.lastAngle = null;
+    state.burst = Math.min(1, state.burst + 0.45);
+    if (canvas.hasPointerCapture(event.pointerId)) {
+      canvas.releasePointerCapture(event.pointerId);
+    }
+  });
+  canvas.addEventListener("pointerleave", () => {
+    state.pointerX = 0;
+    state.pointerY = 0;
+    state.lastAngle = null;
+  });
+  requestAnimationFrame(render);
 }
 
 function updateClock() {
@@ -127,6 +242,89 @@ function updateClock() {
   }
   const now = new Date();
   clock.textContent = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+}
+
+function loadWidgetState() {
+  try {
+    return JSON.parse(localStorage.getItem("kenoma.operator.widgets.v1") || "{}") || {};
+  } catch (_) {
+    return {};
+  }
+}
+
+function saveWidgetState(widgetBand) {
+  const widgets = [...widgetBand.querySelectorAll("[data-widget]")];
+  const collapsed = {};
+  for (const widget of widgets) {
+    collapsed[widget.getAttribute("data-widget") || ""] = widget.classList.contains("is-collapsed");
+  }
+  localStorage.setItem("kenoma.operator.widgets.v1", JSON.stringify({
+    order: widgets.map(widget => widget.getAttribute("data-widget")).filter(Boolean),
+    collapsed,
+  }));
+}
+
+function wireWidgetControls() {
+  const widgetBand = qs("#widget-band");
+  if (!widgetBand) {
+    return;
+  }
+  const saved = loadWidgetState();
+  const widgets = [...widgetBand.querySelectorAll("[data-widget]")];
+  const byId = new Map(widgets.map(widget => [widget.getAttribute("data-widget"), widget]));
+
+  if (Array.isArray(saved.order)) {
+    for (const id of saved.order) {
+      const widget = byId.get(id);
+      if (widget) {
+        widgetBand.append(widget);
+      }
+    }
+  }
+
+  for (const widget of [...widgetBand.querySelectorAll("[data-widget]")]) {
+    const id = widget.getAttribute("data-widget") || "";
+    const button = widget.querySelector(".collapse-button");
+    const initiallyCollapsed = Boolean(saved.collapsed && saved.collapsed[id]);
+    widget.classList.toggle("is-collapsed", initiallyCollapsed);
+    if (button) {
+      button.setAttribute("aria-expanded", initiallyCollapsed ? "false" : "true");
+      button.addEventListener("click", () => {
+        const collapsed = widget.classList.toggle("is-collapsed");
+        button.setAttribute("aria-expanded", collapsed ? "false" : "true");
+        saveWidgetState(widgetBand);
+      });
+    }
+
+    widget.addEventListener("dragstart", event => {
+      widget.classList.add("is-dragging");
+      event.dataTransfer.effectAllowed = "move";
+      event.dataTransfer.setData("text/plain", id);
+    });
+    widget.addEventListener("dragover", event => {
+      event.preventDefault();
+      widget.classList.add("is-drop-target");
+      event.dataTransfer.dropEffect = "move";
+    });
+    widget.addEventListener("dragleave", () => {
+      widget.classList.remove("is-drop-target");
+    });
+    widget.addEventListener("drop", event => {
+      event.preventDefault();
+      const from = byId.get(event.dataTransfer.getData("text/plain"));
+      widget.classList.remove("is-drop-target");
+      if (!from || from === widget) {
+        return;
+      }
+      widgetBand.insertBefore(from, widget);
+      saveWidgetState(widgetBand);
+    });
+    widget.addEventListener("dragend", () => {
+      for (const item of widgetBand.querySelectorAll("[data-widget]")) {
+        item.classList.remove("is-dragging", "is-drop-target");
+      }
+    });
+  }
 }
 
 function wireInteractions() {
@@ -148,10 +346,12 @@ function wireInteractions() {
       focusToggle.textContent = widgetBand.classList.contains("is-hidden") ? "Summon" : "Focus";
     });
   }
+
+  wireWidgetControls();
 }
 
 buildField();
 wireInteractions();
 updateClock();
 setInterval(updateClock, 15000);
-requestAnimationFrame(drawWiremark);
+mountKineticWiremark();

@@ -2226,7 +2226,7 @@ pref("sidebar.animation.expand-on-hover.delay-duration-ms", 200);
 // you can introduce a new tool to the sidebar launcher.
 pref("sidebar.main.tools", "");
 pref("sidebar.installed.extensions", "");
-pref("sidebar.verticalTabs", false);
+pref("sidebar.verticalTabs", true);
 pref("sidebar.verticalTabs.dragToPinPromo.dismissed", false);
 pref("sidebar.visibility", "always-show");
 // Sidebar UI state is stored per-window via session restore. Use this pref

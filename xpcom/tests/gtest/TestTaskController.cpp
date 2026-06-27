@@ -103,6 +103,29 @@ TEST(TaskController, GnosisSafeLaneClassifiesNativeTasks)
 {
   TaskControllerGnosisTelemetry::ResetForTests();
 
+  TaskControllerGnosisAdmission protectedAdmission =
+      TaskControllerGnosisTelemetry::AdmitMainThreadTask(
+          static_cast<uint32_t>(EventQueuePriority::InputHigh));
+  ASSERT_TRUE(protectedAdmission.mAdmitted);
+  ASSERT_TRUE(protectedAdmission.mProtected);
+  ASSERT_FALSE(protectedAdmission.mSafeLane);
+
+  TaskControllerGnosisAdmission safeLaneAdmission =
+      TaskControllerGnosisTelemetry::AdmitMainThreadTask(
+          static_cast<uint32_t>(EventQueuePriority::Normal));
+  ASSERT_TRUE(safeLaneAdmission.mAdmitted);
+  ASSERT_FALSE(safeLaneAdmission.mProtected);
+  ASSERT_TRUE(safeLaneAdmission.mSafeLane);
+
+  TaskControllerGnosisSnapshot snapshot =
+      TaskControllerGnosisTelemetry::Snapshot();
+  ASSERT_EQ(snapshot.mAdmissionDecisions, 2u);
+  ASSERT_EQ(snapshot.mProtectedAdmitted, 1u);
+  ASSERT_EQ(snapshot.mSafeLaneAdmitted, 1u);
+  ASSERT_EQ(snapshot.mSafeLaneHeld, 0u);
+
+  TaskControllerGnosisTelemetry::ResetForTests();
+
   Logger logger;
   RefPtr safeLaneTask =
       MakeRefPtr<ReschedulingTask>(Task::Kind::MainThreadOnly, &logger, "1",
@@ -114,8 +137,7 @@ TEST(TaskController, GnosisSafeLaneClassifiesNativeTasks)
   TaskController::Get()->AddTask(do_AddRef(safeLaneTask));
   TaskController::Get()->AddTask(do_AddRef(protectedTask));
 
-  TaskControllerGnosisSnapshot snapshot =
-      TaskControllerGnosisTelemetry::Snapshot();
+  snapshot = TaskControllerGnosisTelemetry::Snapshot();
   ASSERT_EQ(snapshot.mQueued, 2u);
   ASSERT_EQ(snapshot.mMainThreadQueued, 2u);
   ASSERT_EQ(snapshot.mOffMainThreadQueued, 0u);
@@ -134,6 +156,10 @@ TEST(TaskController, GnosisSafeLaneClassifiesNativeTasks)
   ASSERT_EQ(snapshot.mProtectedSelected, 3u);
   ASSERT_EQ(snapshot.mSafeLaneCompleted, 1u);
   ASSERT_EQ(snapshot.mSafeLaneRequeued, 2u);
+  ASSERT_EQ(snapshot.mAdmissionDecisions, 6u);
+  ASSERT_EQ(snapshot.mProtectedAdmitted, 3u);
+  ASSERT_EQ(snapshot.mSafeLaneAdmitted, 3u);
+  ASSERT_EQ(snapshot.mSafeLaneHeld, 0u);
 }
 
 TEST(TaskController, RescheduleOffMainThread)

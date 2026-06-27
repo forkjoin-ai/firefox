@@ -21,6 +21,10 @@ static Atomic<uint64_t, Relaxed> sProtectedSelected;
 static Atomic<uint64_t, Relaxed> sManagedSelected;
 static Atomic<uint64_t, Relaxed> sSafeLaneCompleted;
 static Atomic<uint64_t, Relaxed> sSafeLaneRequeued;
+static Atomic<uint64_t, Relaxed> sAdmissionDecisions;
+static Atomic<uint64_t, Relaxed> sProtectedAdmitted;
+static Atomic<uint64_t, Relaxed> sSafeLaneAdmitted;
+static Atomic<uint64_t, Relaxed> sSafeLaneHeld;
 
 /* static */
 bool TaskControllerGnosisTelemetry::IsProtectedPriority(uint32_t aPriority) {
@@ -61,6 +65,27 @@ void TaskControllerGnosisTelemetry::RecordTaskQueued(uint32_t aPriority,
   if (aManaged) {
     sManagedTasks++;
   }
+}
+
+/* static */
+TaskControllerGnosisAdmission TaskControllerGnosisTelemetry::AdmitMainThreadTask(
+    uint32_t aPriority) {
+  const bool isProtected = IsProtectedPriority(aPriority);
+  const bool isSafeLane = IsSafeLaneCandidate(aPriority, true);
+
+  sAdmissionDecisions++;
+  if (isProtected) {
+    sProtectedAdmitted++;
+  }
+  if (isSafeLane) {
+    sSafeLaneAdmitted++;
+  }
+
+  return {
+      true,
+      isProtected,
+      isSafeLane,
+  };
 }
 
 /* static */
@@ -106,6 +131,10 @@ TaskControllerGnosisSnapshot TaskControllerGnosisTelemetry::Snapshot() {
       sManagedSelected,
       sSafeLaneCompleted,
       sSafeLaneRequeued,
+      sAdmissionDecisions,
+      sProtectedAdmitted,
+      sSafeLaneAdmitted,
+      sSafeLaneHeld,
   };
 }
 
@@ -123,6 +152,10 @@ void TaskControllerGnosisTelemetry::ResetForTests() {
   sManagedSelected = 0;
   sSafeLaneCompleted = 0;
   sSafeLaneRequeued = 0;
+  sAdmissionDecisions = 0;
+  sProtectedAdmitted = 0;
+  sSafeLaneAdmitted = 0;
+  sSafeLaneHeld = 0;
 }
 
 }  // namespace mozilla

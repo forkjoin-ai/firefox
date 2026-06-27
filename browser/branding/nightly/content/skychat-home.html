@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The page loads from chrome://branding (about:skychat) and talks cross-origin
+         to tv.forkjoin.ai. Match kenoma-home's inline style/script approach but open
+         connect-src to the skychat backend over HTTPS + WSS. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self' chrome:; img-src 'self' chrome: data:; style-src 'self' chrome: 'unsafe-inline'; script-src 'self' chrome:; font-src 'self' chrome:; connect-src https://tv.forkjoin.ai wss://tv.forkjoin.ai;">
+    <title>SkyChat Near</title>
+    <link rel="stylesheet" href="chrome://branding/content/skychat-home.css">
+    <script defer src="chrome://branding/content/skychat-home.js"></script>
+  </head>
+  <body>
+    <div class="operator-shell" data-theme="dark">
+      <div class="field" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <a class="brand" href="about:skychat" aria-label="SkyChat home">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="chrome://branding/content/kenoma-sigil.svg" alt="">
+          </span>
+          <span class="brand-copy">
+            <strong>SkyChat</strong>
+            <span>near</span>
+          </span>
+        </a>
+
+        <nav class="status-rail" aria-label="Session status">
+          <span class="pill" id="identity-pill" title="Your anonymous device identity">
+            <span class="dot dot-memory" aria-hidden="true"></span>
+            <span id="identity-name">resolving…</span>
+          </span>
+          <span class="pill" id="presence-pill">
+            <span class="dot dot-weather" aria-hidden="true"></span>
+            <span id="presence-text">offline</span>
+          </span>
+          <span class="pill" id="transport-pill">
+            <span class="dot" id="transport-dot" aria-hidden="true"></span>
+            <span id="transport-text">connecting</span>
+          </span>
+          <time class="clock" id="clock">--:--</time>
+        </nav>
+      </header>
+
+      <main class="workspace">
+        <section class="near" aria-label="Near chat">
+          <aside class="channels" aria-label="Channels">
+            <div class="channels-head">
+              <span>Channels</span>
+              <button class="loc-btn" id="loc-btn" type="button">Use location</button>
+            </div>
+            <p class="loc-status" id="loc-status">Location off — showing general.</p>
+            <ul class="channel-list" id="channel-list" aria-label="Channel list"></ul>
+          </aside>
+
+          <section class="room" aria-label="Conversation">
+            <header class="room-head">
+              <div class="room-title">
+                <strong id="room-label">general</strong>
+                <small id="room-sublabel">everyone</small>
+              </div>
+              <span class="room-online" id="room-online">0 online</span>
+            </header>
+
+            <ol class="messages" id="messages" aria-live="polite" aria-label="Messages"></ol>
+
+            <div class="typing" id="typing" aria-hidden="true"></div>
+
+            <form class="composer" id="composer">
+              <input
+                id="composer-input"
+                type="text"
+                autocomplete="off"
+                maxlength="180"
+                placeholder="Message this channel…"
+              >
+              <button type="submit">Send</button>
+            </form>
+          </section>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <a href="https://skychat.forkjoin.ai">skychat · location-based chat</a>
+        <span id="footer-status">tv.forkjoin.ai · geo:* + general · MVP</span>
+      </footer>
+    </div>
+  </body>
+</html>

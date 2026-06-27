@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The page loads from chrome://branding (about:weather) and talks cross-origin
+         to storms.forkjoin.ai. Match kenoma-home/skychat-home's inline style/script
+         approach but open connect-src to the storms-watch backend over HTTPS. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self' chrome:; img-src 'self' chrome: data:; style-src 'self' chrome: 'unsafe-inline'; script-src 'self' chrome:; font-src 'self' chrome:; connect-src https://storms.forkjoin.ai;">
+    <title>Weather</title>
+    <link rel="stylesheet" href="chrome://branding/content/weather-home.css">
+    <script defer src="chrome://branding/content/weather-home.js"></script>
+  </head>
+  <body>
+    <div class="operator-shell" data-theme="dark">
+      <div class="field" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <a class="brand" href="about:weather" aria-label="Weather home">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="chrome://branding/content/kenoma-sigil.svg" alt="">
+          </span>
+          <span class="brand-copy">
+            <strong>Weather</strong>
+            <span>local</span>
+          </span>
+        </a>
+
+        <nav class="status-rail" aria-label="Status">
+          <span class="pill" id="loc-pill" title="Active location">
+            <span class="dot dot-weather" aria-hidden="true"></span>
+            <span id="loc-name">resolving…</span>
+          </span>
+          <button class="pill unit-toggle" id="unit-toggle" type="button" title="Toggle Fahrenheit / Celsius">
+            <span id="unit-label">&deg;F</span>
+          </button>
+          <button class="pill" id="refresh-btn" type="button" title="Refresh">refresh</button>
+          <button class="pill" id="locate-btn" type="button" title="Use my location">
+            <span class="dot dot-memory" aria-hidden="true"></span>
+            <span>locate</span>
+          </button>
+          <time class="clock" id="clock">--:--</time>
+        </nav>
+      </header>
+
+      <main class="workspace">
+        <form class="search" id="search-form" role="search">
+          <input
+            id="search-input"
+            type="text"
+            autocomplete="off"
+            maxlength="80"
+            placeholder="Search a place (city, region)…"
+          >
+          <button type="submit">Search</button>
+        </form>
+        <ul class="search-results" id="search-results" aria-label="Search results" hidden></ul>
+
+        <p class="status-line" id="status-line">Requesting your location…</p>
+
+        <section class="storm-banner" id="storm-banner" hidden></section>
+
+        <section class="now-card" id="now-card" aria-label="Current conditions" hidden>
+          <div class="now-main">
+            <div class="now-temp" id="now-temp">--&deg;</div>
+            <div class="now-meta">
+              <strong class="now-cond" id="now-cond">—</strong>
+              <span class="now-place" id="now-place">—</span>
+              <span class="now-hilo" id="now-hilo">—</span>
+            </div>
+          </div>
+          <dl class="now-stats" id="now-stats"></dl>
+          <p class="rain-line" id="rain-line" hidden></p>
+          <div class="rain-strip" id="rain-strip" hidden></div>
+        </section>
+
+        <section class="strip-card" id="hourly-card" aria-label="Hourly forecast" hidden>
+          <h2 class="card-title">Next 24 hours</h2>
+          <div class="hourly-strip" id="hourly-strip"></div>
+        </section>
+
+        <section class="strip-card" id="daily-card" aria-label="7-day forecast" hidden>
+          <h2 class="card-title">7-day</h2>
+          <div class="daily-grid" id="daily-grid"></div>
+        </section>
+
+        <p class="empty-state" id="empty-state" hidden></p>
+      </main>
+
+      <footer class="footer">
+        <a href="https://storms.forkjoin.ai">storms-watch &middot; local forecast</a>
+        <span id="footer-status">storms.forkjoin.ai &middot; NWS + Open-Meteo</span>
+      </footer>
+    </div>
+  </body>
+</html>

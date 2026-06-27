@@ -35,6 +35,8 @@ const edgeworkSdkRoot = path.join(repoRoot, "packages/edgework-sdk");
 const fractalIamRoot = path.join(repoRoot, "apps/fractal-iam");
 const entropyGardenRoot = path.join(repoRoot, "apps/entropy-garden");
 const xGnosisRoot = path.join(repoRoot, "open-source/x-gnosis");
+const aeonTruthRoot = path.join(repoRoot, "open-source/aeon-truth");
+const aeonPrecogRoot = path.join(repoRoot, "open-source/aeon-precog");
 const moonshineRoot = path.join(gnosisRoot, "moonshine");
 const amplituhedronCacheCandidates = [
   path.join(aetherRoot, "src/amplituhedron-cache.json"),
@@ -64,6 +66,9 @@ const aetherWasmCandidates = [
 
 let flowCodecPromise;
 let frameReassemblerPromise;
+let tsxRegistered = false;
+let truthModulePromise;
+let precogModulePromise;
 const laceyStates = new Map();
 const FILE_STATUS_TTL_MS = 1000;
 const runtimeCache = {
@@ -226,6 +231,31 @@ async function getFrameReassembler() {
       .then(module => new module.FrameReassembler());
   }
   return frameReassemblerPromise;
+}
+
+async function ensureTsx() {
+  if (tsxRegistered) {
+    return;
+  }
+  const { register } = await import("tsx/esm/api");
+  register();
+  tsxRegistered = true;
+}
+
+async function getTruthModule() {
+  if (!truthModulePromise) {
+    truthModulePromise = ensureTsx().then(() =>
+      import(pathToFileURL(path.join(aeonTruthRoot, "src/index.ts")).href));
+  }
+  return truthModulePromise;
+}
+
+async function getPrecogModule() {
+  if (!precogModulePromise) {
+    precogModulePromise = ensureTsx().then(() =>
+      import(pathToFileURL(path.join(aeonPrecogRoot, "src/index.ts")).href));
+  }
+  return precogModulePromise;
 }
 
 function normalizeFrame(input, context = "frame") {
@@ -556,6 +586,49 @@ function fileStatus(filePath) {
     expiresAt: now + FILE_STATUS_TTL_MS,
   });
   return status;
+}
+
+function sourceContains(filePath, marker) {
+  if (!fileStatus(filePath).exists) {
+    return false;
+  }
+  return readFileSync(filePath, "utf8").includes(marker);
+}
+
+function schedulerNativeHooksStatus() {
+  const taskControllerPath = path.join(nativeDir, "../xpcom/threads/TaskController.cpp");
+  const telemetryPath = path.join(nativeDir, "../xpcom/threads/TaskControllerGnosisTelemetry.h");
+  const testPath = path.join(nativeDir, "../xpcom/tests/gtest/TestTaskController.cpp");
+  const selectedHook = sourceContains(taskControllerPath, "RecordMainThreadTaskSelected");
+  const finishedHook = sourceContains(taskControllerPath, "RecordMainThreadTaskFinished");
+  const admissionGate = sourceContains(taskControllerPath, "AdmitMainThreadTask");
+  const snapshotCounters =
+    sourceContains(telemetryPath, "mSafeLaneSelected") &&
+    sourceContains(telemetryPath, "mSafeLaneCompleted") &&
+    sourceContains(telemetryPath, "mSafeLaneRequeued") &&
+    sourceContains(telemetryPath, "mAdmissionDecisions") &&
+    sourceContains(telemetryPath, "mSafeLaneAdmitted");
+  const testCoverage =
+    sourceContains(testPath, "mSafeLaneSelected") &&
+    sourceContains(testPath, "mSafeLaneRequeued") &&
+    sourceContains(testPath, "mAdmissionDecisions") &&
+    sourceContains(testPath, "mSafeLaneAdmitted");
+  return {
+    active: selectedHook && finishedHook && admissionGate && snapshotCounters && testCoverage,
+    backend: selectedHook && finishedHook && admissionGate
+      ? "gnosis-antiqueue-helix-taskcontroller-native-admission"
+      : "gnosis-antiqueue-helix-js-harness",
+    selectedHook,
+    finishedHook,
+    admissionGate,
+    snapshotCounters,
+    testCoverage,
+    sources: {
+      taskController: fileStatus(taskControllerPath),
+      telemetry: fileStatus(telemetryPath),
+      test: fileStatus(testPath),
+    },
+  };
 }
 
 function runtimeCapability(name, candidates, extra = {}) {
@@ -1294,6 +1367,7 @@ function schedulerPlan(events, options = {}) {
 async function handleSchedulerObserve(payload) {
   const request = assertObject(payload ?? {}, "payload");
   const events = normalizeSchedulerEvents(request);
+  const nativeHooks = schedulerNativeHooksStatus();
   return {
     sources: {
       antiqueue: fileStatus(path.join(gnosisRoot, "gnosis-antiqueue/src/lib.rs")),
@@ -1307,6 +1381,7 @@ async function handleSchedulerObserve(payload) {
     protectedPriorities: [...SCHEDULER_PROTECTED_PRIORITIES],
     safePriorities: [...SCHEDULER_SAFE_PRIORITIES],
     defaultStoplight: SCHEDULER_STOPLIGHT,
+    nativeHooks,
   };
 }
 
@@ -1317,24 +1392,27 @@ async function handleSchedulerPlan(payload) {
 
 async function handleSchedulerTelemetry(payload) {
   const request = assertObject(payload ?? {}, "payload");
+  const nativeHooks = schedulerNativeHooksStatus();
   const plan = schedulerPlan(normalizeSchedulerEvents(request), {
     ...request,
     active: request.active === true,
     limit: numberOr(request.limit, 16, "payload.limit"),
   });
   return {
-    backend: "gnosis-antiqueue-helix-js-harness",
+    backend: nativeHooks.backend,
     prefs: {
       observe: "forkjoin.gnosis.scheduler.observe.enabled",
       active: "forkjoin.gnosis.scheduler.active.enabled",
       throttled: "forkjoin.gnosis.scheduler.throttled.enabled",
     },
+    nativeHooks,
     ...plan,
   };
 }
 
 async function handleSchedulerBench(payload) {
   const request = assertObject(payload ?? {}, "payload");
+  const nativeHooks = schedulerNativeHooksStatus();
   const count = Math.max(1, Math.min(20000, numberOr(request.count, 4096, "payload.count") | 0));
   const workloads = Array.isArray(request.workloads)
     ? request.workloads.map(value => String(value))
@@ -1353,6 +1431,8 @@ async function handleSchedulerBench(payload) {
     count,
     workloads,
     elapsedMs: elapsedMs(start),
+    backend: nativeHooks.backend,
+    nativeHooks,
     results,
     verdict: Object.values(results).every(result => result.helix.protectedDelay === 0) ? "accept" : "decline",
   };
@@ -2523,6 +2603,51 @@ async function handleLaceyNext(payload) {
   };
 }
 
+async function handleTruthAssess(payload) {
+  const request = assertObject(payload ?? {}, "payload");
+  const { TruthEngine } = await getTruthModule();
+  const engine = new TruthEngine({ domain: request.domain });
+  const claims = Array.isArray(request.claims) ? request.claims : [];
+  for (const claim of claims) {
+    engine.observe(assertObject(claim, "payload.claims[]"));
+  }
+  const nowMs = numberOr(request.nowMs, Date.now(), "payload.nowMs");
+  const ledger = engine.ledger(nowMs);
+  return {
+    backend: "aeon-truth",
+    domain: stringOr(request.domain, "news-claims", "payload.domain"),
+    claims: claims.length,
+    verdicts: {
+      admitted: ledger.asserted.length,
+      observationOnly: ledger.shadows.length,
+      withheld: ledger.contested.length,
+    },
+    ledger,
+  };
+}
+
+async function handlePrecogForecast(payload) {
+  const request = assertObject(payload ?? {}, "payload");
+  const { ForwardWorldEngine, FORWARD_DOMAINS } = await getPrecogModule();
+  const domainId = stringOr(request.domain, "weather-forward", "payload.domain");
+  const domain = FORWARD_DOMAINS[domainId];
+  if (!domain) {
+    throw new TypeError(`Unknown precog domain: ${domainId}`);
+  }
+  const engine = new ForwardWorldEngine();
+  const ticks = Array.isArray(request.ticks)
+    ? request.ticks
+    : request.tick
+      ? [request.tick]
+      : [];
+  for (const tick of ticks) {
+    engine.observe(assertObject(tick, "payload.ticks[]"));
+  }
+  const nowMs = numberOr(request.nowMs, Date.now(), "payload.nowMs");
+  const timeline = engine.forecast(domain, nowMs);
+  return { backend: "aeon-precog", domain: domainId, ticks: ticks.length, timeline };
+}
+
 async function dispatch(type, payload) {
   switch (type) {
     case "gnosis.runtime.capabilities":
@@ -2623,6 +2748,10 @@ async function dispatch(type, payload) {
       return handleLaceySeed(payload);
     case "gnosis.lacey.next":
       return handleLaceyNext(payload);
+    case "truth.assess":
+      return handleTruthAssess(payload);
+    case "precog.forecast":
+      return handlePrecogForecast(payload);
     default:
       throw new TypeError(`Unsupported Aeon native bridge type: ${type}`);
   }
@@ -2677,6 +2806,33 @@ async function runSelfTest() {
   const decoded = await dispatch("aeon.frame.decode", { bytes: encoded.bytes });
   if (decoded.frame.streamId !== 7 || new TextDecoder().decode(decoded.frame.payload) !== "aeon") {
     throw new Error("frame roundtrip failed");
+  }
+
+  const truth = await dispatch("truth.assess", {
+    claims: [
+      {
+        text: "The mayor signed the housing bill this morning.",
+        sources: [
+          { id: "s1", origin: "reuters", trust: 0.85, stance: "affirms" },
+          { id: "s2", origin: "ap", trust: 0.85, stance: "affirms" },
+        ],
+      },
+    ],
+  });
+  if (truth.ledger.asserted.length !== 1) {
+    throw new Error("truth.assess self-test failed");
+  }
+
+  const precog = await dispatch("precog.forecast", {
+    domain: "weather-forward",
+    ticks: [
+      { tMs: 0, scentFeatures: ["petrichor", "ozone"], weather: { pressureHpa: 1004 } },
+      { tMs: 60000, scentFeatures: ["petrichor", "ozone"], weather: { pressureHpa: 999 } },
+      { tMs: 120000, scentFeatures: ["petrichor", "ozone"], weather: { pressureHpa: 994 } },
+    ],
+  });
+  if (!precog.timeline || !Array.isArray(precog.timeline.asserted)) {
+    throw new Error("precog.forecast self-test failed");
   }
 
   const pneuma = await dispatch("bitwise.pneuma.encode", { text: "hello [fold]" });
@@ -2750,6 +2906,9 @@ async function runSelfTest() {
   });
   if (scheduler.verdict !== "accept") {
     throw new Error("scheduler bench failed");
+  }
+  if (scheduler.nativeHooks?.active !== true) {
+    throw new Error("scheduler native hooks not active");
   }
 
   const storage = await dispatch("gnosis.storage.bench", {
@@ -2946,12 +3105,16 @@ async function runVictimAnalysis() {
     dispatch("gnosis.entropy.bench", { frames: 8192 }),
   ]);
   const topStorage = victims.pending.slice(0, 5);
+  const schedulerNativeActive = scheduler.nativeHooks?.active === true;
   const ranking = [
     {
       id: "scheduler-helix-safe-lane",
       score: Math.round(scheduler.elapsedMs),
       elapsedMs: scheduler.elapsedMs,
-      nextAction: "move the JS harness into gnosis-antiqueue / TaskController native hooks and keep protected delay at zero",
+      nativeHooks: scheduler.nativeHooks,
+      nextAction: schedulerNativeActive
+        ? "wire gnosis-antiqueue green-window policy into the native TaskController admission gate while keeping protected delay at zero"
+        : "move the JS harness into gnosis-antiqueue / TaskController native hooks and keep protected delay at zero",
     },
     {
       id: "storage-bitwise-knotgraph",

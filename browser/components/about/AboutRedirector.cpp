@@ -170,6 +170,14 @@ static const RedirEntry kRedirMap[] = {
      nsIAboutModule::URI_SAFE_FOR_UNTRUSTED_CONTENT |
          nsIAboutModule::URI_CAN_LOAD_IN_PRIVILEGEDABOUT_PROCESS |
          nsIAboutModule::URI_MUST_LOAD_IN_CHILD},
+    {"skychat", "chrome://branding/content/skychat-home.html",
+     nsIAboutModule::URI_SAFE_FOR_UNTRUSTED_CONTENT |
+         nsIAboutModule::URI_CAN_LOAD_IN_PRIVILEGEDABOUT_PROCESS |
+         nsIAboutModule::URI_MUST_LOAD_IN_CHILD},
+    {"weather", "chrome://branding/content/weather-home.html",
+     nsIAboutModule::URI_SAFE_FOR_UNTRUSTED_CONTENT |
+         nsIAboutModule::URI_CAN_LOAD_IN_PRIVILEGEDABOUT_PROCESS |
+         nsIAboutModule::URI_MUST_LOAD_IN_CHILD},
 };
 
 static nsAutoCString GetAboutModuleName(nsIURI* aURI) {

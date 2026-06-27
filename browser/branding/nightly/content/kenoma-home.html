@@ -41,13 +41,9 @@
           <canvas id="wiremark" class="wiremark" width="240" height="240" aria-hidden="true"></canvas>
           <p class="eyebrow">Aeon browser · sovereign transport · no borrowed sky</p>
           <h1 id="kenoma-title">Kenoma</h1>
-          <p class="lede">
-            Dispatch across Aeon frames, Fractal Memory, Storms Watch, SkyChat,
-            Pneuma codecs, Bitwise channels, and the Forkjoin wiki graph.
-          </p>
 
           <form class="command-form" action="https://wiki.forkjoin.ai/search" method="get">
-            <label for="q">Dispatch an operation</label>
+            <label for="q" class="visually-hidden">Search the Forkjoin wiki</label>
             <div class="command-row">
               <span class="fork-label">FORK x3</span>
               <input
@@ -70,12 +66,19 @@
         </section>
 
         <section class="widget-band" id="widget-band" aria-label="Operator widgets">
-          <article class="widget in-flight">
+          <article class="widget in-flight" data-widget="inflight" draggable="true">
             <div class="widget-head">
-              <span>In Flight</span>
+              <span class="drag-handle" aria-hidden="true">
+                <i></i><i></i><i></i><i></i><i></i><i></i>
+              </span>
+              <span class="widget-title">In Flight</span>
+              <span class="widget-spacer"></span>
               <strong>3 live</strong>
+              <button class="collapse-button" type="button" aria-label="Collapse In Flight" aria-expanded="true">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+              </button>
             </div>
-            <div class="run-list">
+            <div class="widget-body run-list">
               <a class="run" href="aeon://wiki.forkjoin.ai">
                 <span class="run-dot cyan"></span>
                 <span>
@@ -103,12 +106,19 @@
             </div>
           </article>
 
-          <article class="widget">
+          <article class="widget" data-widget="recent" draggable="true">
             <div class="widget-head">
-              <span>Recent</span>
+              <span class="drag-handle" aria-hidden="true">
+                <i></i><i></i><i></i><i></i><i></i><i></i>
+              </span>
+              <span class="widget-title">Recent</span>
+              <span class="widget-spacer"></span>
               <strong>folded</strong>
+              <button class="collapse-button" type="button" aria-label="Collapse Recent" aria-expanded="true">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+              </button>
             </div>
-            <ul class="recent-list">
+            <ul class="widget-body recent-list">
               <li><span>Kenoma about page</span><em>about:kenoma</em></li>
               <li><span>Aeon native bridge</span><em>UDP · Pneuma · Lacey</em></li>
               <li><span>Session receipts</span><em>knotchain append</em></li>
@@ -116,12 +126,19 @@
             </ul>
           </article>
 
-          <article class="widget">
+          <article class="widget" data-widget="launch" draggable="true">
             <div class="widget-head">
-              <span>Launch</span>
+              <span class="drag-handle" aria-hidden="true">
+                <i></i><i></i><i></i><i></i><i></i><i></i>
+              </span>
+              <span class="widget-title">Launch</span>
+              <span class="widget-spacer"></span>
               <strong>sovereign</strong>
+              <button class="collapse-button" type="button" aria-label="Collapse Launch" aria-expanded="true">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+              </button>
             </div>
-            <nav class="launch-grid" aria-label="Pinned Forkjoin services">
+            <nav class="widget-body launch-grid" aria-label="Pinned Forkjoin services">
               <a href="aeon://wiki.forkjoin.ai">Wiki</a>
               <a href="https://memory-api.forkjoin.ai">Memory</a>
               <a href="https://storms.watch">Storms</a>
