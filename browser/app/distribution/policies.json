@@ -115,6 +115,41 @@
     "OfferToSaveLoginsDefault": false,
     "OverrideFirstRunPage": "about:kenoma",
     "OverridePostUpdatePage": "",
+    "Permissions": {
+      "Camera": {
+        "Allow": [
+          "https://affectively.ai",
+          "https://www.affectively.ai",
+          "https://forkjoin.ai",
+          "https://www.forkjoin.ai"
+        ],
+        "Locked": false
+      },
+      "Microphone": {
+        "Allow": [
+          "https://affectively.ai",
+          "https://www.affectively.ai",
+          "https://forkjoin.ai",
+          "https://www.forkjoin.ai"
+        ],
+        "Locked": false
+      },
+      "Location": {
+        "Allow": [
+          "https://affectively.ai",
+          "https://www.affectively.ai",
+          "https://forkjoin.ai",
+          "https://www.forkjoin.ai",
+          "https://storms.watch",
+          "https://wiki.forkjoin.ai",
+          "https://skychat.forkjoin.ai",
+          "https://skymesh.forkjoin.ai",
+          "https://edgework.forkjoin.ai",
+          "https://dashrelay.forkjoin.ai"
+        ],
+        "Locked": false
+      }
+    },
     "Preferences": {
       "browser.ml.enable": {
         "Value": false,

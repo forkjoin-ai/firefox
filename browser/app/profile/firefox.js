@@ -3768,3 +3768,9 @@ pref("forkjoin.gnosis.entropy.active.enabled", true);
 pref("forkjoin.gnosis.entropy.rewards.enabled", true);
 pref("forkjoin.gnosis.network.enabled", true);
 pref("forkjoin.gnosis.commandbar.enabled", true);
+
+// Sovereign sensorium: first-party origins are granted camera/microphone/geo by
+// policy (browser/app/distribution/policies.json), so Cyrano taps in directly.
+// Prefer native macOS CoreLocation over the network geo provider.
+pref("geo.enabled", true);
+pref("geo.provider.use_corelocation", true);
