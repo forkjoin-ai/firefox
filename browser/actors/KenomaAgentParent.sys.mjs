@@ -95,6 +95,25 @@ export class KenomaAgentParent extends JSWindowActorParent {
           answer = action.answer != null ? action.answer : null;
           break;
         }
+
+        // Stuck-loop guard: a weak model can repeat the same action (e.g. keep
+        // navigating to the page it is already on). After it repeats, stop and
+        // answer from what the active page already shows.
+        const key = `${verb}|${action.url || ""}|${action.selector || ""}`;
+        if (key === this._lastActionKey) {
+          this._repeatCount = (this._repeatCount || 0) + 1;
+        } else {
+          this._repeatCount = 0;
+          this._lastActionKey = key;
+        }
+        if (this._repeatCount >= 2 && observation.active) {
+          answer =
+            observation.active.title ||
+            (observation.active.text || "").slice(0, 200) ||
+            null;
+          this.emit({ kind: "act", step, action: "settled" });
+          break;
+        }
         if (verb === "open") {
           // Open in the BACKGROUND: selecting the tab would background
           // about:kenoma and destroy the actor driving this loop. The content

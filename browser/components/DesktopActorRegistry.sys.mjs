@@ -615,6 +615,9 @@ let JSWINDOWACTORS = {
     },
     matches: ["about:kenoma", "*://*/*"],
     allFrames: false,
+    // Required so the actor is allowed in untrusted/isolated web content
+    // processes (webIsolated=...), where the agent reads + drives real pages.
+    safeForUntrustedWebProcess: true,
   },
 
   LightweightTheme: {
