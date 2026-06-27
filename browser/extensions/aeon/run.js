@@ -78,8 +78,29 @@ const SUPPORTED_TYPES = new Set([
   "gnosis.lacey.next",
   "truth.assess",
   "precog.forecast",
+  "browser.tab.list",
+  "browser.tab.read",
+  "browser.tab.screenshot",
+  "browser.tab.open",
+  "browser.tab.navigate",
+  "browser.tab.close",
+  "browser.tab.click",
+  "browser.tab.type",
 ]);
 const LOCAL_TYPES = new Set(["aeon.frame.streams"]);
+const BROWSER_TYPES = new Set([
+  "browser.tab.list",
+  "browser.tab.read",
+  "browser.tab.screenshot",
+  "browser.tab.open",
+  "browser.tab.navigate",
+  "browser.tab.close",
+  "browser.tab.click",
+  "browser.tab.type",
+]);
+const BROWSER_GATE_KEY = "kenoma.browser.control";
+const BROWSER_READ_CODE =
+  "(function(){return {title:document.title,url:location.href,text:(document.body?document.body.innerText:'').slice(0,8000)};})()";
 
 const state = {
   port: null,
@@ -168,6 +189,114 @@ function handleLocalRequest(message) {
   return null;
 }
 
+async function browserGate() {
+  const fallback = { enabled: true, read: true, navigate: true, run: true };
+  try {
+    const stored = await browserApi.storage.local.get(BROWSER_GATE_KEY);
+    return Object.assign(fallback, isPlainObject(stored[BROWSER_GATE_KEY]) ? stored[BROWSER_GATE_KEY] : {});
+  } catch (_) {
+    return fallback;
+  }
+}
+
+function requireGate(gate, capability) {
+  if (!gate.enabled) {
+    throw new Error("kenoma browser control is disabled");
+  }
+  if (capability && !gate[capability]) {
+    throw new Error(`kenoma browser control: ${capability} is disabled`);
+  }
+}
+
+async function resolveTabId(payload) {
+  if (payload && typeof payload.tabId === "number") {
+    return payload.tabId;
+  }
+  const tabs = await browserApi.tabs.query({ active: true, currentWindow: true });
+  if (!tabs.length || typeof tabs[0].id !== "number") {
+    throw new Error("no active tab");
+  }
+  return tabs[0].id;
+}
+
+function clickCode(selector) {
+  return `(function(){var el=document.querySelector(${JSON.stringify(selector)});if(!el)return {ok:false,error:'no match'};el.scrollIntoView();el.click();return {ok:true};})()`;
+}
+
+function typeCode(selector, text) {
+  return `(function(){var el=document.querySelector(${JSON.stringify(selector)});if(!el)return {ok:false,error:'no match'};el.focus();el.value=${JSON.stringify(text)};el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));return {ok:true};})()`;
+}
+
+function firstResult(value) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+async function handleBrowserRequest(message) {
+  const type = message.type;
+  const payload = isPlainObject(message.payload) ? message.payload : {};
+  const gate = await browserGate();
+
+  if (type === "browser.tab.list") {
+    requireGate(gate);
+    const tabs = await browserApi.tabs.query(isPlainObject(payload.query) ? payload.query : {});
+    return tabs.map(tab => ({
+      id: tab.id,
+      url: tab.url,
+      title: tab.title,
+      active: tab.active,
+      windowId: tab.windowId,
+      index: tab.index,
+    }));
+  }
+  if (type === "browser.tab.read") {
+    requireGate(gate, "read");
+    const tabId = await resolveTabId(payload);
+    const result = firstResult(await browserApi.tabs.executeScript(tabId, { code: BROWSER_READ_CODE }));
+    return Object.assign({ tabId }, isPlainObject(result) ? result : {});
+  }
+  if (type === "browser.tab.screenshot") {
+    requireGate(gate, "read");
+    const dataUrl = await browserApi.tabs.captureVisibleTab(
+      typeof payload.windowId === "number" ? payload.windowId : undefined,
+      { format: "png" }
+    );
+    return { dataUrl };
+  }
+  if (type === "browser.tab.open") {
+    requireGate(gate, "navigate");
+    const tab = await browserApi.tabs.create({
+      url: String(payload.url || "about:blank"),
+      active: payload.active !== false,
+    });
+    return { id: tab.id, url: tab.url };
+  }
+  if (type === "browser.tab.navigate") {
+    requireGate(gate, "navigate");
+    const tabId = await resolveTabId(payload);
+    const tab = await browserApi.tabs.update(tabId, { url: String(payload.url || "") });
+    return { id: tab.id, url: tab.url };
+  }
+  if (type === "browser.tab.close") {
+    requireGate(gate, "navigate");
+    const tabId = await resolveTabId(payload);
+    await browserApi.tabs.remove(tabId);
+    return { closed: tabId };
+  }
+  if (type === "browser.tab.click") {
+    requireGate(gate, "run");
+    const tabId = await resolveTabId(payload);
+    return firstResult(await browserApi.tabs.executeScript(tabId, { code: clickCode(String(payload.selector || "")) }));
+  }
+  if (type === "browser.tab.type") {
+    requireGate(gate, "run");
+    const tabId = await resolveTabId(payload);
+    return firstResult(
+      await browserApi.tabs.executeScript(tabId, { code: typeCode(String(payload.selector || ""), String(payload.text || "")) })
+    );
+  }
+  throw new TypeError(`Unsupported kenoma browser op: ${type}`);
+}
+
 function timeoutMsFor(message) {
   const payload = isPlainObject(message.payload) ? message.payload : {};
   const requested = Number(payload.timeoutMs);
@@ -240,6 +369,9 @@ function sendBridgeRequest(message) {
   }
   if (LOCAL_TYPES.has(message.type)) {
     return handleLocalRequest(message);
+  }
+  if (BROWSER_TYPES.has(message.type)) {
+    return handleBrowserRequest(message);
   }
 
   let port;

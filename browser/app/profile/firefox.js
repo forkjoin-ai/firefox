@@ -3774,3 +3774,12 @@ pref("forkjoin.gnosis.commandbar.enabled", true);
 // Prefer native macOS CoreLocation over the network geo provider.
 pref("geo.enabled", true);
 pref("geo.provider.use_corelocation", true);
+
+// Agent browser control: the aeon extension can see (list/read/screenshot) and
+// drive (open/navigate/close/click/type) tabs on behalf of a Moonshine agent.
+// The enforced runtime gate is browser.storage.local "kenoma.browser.control";
+// these prefs document intent and can be locked by policy for managed installs.
+pref("forkjoin.gnosis.browser.control.enabled", true);
+pref("forkjoin.gnosis.browser.control.read.enabled", true);
+pref("forkjoin.gnosis.browser.control.navigate.enabled", true);
+pref("forkjoin.gnosis.browser.control.run.enabled", true);
