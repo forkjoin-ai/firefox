@@ -7,6 +7,7 @@
 
 #include "CacheCrypto.h"
 #include "CacheFile.h"
+#include "CacheGnosisTelemetry.h"
 #include "nsThreadUtils.h"
 
 #include "mozilla/IntegerPrintfMacros.h"
@@ -449,6 +450,7 @@ nsresult CacheFileChunk::Write(CacheFileHandle* aHandle,
                   (kChunkSize + CacheCrypto::kBlockOverhead);
   }
 
+  CacheGnosisTelemetry::RecordChunkWrite(mIndex, writeLen, mEncrypted);
   rv = CacheFileIOManager::Write(aHandle, writeOffset, writeBuf, writeLen,
                                  false, false, this);
   if (NS_WARN_IF(NS_FAILED(rv))) {

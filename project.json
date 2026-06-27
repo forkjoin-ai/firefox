@@ -224,7 +224,21 @@
       "executor": "a0:run-commands",
       "options": {
         "cwd": "open-source/firefox",
-        "command": "python3.12 ./mach --no-interactive xpcshell-test browser/components/sessionstore/test/unit/test_gnosis_sessionstore_receipts.js"
+        "command": "/opt/homebrew/bin/node scripts/forkjoin-tmp-build.mjs --sync-only --reuse && python3.12 /tmp/forkjoin-firefox-build/mach --no-interactive xpcshell-test browser/components/sessionstore/test/unit/test_gnosis_sessionstore_receipts.js"
+      }
+    },
+    "test:profile-json-gnosis": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node scripts/forkjoin-tmp-build.mjs --sync-only --reuse && python3.12 /tmp/forkjoin-firefox-build/mach --no-interactive xpcshell-test toolkit/modules/tests/xpcshell/test_JSONFile.js"
+      }
+    },
+    "test:taskcontroller-gnosis": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node scripts/forkjoin-tmp-build.mjs --sync-only --reuse && python3.12 /tmp/forkjoin-firefox-build/mach --no-interactive gtest TestTaskController.GnosisSafeLaneClassifiesNativeTasks"
       }
     },
     "commandbar-smoke": {

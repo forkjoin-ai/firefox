@@ -2,10 +2,13 @@
 import {
   cpSync,
   existsSync,
+  closeSync,
   mkdirSync,
+  openSync,
   readFileSync,
   rmSync,
   statSync,
+  unlinkSync,
   writeFileSync,
 } from "node:fs";
 import { basename, dirname, join, resolve, sep } from "node:path";
@@ -42,6 +45,38 @@ function run(command, commandArgs, cwd = tmpRoot) {
   }
 }
 
+function waitForSyncLock() {
+  const buffer = new SharedArrayBuffer(4);
+  const view = new Int32Array(buffer);
+  Atomics.wait(view, 0, 0, 100);
+}
+
+function withSyncLock(callback) {
+  mkdirSync(tmpRoot, { recursive: true });
+  const lockPath = join(tmpRoot, ".forkjoin-sync.lock");
+  let fd = null;
+  const start = Date.now();
+  while (fd === null) {
+    try {
+      fd = openSync(lockPath, "wx");
+    } catch (error) {
+      if (error?.code !== "EEXIST" || Date.now() - start > 120000) {
+        throw error;
+      }
+      waitForSyncLock();
+    }
+  }
+
+  try {
+    return callback();
+  } finally {
+    closeSync(fd);
+    try {
+      unlinkSync(lockPath);
+    } catch (error) {}
+  }
+}
+
 function ensureInsideTmp(path) {
   const resolved = resolve(path);
   if (
@@ -66,6 +101,15 @@ function copyPath(relativePath) {
   } else {
     cpSync(from, to);
   }
+}
+
+function copyFileTo(sourcePath, targetPath) {
+  if (!existsSync(sourcePath)) {
+    return;
+  }
+  mkdirSync(dirname(targetPath), { recursive: true });
+  rmSync(targetPath, { recursive: true, force: true });
+  cpSync(sourcePath, targetPath);
 }
 
 function ensureMozBuildEntry(path, entry) {
@@ -115,6 +159,33 @@ function syncForkjoinFiles() {
   copyPath("mozconfig");
   copyPath("browser/components/about/AboutRedirector.cpp");
   copyPath("browser/components/about/components.conf");
+  copyPath("browser/components/sessionstore/SessionStoreGnosis.sys.mjs");
+  copyPath("browser/components/sessionstore/SessionWriter.sys.mjs");
+  copyPath("browser/components/sessionstore/moz.build");
+  copyPath("browser/components/sessionstore/test/unit/test_gnosis_sessionstore_receipts.js");
+  copyPath("browser/components/sessionstore/test/unit/xpcshell.toml");
+  copyPath("toolkit/modules/JSONFile.sys.mjs");
+  copyPath("toolkit/modules/ProfileJSONGnosis.sys.mjs");
+  copyPath("toolkit/modules/moz.build");
+  copyPath("toolkit/modules/tests/xpcshell/test_JSONFile.js");
+  copyPath("netwerk/cache2/CacheFileChunk.cpp");
+  copyPath("netwerk/cache2/CacheFileMetadata.cpp");
+  copyPath("netwerk/cache2/CacheGnosisTelemetry.cpp");
+  copyPath("netwerk/cache2/CacheGnosisTelemetry.h");
+  copyPath("netwerk/cache2/moz.build");
+  copyPath("storage/mozStorageAsyncStatementExecution.cpp");
+  copyPath("storage/StorageGnosisTelemetry.cpp");
+  copyPath("storage/StorageGnosisTelemetry.h");
+  copyPath("storage/moz.build");
+  copyPath("dom/quota/OriginOperations.cpp");
+  copyPath("dom/quota/QuotaGnosisTelemetry.cpp");
+  copyPath("dom/quota/QuotaGnosisTelemetry.h");
+  copyPath("dom/quota/moz.build");
+  copyPath("xpcom/threads/TaskController.cpp");
+  copyPath("xpcom/threads/TaskControllerGnosisTelemetry.cpp");
+  copyPath("xpcom/threads/TaskControllerGnosisTelemetry.h");
+  copyPath("xpcom/threads/moz.build");
+  copyPath("xpcom/tests/gtest/TestTaskController.cpp");
   copyPath("browser/extensions/aeon");
   copyPath("browser/components/aeonprotocol");
   copyPath("browser/app/profile/firefox.js");
@@ -126,7 +197,100 @@ function syncForkjoinFiles() {
   copyPath("browser/branding/nightly/content/jar.mn");
   copyPath("browser/branding/nightly/content/kenoma-home.css");
   copyPath("browser/branding/nightly/content/kenoma-home.html");
+  copyPath("browser/branding/nightly/content/kenoma-home.js");
+  copyPath("browser/branding/nightly/content/operator-tab");
   ensureForkjoinBuildEntries();
+  syncBuiltSessionstoreArtifacts();
+  syncBuiltToolkitModuleArtifacts();
+}
+
+function syncBuiltSessionstoreArtifacts() {
+  const moduleFiles = [
+    "SessionStoreGnosis.sys.mjs",
+    "SessionWriter.sys.mjs",
+  ];
+  const resourceRoots = [
+    join(tmpRoot, objectDir, "dist", "bin"),
+    join(tmpRoot, objectDir, "dist", "Nightly.app", "Contents", "Resources"),
+    join(tmpRoot, objectDir, "dist", "Kenoma.app", "Contents", "Resources"),
+  ];
+  for (const resourceRoot of resourceRoots) {
+    const moduleRoot = join(resourceRoot, "browser", "modules", "sessionstore");
+    if (!existsSync(moduleRoot)) {
+      continue;
+    }
+    for (const file of moduleFiles) {
+      copyFileTo(
+        join(sourceRoot, "browser", "components", "sessionstore", file),
+        join(moduleRoot, file)
+      );
+    }
+  }
+
+  const xpcshellRoot = join(
+    tmpRoot,
+    objectDir,
+    "_tests",
+    "xpcshell",
+    "browser",
+    "components",
+    "sessionstore",
+    "test",
+    "unit"
+  );
+  if (existsSync(xpcshellRoot)) {
+    for (const file of ["test_gnosis_sessionstore_receipts.js", "xpcshell.toml"]) {
+      copyFileTo(
+        join(sourceRoot, "browser", "components", "sessionstore", "test", "unit", file),
+        join(xpcshellRoot, file)
+      );
+    }
+  }
+}
+
+function syncBuiltToolkitModuleArtifacts() {
+  const moduleFiles = [
+    "JSONFile.sys.mjs",
+    "ProfileJSONGnosis.sys.mjs",
+  ];
+  const resourceRoots = [
+    join(tmpRoot, objectDir, "dist", "bin"),
+    join(tmpRoot, objectDir, "dist", "Nightly.app", "Contents", "Resources"),
+    join(tmpRoot, objectDir, "dist", "Kenoma.app", "Contents", "Resources"),
+  ];
+  for (const resourceRoot of resourceRoots) {
+    const moduleRoot = join(resourceRoot, "modules");
+    if (!existsSync(moduleRoot)) {
+      continue;
+    }
+    for (const file of moduleFiles) {
+      copyFileTo(
+        join(sourceRoot, "toolkit", "modules", file),
+        join(moduleRoot, file)
+      );
+    }
+  }
+
+  const xpcshellRoot = join(
+    tmpRoot,
+    objectDir,
+    "_tests",
+    "xpcshell",
+    "toolkit",
+    "modules",
+    "tests",
+    "xpcshell"
+  );
+  if (existsSync(xpcshellRoot)) {
+    copyFileTo(
+      join(sourceRoot, "toolkit", "modules", "tests", "xpcshell", "test_JSONFile.js"),
+      join(xpcshellRoot, "test_JSONFile.js")
+    );
+  }
+}
+
+function syncPostGeneratedBrandingFiles() {
+  copyPath("browser/branding/nightly/content/operator-tab");
 }
 
 function generateKenomaBranding() {
@@ -184,6 +348,26 @@ function verifyBuiltArtifact() {
       "content",
       "branding",
       "kenoma-sigil.svg"
+    ),
+    join(
+      distResources,
+      "browser",
+      "chrome",
+      "browser",
+      "content",
+      "branding",
+      "kenoma-home.js"
+    ),
+    join(
+      distResources,
+      "browser",
+      "chrome",
+      "browser",
+      "content",
+      "branding",
+      "operator-tab",
+      "fonts",
+      "AtkinsonHyperlegible-Regular.ttf"
     ),
     join(distResources, "distribution", "policies.json"),
   ];
@@ -271,8 +455,11 @@ if (args.has("--paths")) {
 }
 
 ensureTmpClone();
-syncForkjoinFiles();
-generateKenomaBranding();
+withSyncLock(() => {
+  syncForkjoinFiles();
+  generateKenomaBranding();
+  syncPostGeneratedBrandingFiles();
+});
 
 if (args.has("--sync-only")) {
   printPaths();

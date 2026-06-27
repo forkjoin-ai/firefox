@@ -4,6 +4,7 @@
 
 #include "TaskController.h"
 #include "IdleTaskRunner.h"
+#include "TaskControllerGnosisTelemetry.h"
 #include "nsIIdleRunnable.h"
 #include "nsIRunnable.h"
 #include "nsThreadUtils.h"
@@ -505,6 +506,10 @@ void TaskController::AddTask(already_AddRefed<Task> aTask) {
   }
 
   MutexAutoLock lock(mGraphMutex);
+
+  TaskControllerGnosisTelemetry::RecordTaskQueued(
+      task->GetPriority(), task->GetKind() == Task::Kind::MainThreadOnly,
+      task->GetManager() != nullptr);
 
   if (TaskManager* manager = task->GetManager()) {
     if (manager->mTaskCount == 0) {

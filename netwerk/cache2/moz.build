@@ -46,6 +46,7 @@ UNIFIED_SOURCES += [
     "CacheFileMetadata.cpp",
     "CacheFileOutputStream.cpp",
     "CacheFileUtils.cpp",
+    "CacheGnosisTelemetry.cpp",
     "CacheHashUtils.cpp",
     "CacheIndex.cpp",
     "CacheIndexContextIterator.cpp",

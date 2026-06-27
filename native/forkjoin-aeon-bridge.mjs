@@ -1479,9 +1479,9 @@ const FIREFOX_STORAGE_SURFACES = Object.freeze([
     priority: 68,
     frequency: "medium",
     files: [
-      "browser/components/places/PlacesBackups.sys.mjs",
-      "browser/components/preferences/",
-      "toolkit/components/jsoncpp/",
+      "toolkit/modules/JSONFile.sys.mjs",
+      "toolkit/modules/ProfileJSONGnosis.sys.mjs",
+      "toolkit/components/places/PlacesBackups.sys.mjs",
     ],
     diskArtifacts: [
       "*.json",
@@ -1490,6 +1490,32 @@ const FIREFOX_STORAGE_SURFACES = Object.freeze([
     reason: "small structured rewrites should use bitwise envelopes and content hashes before disk fallback",
   },
 ]);
+const STORAGE_SURFACE_INTEGRATION_EVIDENCE = Object.freeze({
+  "sessionstore-recovery": [
+    "browser/components/sessionstore/SessionStoreGnosis.sys.mjs",
+    "browser/components/sessionstore/test/unit/test_gnosis_sessionstore_receipts.js",
+  ],
+  "http-cache-chunks": [
+    "netwerk/cache2/CacheGnosisTelemetry.h",
+    "netwerk/cache2/CacheGnosisTelemetry.cpp",
+  ],
+  "http-cache-metadata": [
+    "netwerk/cache2/CacheGnosisTelemetry.h",
+    "netwerk/cache2/CacheGnosisTelemetry.cpp",
+  ],
+  "sqlite-async-writes": [
+    "storage/StorageGnosisTelemetry.h",
+    "storage/StorageGnosisTelemetry.cpp",
+  ],
+  "quota-origin-operations": [
+    "dom/quota/QuotaGnosisTelemetry.h",
+    "dom/quota/QuotaGnosisTelemetry.cpp",
+  ],
+  "profile-json-small-writes": [
+    "toolkit/modules/ProfileJSONGnosis.sys.mjs",
+    "toolkit/modules/tests/xpcshell/test_JSONFile.js",
+  ],
+});
 
 function storageHash(bytes, size = 12) {
   return createHash("sha256").update(bytes).digest("hex").slice(0, size);
@@ -1612,6 +1638,17 @@ function storageSurfaceStatus(surface) {
 function storageVictimSurfaces() {
   return FIREFOX_STORAGE_SURFACES.map(surface => {
     const files = storageSurfaceStatus(surface);
+    const evidenceFiles = STORAGE_SURFACE_INTEGRATION_EVIDENCE[surface.id] ?? [];
+    const evidence = evidenceFiles.map(file => {
+      const status = fileStatus(path.join(nativeDir, "..", file));
+      return {
+        file,
+        exists: status.exists,
+        bytes: status.bytes ?? 0,
+        path: status.path,
+      };
+    });
+    const integrated = evidence.length > 0 && evidence.every(file => file.exists);
     const existingFiles = files.filter(file => file.exists);
     const presenceScore = existingFiles.length / Math.max(1, files.length);
     const routeSpec = STORAGE_ROUTE_TABLE[surface.kind] ?? STORAGE_ROUTE_TABLE.profileJson;
@@ -1620,6 +1657,8 @@ function storageVictimSurfaces() {
       ...surface,
       route: surface.route ?? routeSpec.route,
       score,
+      integrated,
+      integrationEvidence: evidence,
       files,
       presentFiles: existingFiles.length,
       totalFiles: files.length,
@@ -1630,9 +1669,12 @@ function storageVictimSurfaces() {
 
 async function handleStorageVictims() {
   const surfaces = storageVictimSurfaces();
+  const pending = surfaces.filter(surface => !surface.integrated);
   return {
     mode: "active-victim-ranking",
-    topVictim: surfaces[0] ?? null,
+    topVictim: pending[0] ?? null,
+    integrated: surfaces.filter(surface => surface.integrated),
+    pending,
     surfaces,
     invariants: {
       directDiskFallback: true,
@@ -2874,7 +2916,7 @@ async function runVictimAnalysis() {
     dispatch("gnosis.storage.victims", {}),
     dispatch("gnosis.entropy.bench", { frames: 8192 }),
   ]);
-  const topStorage = victims.surfaces.slice(0, 5);
+  const topStorage = victims.pending.slice(0, 5);
   const ranking = [
     {
       id: "scheduler-helix-safe-lane",
@@ -2895,15 +2937,17 @@ async function runVictimAnalysis() {
       id: surface.id,
       score: surface.score,
       route: surface.route,
+      integrated: surface.integrated,
       presentFiles: surface.presentFiles,
       totalFiles: surface.totalFiles,
       nextAction: surface.reason,
     })),
   ].sort((a, b) => b.score - a.score || a.id.localeCompare(b.id));
+  const pendingRanking = ranking.filter(item => item.integrated !== true);
   process.stdout.write(JSON.stringify({
     ok: true,
     elapsedMs: elapsedMs(start),
-    nextVictim: ranking[0] ?? null,
+    nextVictim: victims.topVictim ?? pendingRanking[0] ?? null,
     ranking,
     scheduler,
     storage,

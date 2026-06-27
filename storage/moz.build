@@ -79,6 +79,7 @@ UNIFIED_SOURCES += [
     "ReadOnlyNoLockVFS.cpp",
     "SQLiteEncryption.cpp",
     "StorageBaseStatementInternal.cpp",
+    "StorageGnosisTelemetry.cpp",
     "StoragePathUtil.cpp",
     "VacuumManager.cpp",
     "Variant.cpp",

@@ -150,6 +150,7 @@ UNIFIED_SOURCES += [
     "PromiseUtils.cpp",
     "QMResult.cpp",
     "QuotaCommon.cpp",
+    "QuotaGnosisTelemetry.cpp",
     "QuotaManagerService.cpp",
     "QuotaObject.cpp",
     "QuotaParent.cpp",

@@ -3,53 +3,140 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Kenoma</title>
+    <title>Kenoma Operator</title>
     <link rel="stylesheet" href="chrome://branding/content/kenoma-home.css">
+    <script defer src="chrome://branding/content/kenoma-home.js"></script>
   </head>
   <body>
-    <main class="shell" aria-label="Kenoma home">
-      <section class="hero">
-        <div class="sigil-card" aria-hidden="true">
-          <img src="chrome://branding/content/kenoma-sigil.svg" alt="">
-        </div>
-        <p class="eyebrow">Aeon browser · sovereign transport · no borrowed sky</p>
-        <h1>Kenoma</h1>
-        <p class="lede">
-          A browser surface for Aeon frames, local-first apps, Pneuma codecs,
-          Bitwise channels, and the Forkjoin wiki graph.
-        </p>
-        <form class="search" action="https://wiki.forkjoin.ai/search" method="get">
-          <label for="q">Search the palimpset</label>
-          <div class="search-row">
-            <input id="q" name="q" type="search" autocomplete="off" placeholder="Search the codex, proofs, apps, frames...">
-            <button type="submit">Search</button>
-          </div>
-        </form>
-        <nav class="launch" aria-label="Sovereign launch points">
-          <a href="aeon://wiki.forkjoin.ai">Wiki over Aeon</a>
-          <a href="https://storms.watch">Storms Watch</a>
-          <a href="https://skychat.forkjoin.ai">SkyChat</a>
-          <a href="https://edgework.forkjoin.ai">Edgework</a>
-          <a href="https://dashrelay.forkjoin.ai">Dashrelay</a>
+    <div class="operator-shell" data-theme="dark">
+      <div class="field" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <a class="brand" href="about:kenoma" aria-label="Kenoma home">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="chrome://branding/content/kenoma-sigil.svg" alt="">
+          </span>
+          <span class="brand-copy">
+            <strong>Kenoma</strong>
+            <span>operator</span>
+          </span>
+        </a>
+
+        <nav class="status-rail" aria-label="Sovereign status">
+          <a class="pill" href="https://storms.watch">
+            <span class="dot dot-weather" aria-hidden="true"></span>
+            <span id="weather-pill">Storms Watch</span>
+          </a>
+          <a class="pill" href="https://memory-api.forkjoin.ai">
+            <span class="dot dot-memory" aria-hidden="true"></span>
+            <span id="memory-pill">Fractal Memory</span>
+          </a>
+          <button class="pill button-pill" id="focus-toggle" type="button">Focus</button>
+          <time class="clock" id="clock">--:--</time>
         </nav>
-      </section>
-      <aside class="panel" aria-label="Protocol status">
-        <img class="splash" src="chrome://branding/content/kenoma-splash.svg" alt="">
-        <dl>
-          <div>
-            <dt>scheme</dt>
-            <dd>aeon://</dd>
+      </header>
+
+      <main class="workspace">
+        <section class="command-core" aria-labelledby="kenoma-title">
+          <canvas id="wiremark" class="wiremark" width="240" height="240" aria-hidden="true"></canvas>
+          <p class="eyebrow">Aeon browser · sovereign transport · no borrowed sky</p>
+          <h1 id="kenoma-title">Kenoma</h1>
+          <p class="lede">
+            Dispatch across Aeon frames, Fractal Memory, Storms Watch, SkyChat,
+            Pneuma codecs, Bitwise channels, and the Forkjoin wiki graph.
+          </p>
+
+          <form class="command-form" action="https://wiki.forkjoin.ai/search" method="get">
+            <label for="q">Dispatch an operation</label>
+            <div class="command-row">
+              <span class="fork-label">FORK x3</span>
+              <input
+                id="q"
+                name="q"
+                type="search"
+                autocomplete="off"
+                placeholder="Search the wiki, proofs, apps, frames..."
+              >
+              <button type="submit">Run</button>
+            </div>
+          </form>
+
+          <div class="chips" aria-label="Quick operations">
+            <button type="button" data-query="memory protocol for browser sessions">Recall browser memory</button>
+            <button type="button" data-query="weather mesh severe storms">Open weather mesh</button>
+            <button type="button" data-query="aeon protocol frame transport">Trace aeon frames</button>
+            <button type="button" data-query="pneuma bitwise codec">Inspect codecs</button>
           </div>
-          <div>
-            <dt>native bridge</dt>
-            <dd>frames · UDP · Pneuma · Lacey</dd>
-          </div>
-          <div>
-            <dt>default search</dt>
-            <dd>wiki.forkjoin.ai</dd>
-          </div>
-        </dl>
-      </aside>
-    </main>
+        </section>
+
+        <section class="widget-band" id="widget-band" aria-label="Operator widgets">
+          <article class="widget in-flight">
+            <div class="widget-head">
+              <span>In Flight</span>
+              <strong>3 live</strong>
+            </div>
+            <div class="run-list">
+              <a class="run" href="aeon://wiki.forkjoin.ai">
+                <span class="run-dot cyan"></span>
+                <span>
+                  <strong>Wiki over Aeon</strong>
+                  <small>scheme resolver · frames</small>
+                </span>
+                <em>RACING</em>
+              </a>
+              <a class="run" href="https://memory-api.forkjoin.ai">
+                <span class="run-dot violet"></span>
+                <span>
+                  <strong>Fractal Memory</strong>
+                  <small>facts · spaces · snapshots</small>
+                </span>
+                <em>READY</em>
+              </a>
+              <a class="run" href="https://storms.watch">
+                <span class="run-dot lime"></span>
+                <span>
+                  <strong>Storms Watch</strong>
+                  <small>weather mesh · alerts</small>
+                </span>
+                <em>LIVE</em>
+              </a>
+            </div>
+          </article>
+
+          <article class="widget">
+            <div class="widget-head">
+              <span>Recent</span>
+              <strong>folded</strong>
+            </div>
+            <ul class="recent-list">
+              <li><span>Kenoma about page</span><em>about:kenoma</em></li>
+              <li><span>Aeon native bridge</span><em>UDP · Pneuma · Lacey</em></li>
+              <li><span>Session receipts</span><em>knotchain append</em></li>
+              <li><span>Commercial junk purge</span><em>locked</em></li>
+            </ul>
+          </article>
+
+          <article class="widget">
+            <div class="widget-head">
+              <span>Launch</span>
+              <strong>sovereign</strong>
+            </div>
+            <nav class="launch-grid" aria-label="Pinned Forkjoin services">
+              <a href="aeon://wiki.forkjoin.ai">Wiki</a>
+              <a href="https://memory-api.forkjoin.ai">Memory</a>
+              <a href="https://storms.watch">Storms</a>
+              <a href="https://skychat.forkjoin.ai">SkyChat</a>
+              <a href="https://dashrelay.com">DashRelay</a>
+              <a href="https://edgework.forkjoin.ai">Edgework</a>
+            </nav>
+          </article>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <a href="https://memory-api.forkjoin.ai">memory · fractal-memory</a>
+        <span>38% context · browser bridge warm · aeon:// enabled</span>
+      </footer>
+    </div>
   </body>
 </html>

@@ -9,6 +9,7 @@ ChromeUtils.defineESModuleGetters(this, {
   AsyncShutdown: "resource://gre/modules/AsyncShutdown.sys.mjs",
   FileTestUtils: "resource://testing-common/FileTestUtils.sys.mjs",
   JSONFile: "resource://gre/modules/JSONFile.sys.mjs",
+  ProfileJSONGnosis: "resource://gre/modules/ProfileJSONGnosis.sys.mjs",
   sinon: "resource://testing-common/Sinon.sys.mjs",
 });
 
@@ -30,6 +31,19 @@ const TEST_DATA = {
     prop2: 2,
   },
 };
+
+registerCleanupFunction(() => {
+  ProfileJSONGnosis.resetForTests();
+  for (let pref of [
+    "forkjoin.gnosis.storage.active.enabled",
+    "forkjoin.gnosis.auth.active.enabled",
+    "forkjoin.fractal_iam.root_did",
+  ]) {
+    try {
+      Services.prefs.clearUserPref(pref);
+    } catch (ex) {}
+  }
+});
 
 add_setup(
   { skip_if: () => AppConstants.platform == "android" },
@@ -69,6 +83,33 @@ add_task(async function test_save_reload() {
   await storeForLoad.load();
 
   Assert.deepEqual(storeForLoad.data, TEST_DATA);
+});
+
+add_task(async function test_gnosis_profile_json_projection() {
+  Services.prefs.setBoolPref("forkjoin.gnosis.storage.active.enabled", true);
+  Services.prefs.setBoolPref("forkjoin.gnosis.auth.active.enabled", true);
+  Services.prefs.setCharPref(
+    "forkjoin.fractal_iam.root_did",
+    "did:example:jsonfile"
+  );
+  ProfileJSONGnosis.resetForTests();
+
+  let store = new JSONFile({
+    path: getTempFile("gnosis-profile.json").path,
+    sanitizedBasename: "gnosisprofile",
+  });
+  await store.load();
+  store.data = TEST_DATA;
+  await store._save();
+
+  let projection = ProfileJSONGnosis.snapshotForTests();
+  Assert.equal(projection.route, "bitwise-binary");
+  Assert.equal(projection.sanitizedBasename, "gnosisprofile");
+  Assert.equal(projection.profilePathRedacted, true);
+  Assert.equal(projection.did, "did:example:jsonfile");
+  Assert.greater(projection.jsonBytes, 0);
+  Assert.less(projection.bitwiseEnvelopeBytes, projection.jsonBytes);
+  Assert.deepEqual(await IOUtils.readJSON(store.path), TEST_DATA);
 });
 
 add_task(async function test_load_sync() {

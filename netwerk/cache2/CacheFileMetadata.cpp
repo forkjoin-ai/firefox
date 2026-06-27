@@ -7,6 +7,7 @@
 
 #include "CacheCrypto.h"
 #include "CacheFileIOManager.h"
+#include "CacheGnosisTelemetry.h"
 #include "nsICacheEntry.h"
 #include "CacheHashUtils.h"
 #include "CacheFileChunk.h"
@@ -397,6 +398,7 @@ nsresult CacheFileMetadata::WriteMetadata(
       encrypted ? EncryptedMetaPhysicalOffset(aOffset) : int64_t(aOffset);
 
   char* writeBuffer = mWriteBuf;
+  CacheGnosisTelemetry::RecordMetadataWrite(bufSize, encrypted);
   if (aListener) {
     mListener = aListener;
     rv = CacheFileIOManager::Write(mHandle, writeOffset, writeBuffer, bufSize,

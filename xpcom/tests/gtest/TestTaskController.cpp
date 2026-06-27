@@ -13,6 +13,7 @@
 #include "mozilla/Mutex.h"           // Mutex, MutexAutoLock
 #include "mozilla/RefPtr.h"          // RefPtr, do_AddRef
 #include "mozilla/TaskController.h"  // TaskController, Task
+#include "mozilla/TaskControllerGnosisTelemetry.h"
 #include "prthread.h"                // PR_Sleep
 
 using namespace mozilla;
@@ -40,8 +41,10 @@ class ReschedulingTask : public Task {
   static constexpr uint32_t LoopCount = 3;
 
  public:
-  explicit ReschedulingTask(Kind aKind, Logger* aLogger, const char* aName)
-      : Task(aKind, EventQueuePriority::Normal),
+  explicit ReschedulingTask(Kind aKind, Logger* aLogger, const char* aName,
+                            EventQueuePriority aPriority =
+                                EventQueuePriority::Normal)
+      : Task(aKind, aPriority),
         mCount(0),
         mIsDone(false),
         mLogger(aLogger),
@@ -94,6 +97,36 @@ TEST(TaskController, RescheduleOnMainThread)
   ASSERT_TRUE(mainThreadTask->IsDone());
 
   ASSERT_TRUE(logger.GetLog() == "111");
+}
+
+TEST(TaskController, GnosisSafeLaneClassifiesNativeTasks)
+{
+  TaskControllerGnosisTelemetry::ResetForTests();
+
+  Logger logger;
+  RefPtr safeLaneTask =
+      MakeRefPtr<ReschedulingTask>(Task::Kind::MainThreadOnly, &logger, "1",
+                                   EventQueuePriority::Normal);
+  RefPtr protectedTask =
+      MakeRefPtr<ReschedulingTask>(Task::Kind::MainThreadOnly, &logger, "2",
+                                   EventQueuePriority::InputHigh);
+
+  TaskController::Get()->AddTask(do_AddRef(safeLaneTask));
+  TaskController::Get()->AddTask(do_AddRef(protectedTask));
+
+  TaskControllerGnosisSnapshot snapshot =
+      TaskControllerGnosisTelemetry::Snapshot();
+  ASSERT_EQ(snapshot.mQueued, 2u);
+  ASSERT_EQ(snapshot.mMainThreadQueued, 2u);
+  ASSERT_EQ(snapshot.mOffMainThreadQueued, 0u);
+  ASSERT_EQ(snapshot.mSafeLaneCandidates, 1u);
+  ASSERT_EQ(snapshot.mProtectedQueued, 1u);
+
+  while (NS_ProcessNextEvent(nullptr, false)) {
+  }
+
+  ASSERT_TRUE(safeLaneTask->IsDone());
+  ASSERT_TRUE(protectedTask->IsDone());
 }
 
 TEST(TaskController, RescheduleOffMainThread)

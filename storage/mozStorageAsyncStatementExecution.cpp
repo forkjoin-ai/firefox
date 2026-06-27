@@ -14,6 +14,7 @@
 #include "mozStoragePrivateHelpers.h"
 #include "mozStorageStatementData.h"
 #include "mozStorageAsyncStatementExecution.h"
+#include "StorageGnosisTelemetry.h"
 
 #include "mozilla/DebugOnly.h"
 
@@ -244,6 +245,8 @@ bool AsyncExecuteStatements::executeStatement(StatementData& aData) {
     SQLiteMutexAutoLock lockedScope(mDBMutex);
 
     int rc = mConnection->stepStatement(mNativeConnection, aStatement);
+    StorageGnosisTelemetry::RecordAsyncStep(
+        ::sqlite3_stmt_readonly(aStatement) != 0, rc);
 
     // Some errors are not fatal, and we can handle them and continue.
     if (rc == SQLITE_BUSY) {

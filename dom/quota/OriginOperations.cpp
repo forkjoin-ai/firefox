@@ -18,6 +18,7 @@
 #include "OriginOperationBase.h"
 #include "OriginParser.h"
 #include "QuotaRequestBase.h"
+#include "QuotaGnosisTelemetry.h"
 #include "ResolvableNormalOriginOp.h"
 #include "mozilla/Assertions.h"
 #include "mozilla/Atomics.h"
@@ -1299,6 +1300,8 @@ RefPtr<BoolPromise> OpenStorageDirectoryHelper<Base>::OpenStorageDirectory(
     const PersistenceScope& aPersistenceScope, const OriginScope& aOriginScope,
     const ClientStorageScope& aClientStorageScope, bool aExclusive,
     bool aInitializeOrigins, const DirectoryLockCategory aCategory) {
+  QuotaGnosisTelemetry::RecordStorageDirectoryOpen(aExclusive,
+                                                   aInitializeOrigins);
   return Base::mQuotaManager
       ->OpenStorageDirectory(aPersistenceScope, aOriginScope,
                              aClientStorageScope, aExclusive,

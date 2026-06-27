@@ -59,6 +59,10 @@ and `open-source/aeon-ux/src/swag/svg/piece-knot-void.svg` for the home splash.
 The user-facing home URL is `about:kenoma`, registered through
 `browser/components/about/AboutRedirector.cpp`; the page itself is backed by the
 packaged `chrome://branding/content/kenoma-home.html` resource.
+The current home surface is adapted from `Agent browser startup tab.zip` as a
+self-contained operator tab: `kenoma-home.html`, `kenoma-home.css`,
+`kenoma-home.js`, and local Atkinson fonts under
+`browser/branding/nightly/content/operator-tab/fonts`.
 Regenerate derived branding assets with:
 
 ```bash

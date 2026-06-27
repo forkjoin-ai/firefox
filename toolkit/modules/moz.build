@@ -82,6 +82,9 @@ with Files("Integration.sys.mjs"):
 with Files("JSONFile.sys.mjs"):
     BUG_COMPONENT = ("Toolkit", "Form Manager")
 
+with Files("ProfileJSONGnosis.sys.mjs"):
+    BUG_COMPONENT = ("Toolkit", "Form Manager")
+
 with Files("LightweightThemeConsumer.sys.mjs"):
     BUG_COMPONENT = ("Firefox", "Toolbars and Customization")
 
@@ -196,6 +199,7 @@ EXTRA_JS_MODULES += [
     "PrivateBrowsingUtils.sys.mjs",
     "ProcessType.sys.mjs",
     "ProfileAge.sys.mjs",
+    "ProfileJSONGnosis.sys.mjs",
     "Region.sys.mjs",
     "RemotePageAccessManager.sys.mjs",
     "ResetProfile.sys.mjs",

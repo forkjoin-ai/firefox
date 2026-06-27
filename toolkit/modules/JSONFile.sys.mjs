@@ -34,6 +34,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
   DeferredTask: "resource://gre/modules/DeferredTask.sys.mjs",
   FileUtils: "resource://gre/modules/FileUtils.sys.mjs",
   NetUtil: "resource://gre/modules/NetUtil.sys.mjs",
+  ProfileJSONGnosis: "resource://gre/modules/ProfileJSONGnosis.sys.mjs",
 });
 
 ChromeUtils.defineLazyGetter(lazy, "gTextDecoder", function () {
@@ -422,20 +423,32 @@ JSONFile.prototype = {
       await Promise.resolve(this._beforeSave());
     }
 
+    let writeOptions = Object.assign(
+      { tmpPath: this.path + ".tmp" },
+      this._options
+    );
+
     try {
-      await IOUtils.writeJSON(
-        this.path,
-        this._data,
-        Object.assign({ tmpPath: this.path + ".tmp" }, this._options)
-      );
+      let gnosisWrite = lazy.ProfileJSONGnosis.prepareWrite({
+        data: this._data,
+        sanitizedBasename: this.sanitizedBasename,
+        options: writeOptions,
+      });
+      if (gnosisWrite.active) {
+        await IOUtils.writeUTF8(this.path, gnosisWrite.serialized, writeOptions);
+      } else {
+        await IOUtils.writeJSON(this.path, this._data, writeOptions);
+      }
     } catch (ex) {
       if (typeof this._data.toJSONSafe == "function") {
         // If serialization fails, try fallback safe JSON converter.
-        await IOUtils.writeUTF8(
-          this.path,
-          this._data.toJSONSafe(),
-          Object.assign({ tmpPath: this.path + ".tmp" }, this._options)
-        );
+        let serialized = this._data.toJSONSafe();
+        let gnosisWrite = lazy.ProfileJSONGnosis.prepareSerializedWrite({
+          serialized,
+          sanitizedBasename: this.sanitizedBasename,
+          options: writeOptions,
+        });
+        await IOUtils.writeUTF8(this.path, gnosisWrite.serialized, writeOptions);
       } else {
         // Something went wrong with saving that we cannot recover from. If
         // the consumer of JSONFile has supplied a save failure handler, we'll
