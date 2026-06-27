@@ -41,11 +41,21 @@ export class KenomaIdentityChild extends JSWindowActorChild {
     this.injectAPI();
   }
 
+  // Event-gated actors are dispatched through handleEvent; without it the
+  // DOMDocElementInserted instantiation aborts before actorCreated, so the API
+  // never gets injected.
+  handleEvent(event) {
+    if (event.type === "DOMDocElementInserted") {
+      this.injectAPI();
+    }
+  }
+
   injectAPI() {
     const window = this.contentWindow;
-    if (!window) {
+    if (!window || this._injected) {
       return;
     }
+    this._injected = true;
 
     const api = Cu.createObjectIn(window, { defineAs: "KenomaIdentity" });
     Cu.exportFunction(this.getBadge.bind(this), api, { defineAs: "getBadge" });
