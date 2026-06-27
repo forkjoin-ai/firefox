@@ -96,17 +96,27 @@ export class KenomaAgentParent extends JSWindowActorParent {
           break;
         }
         if (verb === "open") {
+          // Open in the BACKGROUND: selecting the tab would background
+          // about:kenoma and destroy the actor driving this loop. The content
+          // actor still drives a background tab.
           const tab = win.gBrowser.addTab(String(action.url || "about:blank"), {
             triggeringPrincipal: systemPrincipal,
           });
-          win.gBrowser.selectedTab = tab;
           targetBrowser = tab.linkedBrowser;
           await this.pause(SETTLE_NAV_MS);
         } else if (verb === "navigate") {
-          targetBrowser = browser;
-          targetBrowser.fixupAndLoadURIString(String(action.url || ""), {
-            triggeringPrincipal: systemPrincipal,
-          });
+          if (!targetBrowser) {
+            // No target yet: open a background tab rather than navigating the
+            // operator page (which would destroy this loop's actor).
+            const tab = win.gBrowser.addTab(String(action.url || "about:blank"), {
+              triggeringPrincipal: systemPrincipal,
+            });
+            targetBrowser = tab.linkedBrowser;
+          } else {
+            targetBrowser.fixupAndLoadURIString(String(action.url || ""), {
+              triggeringPrincipal: systemPrincipal,
+            });
+          }
           await this.pause(SETTLE_NAV_MS);
         } else if (verb === "click") {
           targetBrowser = browser;
