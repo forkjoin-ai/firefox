@@ -99,8 +99,19 @@ const BROWSER_TYPES = new Set([
   "browser.tab.type",
 ]);
 const BROWSER_GATE_KEY = "kenoma.browser.control";
-const BROWSER_READ_CODE =
-  "(function(){return {title:document.title,url:location.href,text:(document.body?document.body.innerText:'').slice(0,8000)};})()";
+// Read the page AND tag each interactive element with a stable data-kenoma-id,
+// returning that as its selector so a later click/type targets the same element
+// across the read -> act gap. Caps keep the observation small for the model.
+const BROWSER_READ_CODE = `(function(){
+  function txt(el){return ((el.innerText||el.value||el.getAttribute("aria-label")||el.getAttribute("placeholder")||el.getAttribute("title")||"")+"").replace(/\\s+/g," ").trim().slice(0,80);}
+  var n=0;
+  function tag(el){var existing=el.getAttribute("data-kenoma-id");if(existing)return "[data-kenoma-id=\\""+existing+"\\"]";var id="k"+(n++);el.setAttribute("data-kenoma-id",id);return "[data-kenoma-id=\\""+id+"\\"]";}
+  var MAX=40,links=[],buttons=[],fields=[];
+  Array.prototype.forEach.call(document.querySelectorAll("a[href]"),function(el){if(links.length>=MAX)return;var t=txt(el);if(!t)return;links.push({text:t,href:el.href,selector:tag(el)});});
+  Array.prototype.forEach.call(document.querySelectorAll("button,[role=button],input[type=submit],input[type=button]"),function(el){if(buttons.length>=MAX)return;buttons.push({text:txt(el),selector:tag(el)});});
+  Array.prototype.forEach.call(document.querySelectorAll("input:not([type=hidden]),textarea,select"),function(el){if(fields.length>=MAX)return;fields.push({label:txt(el)||el.name||el.type||"",selector:tag(el)});});
+  return {title:document.title,url:location.href,text:(document.body?document.body.innerText:"").slice(0,4000),links:links,buttons:buttons,fields:fields};
+})()`;
 
 const state = {
   port: null,
