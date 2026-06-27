@@ -18,5 +18,14 @@
   },
   "background": {
     "scripts": ["run.js"]
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.forkjoin.ai/*", "*://*.affectively.ai/*"],
+      "js": ["kenoma-content.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": ["kenoma-page.js"]
 }

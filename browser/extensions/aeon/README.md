@@ -25,6 +25,25 @@ seeded PRNG path.
   `aeon3d.render.*`, `aether.simd.*`, `xgnosis.*`, and `gnosis.uring.*`.
 - Providing the Moonshine popup command bar, which sends commands through
   `gnosis.moonshine.exec` and runtime probes through the same native host.
+- Forwarding the sovereign engines `truth.assess` (`@a0n/aeon-truth` claim
+  cross-examination) and `precog.forecast` (`@a0n/aeon-precog` forward read),
+  which the native host runs in-process so they work offline.
+
+## Web-content API
+
+`kenoma-content.js` is a content script injected on first-party origins
+(`*.forkjoin.ai`, `*.affectively.ai`). It relays a small page-world API,
+`kenoma-page.js`, that exposes `window.kenoma`:
+
+```js
+const ledger = await window.kenoma.truth.assess({ claims, domain });
+const timeline = await window.kenoma.precog.forecast({ ticks, domain });
+```
+
+Calls cross to the background script over `postMessage`, then to the native
+host. Only `truth.assess` and `precog.forecast` are reachable this way (the
+allow-list is enforced in both the page shim and the content script), so web
+pages cannot reach the transport, codec, or runtime ops.
 
 ## What it does not own
 

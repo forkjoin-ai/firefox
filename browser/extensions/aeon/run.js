@@ -76,6 +76,8 @@ const SUPPORTED_TYPES = new Set([
   "bitwise.pneuma.voice-flac.decode",
   "gnosis.lacey.seed",
   "gnosis.lacey.next",
+  "truth.assess",
+  "precog.forecast",
 ]);
 const LOCAL_TYPES = new Set(["aeon.frame.streams"]);
 
