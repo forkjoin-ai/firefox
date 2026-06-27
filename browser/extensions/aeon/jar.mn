@@ -5,3 +5,6 @@
 browser.jar:
     builtin-addons/aeon/manifest.json (manifest.json)
     builtin-addons/aeon/run.js (run.js)
+    builtin-addons/aeon/commandbar.html (commandbar.html)
+    builtin-addons/aeon/commandbar.css (commandbar.css)
+    builtin-addons/aeon/commandbar.js (commandbar.js)

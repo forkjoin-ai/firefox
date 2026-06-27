@@ -12,6 +12,10 @@
     "nativeMessaging",
     "storage"
   ],
+  "browser_action": {
+    "default_title": "Moonshine",
+    "default_popup": "commandbar.html"
+  },
   "background": {
     "scripts": ["run.js"]
   }

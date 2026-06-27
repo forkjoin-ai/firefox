@@ -1,0 +1,157 @@
+{
+  "policies": {
+    "AIControls": {
+      "Default": {
+        "Value": "blocked",
+        "Locked": true
+      },
+      "LinkPreviewKeyPoints": {
+        "Value": "blocked",
+        "Locked": true
+      },
+      "PDFAltText": {
+        "Value": "blocked",
+        "Locked": true
+      },
+      "SidebarChatbot": {
+        "Value": "blocked",
+        "Locked": true
+      },
+      "SmartTabGroups": {
+        "Value": "blocked",
+        "Locked": true
+      },
+      "SmartWindow": {
+        "Value": "blocked",
+        "Locked": true
+      },
+      "Translations": {
+        "Value": "available",
+        "Locked": false
+      }
+    },
+    "Bookmarks": [
+      {
+        "Title": "Wiki",
+        "URL": "https://wiki.forkjoin.ai",
+        "Placement": "toolbar"
+      },
+      {
+        "Title": "Storms Watch",
+        "URL": "https://storms.watch",
+        "Placement": "toolbar"
+      },
+      {
+        "Title": "SkyChat",
+        "URL": "https://skychat.forkjoin.ai",
+        "Placement": "toolbar"
+      },
+      {
+        "Title": "SkyMesh",
+        "URL": "https://skymesh.forkjoin.ai/watch",
+        "Placement": "toolbar"
+      },
+      {
+        "Title": "Edgework",
+        "URL": "https://edgework.forkjoin.ai",
+        "Placement": "menu",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Dashrelay",
+        "URL": "https://dashrelay.forkjoin.ai",
+        "Placement": "menu",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Forkjoin App",
+        "URL": "https://forkjoin.ai",
+        "Placement": "menu",
+        "Folder": "Forkjoin"
+      }
+    ],
+    "DisableFirefoxAccounts": true,
+    "DisableFirefoxStudies": true,
+    "DisablePocket": true,
+    "DisableProfileImport": true,
+    "DisableTelemetry": true,
+    "DisableFeedbackCommands": true,
+    "DisplayBookmarksToolbar": "always",
+    "FirefoxHome": {
+      "Search": true,
+      "Weather": false,
+      "TopSites": true,
+      "SponsoredTopSites": false,
+      "Highlights": false,
+      "Pocket": false,
+      "Stories": false,
+      "SponsoredPocket": false,
+      "SponsoredStories": false,
+      "Snippets": false,
+      "Locked": true
+    },
+    "FirefoxSuggest": {
+      "WebSuggestions": false,
+      "SponsoredSuggestions": false,
+      "ImproveSuggest": false,
+      "OnlineEnabled": false,
+      "Locked": true
+    },
+    "GenerativeAI": {
+      "Enabled": false,
+      "Chatbot": false,
+      "LinkPreviews": false,
+      "SmartWindow": false,
+      "TabGroups": false,
+      "Locked": true
+    },
+    "Homepage": {
+      "URL": "chrome://branding/content/kenoma-home.html",
+      "StartPage": "homepage",
+      "Locked": false
+    },
+    "NetworkPrediction": false,
+    "NoDefaultBookmarks": true,
+    "OfferToSaveLoginsDefault": false,
+    "OverrideFirstRunPage": "chrome://branding/content/kenoma-home.html",
+    "OverridePostUpdatePage": "",
+    "Preferences": {
+      "browser.ml.enable": {
+        "Value": false,
+        "Status": "locked"
+      },
+      "browser.newtabpage.activity-stream.default.sites": {
+        "Value": "https://wiki.forkjoin.ai,https://storms.watch,https://skychat.forkjoin.ai,https://skymesh.forkjoin.ai/watch,https://edgework.forkjoin.ai,https://dashrelay.forkjoin.ai,https://forkjoin.ai",
+        "Status": "default"
+      },
+      "browser.startup.homepage": {
+        "Value": "chrome://branding/content/kenoma-home.html",
+        "Status": "default"
+      }
+    },
+    "SearchEngines": {
+      "Add": [
+        {
+          "Name": "Wiki",
+          "Description": "Forkjoin sovereign wiki search",
+          "Alias": "@wiki",
+          "Method": "GET",
+          "URLTemplate": "https://wiki.forkjoin.ai/search?q={searchTerms}",
+          "SuggestURLTemplate": "https://wiki.forkjoin.ai/api/search/suggest?q={searchTerms}"
+        }
+      ],
+      "Default": "Wiki",
+      "DefaultPrivate": "Wiki",
+      "PreventInstalls": false,
+      "Remove": [
+        "Amazon.com",
+        "Bing",
+        "DuckDuckGo",
+        "eBay",
+        "Google",
+        "Wikipedia"
+      ]
+    },
+    "SearchSuggestEnabled": false
+  }
+}

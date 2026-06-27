@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="commandbar.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <form id="command-form" class="command-row">
+        <input id="command-input" autocomplete="off" spellcheck="false" placeholder="moonshine -c" />
+        <button id="run-button" type="submit">Run</button>
+      </form>
+      <nav class="toolbar" aria-label="Runtime">
+        <button type="button" data-op="gnosis.runtime.capabilities">Runtime</button>
+        <button type="button" data-op="gnosis.runtime.cache.stats">Cache</button>
+        <button type="button" data-op="gnosis.scheduler.bench">Sched</button>
+        <button type="button" data-op="gnosis.storage.bench">Store</button>
+        <button type="button" data-op="gnosis.auth.plan">Auth</button>
+        <button type="button" data-op="gnosis.frf.bench">FRF</button>
+        <button type="button" data-op="aether.simd.bench">SIMD</button>
+      </nav>
+      <pre id="output" class="output" aria-live="polite"></pre>
+    </main>
+    <script src="commandbar.js"></script>
+  </body>
+</html>

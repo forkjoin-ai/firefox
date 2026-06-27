@@ -19,4 +19,8 @@ browser.jar:
   content/branding/icon48.png                    (../default48.png)
   content/branding/icon64.png                    (../default64.png)
   content/branding/icon128.png                   (../default128.png)
+  content/branding/kenoma-home.css
+  content/branding/kenoma-home.html
+  content/branding/kenoma-sigil.svg
+  content/branding/kenoma-splash.svg
   content/branding/aboutDialog.css

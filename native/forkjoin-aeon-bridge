@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+set -eu
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+if [ -x /opt/homebrew/bin/node ]; then
+  NODE_BIN=/opt/homebrew/bin/node
+elif [ -x "$HOME/.nvm/versions/node/v22.22.0/bin/node" ]; then
+  NODE_BIN="$HOME/.nvm/versions/node/v22.22.0/bin/node"
+else
+  NODE_BIN=$(command -v node)
+fi
+exec "$NODE_BIN" "$SCRIPT_DIR/forkjoin-aeon-bridge.mjs" "$@"

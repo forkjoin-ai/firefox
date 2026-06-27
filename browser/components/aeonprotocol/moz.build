@@ -2,13 +2,13 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-DIST_SUBDIR = ""
+with Files("**"):
+    BUG_COMPONENT = ("Firefox", "General")
 
-FINAL_TARGET_FILES.distribution += [
-    "policies.json",
+EXTRA_JS_MODULES += [
+    "AeonProtocolHandler.sys.mjs",
 ]
 
-if CONFIG["BUILT_BY_MOZILLA"]:
-    FINAL_TARGET_FILES.distribution += [
-        "distribution.ini",
-    ]
+XPCOM_MANIFESTS += [
+    "components.conf",
+]

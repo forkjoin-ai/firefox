@@ -18,6 +18,13 @@ seeded PRNG path.
   `bitwise.pneuma.residual.*`, and `bitwise.pneuma.voice-flac.*` requests.
 - Forwarding `gnosis.lacey.seed` / `gnosis.lacey.next` deterministic state
   requests.
+- Forwarding the Gnosis runtime gateway:
+  `gnosis.runtime.capabilities`, `gnosis.runtime.cache.*`, `gnosis.frf.*`, `gnosis.foil.*`,
+  `gnosis.moonshine.*`, `gnosis.amplituhedron.*`, `gnosis.antiqueue.*`,
+  `gnosis.scheduler.*`, `gnosis.storage.*`, `aeon3d.render.*`, `aether.simd.*`,
+  `xgnosis.*`, and `gnosis.uring.*`.
+- Providing the Moonshine popup command bar, which sends commands through
+  `gnosis.moonshine.exec` and runtime probes through the same native host.
 
 ## What it does not own
 
@@ -54,3 +61,6 @@ The supported operation names intentionally mirror the package boundaries:
 - Aeon Flow: `FlowCodec`, `FrameReassembler`, `UDPFlowTransport`, and `wall`.
 - Bitwise: pneuma residual and voice-FLAC codecs.
 - Gnosis: Lacey deterministic state operations.
+- Gnosis runtime: FRF, FOIL, Moonshine, amplituhedron cache, antiqueue,
+  gnosis-antiqueue scheduler probes, bitwise/knotchain/knotgraph storage
+  probes, aeon-3d rendering probes, Aether WASM-SIMD probes, x-gnosis, and uring.

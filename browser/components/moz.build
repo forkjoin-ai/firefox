@@ -26,6 +26,7 @@ with Files("controlcenter/**"):
 
 DIRS += [
     "about",
+    "aeonprotocol",
     "aboutlogins",
     "aboutwelcome",
     "aiwindow",

@@ -1,0 +1,208 @@
+{
+  "name": "@a0n/firefox",
+  "sourceRoot": "open-source/firefox",
+  "projectType": "application",
+  "targets": {
+    "configure": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "python3.12 ./mach --no-interactive configure"
+      }
+    },
+    "build": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "python3.12 ./mach --no-interactive build"
+      }
+    },
+    "build:tmp": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node scripts/forkjoin-tmp-build.mjs --reuse"
+      }
+    },
+    "brand:generate": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node scripts/generate-kenoma-branding.mjs"
+      }
+    },
+    "build:tmp:fresh": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node scripts/forkjoin-tmp-build.mjs --fresh"
+      }
+    },
+    "sync:tmp": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node scripts/forkjoin-tmp-build.mjs --sync-only --reuse"
+      }
+    },
+    "verify:tmp": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node scripts/forkjoin-tmp-build.mjs --verify-only --reuse"
+      }
+    },
+    "mirror:tmp": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node scripts/forkjoin-tmp-build.mjs --mirror-only --reuse"
+      }
+    },
+    "version:tmp": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "python3.12 /tmp/forkjoin-firefox-build/mach --no-interactive run -- --version"
+      }
+    },
+    "run:tmp": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "python3.12 /tmp/forkjoin-firefox-build/mach --no-interactive run"
+      }
+    },
+    "run:tmp:new-profile": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "python3.12 /tmp/forkjoin-firefox-build/mach --no-interactive run -- --profile /tmp/forkjoin-firefox-profile --no-remote"
+      }
+    },
+    "run:monorepo": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "build/forkjoin/Kenoma.app/Contents/MacOS/firefox"
+      }
+    },
+    "run:monorepo:new-profile": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "build/forkjoin/Kenoma.app/Contents/MacOS/firefox --profile /tmp/forkjoin-firefox-profile --no-remote"
+      }
+    },
+    "package:tmp": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "cd /tmp/forkjoin-firefox-build && python3.12 ./mach --no-interactive package"
+      }
+    },
+    "paths": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node scripts/forkjoin-tmp-build.mjs --paths"
+      }
+    },
+    "native:self-test": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node native/forkjoin-aeon-bridge.mjs --self-test"
+      }
+    },
+    "native:probe": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node native/probe-native-host.mjs"
+      }
+    },
+    "native:install": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node native/install-native-host.mjs"
+      }
+    },
+    "native-self-test": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node native/forkjoin-aeon-bridge.mjs --self-test"
+      }
+    },
+    "native-probe": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node native/probe-native-host.mjs"
+      }
+    },
+    "native-install": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node native/install-native-host.mjs"
+      }
+    },
+    "native:runtime-bench": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node native/forkjoin-aeon-bridge.mjs --runtime-bench"
+      }
+    },
+    "runtime-bench": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node native/forkjoin-aeon-bridge.mjs --runtime-bench"
+      }
+    },
+    "native:scheduler-bench": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node native/forkjoin-aeon-bridge.mjs --scheduler-bench"
+      }
+    },
+    "scheduler-bench": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node native/forkjoin-aeon-bridge.mjs --scheduler-bench"
+      }
+    },
+    "native:storage-bench": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node native/forkjoin-aeon-bridge.mjs --storage-bench"
+      }
+    },
+    "storage-bench": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node native/forkjoin-aeon-bridge.mjs --storage-bench"
+      }
+    },
+    "commandbar-smoke": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "/opt/homebrew/bin/node native/forkjoin-aeon-bridge.mjs --commandbar-smoke"
+      }
+    }
+  },
+  "tags": [
+    "scope:open-source",
+    "runtime:desktop",
+    "domain:browser"
+  ]
+}

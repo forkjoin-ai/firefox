@@ -1,0 +1,72 @@
+html,
+body {
+  margin: 0;
+  min-width: 420px;
+  min-height: 320px;
+  background: #101418;
+  color: #e8edf2;
+  font: 13px system-ui, sans-serif;
+}
+
+.shell {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 8px;
+  padding: 10px;
+}
+
+.command-row {
+  display: grid;
+  grid-template-columns: 1fr 64px;
+  gap: 8px;
+}
+
+input,
+button {
+  border: 1px solid #3b4652;
+  border-radius: 6px;
+  background: #171d23;
+  color: #e8edf2;
+  font: inherit;
+}
+
+input {
+  min-width: 0;
+  height: 34px;
+  padding: 0 10px;
+  outline: none;
+}
+
+input:focus {
+  border-color: #7aa7ff;
+}
+
+button {
+  height: 34px;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #202833;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.output {
+  min-height: 220px;
+  max-height: 420px;
+  margin: 0;
+  padding: 10px;
+  overflow: auto;
+  border: 1px solid #27313c;
+  border-radius: 6px;
+  background: #0b0f13;
+  color: #d8e0e7;
+  font: 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: pre-wrap;
+}
