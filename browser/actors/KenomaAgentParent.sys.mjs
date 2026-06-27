@@ -170,6 +170,9 @@ export class KenomaAgentParent extends JSWindowActorParent {
         arguments: ["-c", `browser-step ${task}`],
         environment: { MOONSHINE_BROWSER_OBSERVATION: JSON.stringify(observation) },
         environmentAppend: true,
+        // Merge stderr into stdout: one pipe to drain (no separate-stderr
+        // deadlock, no null pipe), and parseAction ignores the trace lines.
+        stderr: "stdout",
       });
       const stdout = await this.readAll(proc.stdout);
       await proc.wait();

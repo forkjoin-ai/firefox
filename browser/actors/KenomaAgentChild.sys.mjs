@@ -17,9 +17,19 @@ export class KenomaAgentChild extends JSWindowActorChild {
     }
   }
 
+  // Event-gated actors are instantiated by the event and dispatched through
+  // handleEvent; without it the instantiation aborts before actorCreated, so
+  // inject here too (idempotent).
+  handleEvent(event) {
+    if (event.type === "DOMDocElementInserted" && this.isOperatorPage()) {
+      this.injectAPI();
+    }
+  }
+
   isOperatorPage() {
     try {
-      return (this.contentWindow?.location?.href || "").startsWith(OPERATOR_PAGE);
+      const href = (this.contentWindow && this.contentWindow.location && this.contentWindow.location.href) || (this.document && this.document.documentURI) || "";
+      return href.startsWith(OPERATOR_PAGE);
     } catch (e) {
       return false;
     }
@@ -27,9 +37,10 @@ export class KenomaAgentChild extends JSWindowActorChild {
 
   injectAPI() {
     const window = this.contentWindow;
-    if (!window) {
+    if (!window || this._injected) {
       return;
     }
+    this._injected = true;
     const api = Cu.createObjectIn(window, { defineAs: "KenomaAgent" });
     Cu.exportFunction(this.run.bind(this), api, { defineAs: "run" });
     Cu.exportFunction(this.stop.bind(this), api, { defineAs: "stop" });
@@ -115,7 +126,7 @@ export class KenomaAgentChild extends JSWindowActorChild {
       el.setAttribute("data-kenoma-id", id);
       return `[data-kenoma-id="${id}"]`;
     };
-    const MAX = 40;
+    const MAX = 12;
     const links = [];
     const buttons = [];
     const fields = [];
@@ -148,7 +159,7 @@ export class KenomaAgentChild extends JSWindowActorChild {
     return {
       title: doc.title,
       url: (this.contentWindow && this.contentWindow.location.href) || "",
-      text: (doc.body ? doc.body.innerText : "").slice(0, 4000),
+      text: (doc.body ? doc.body.innerText : "").slice(0, 1200),
       links,
       buttons,
       fields,
