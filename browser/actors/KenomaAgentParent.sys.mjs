@@ -38,6 +38,8 @@ const STATUS_BASE = {
 const EDGEWORK_BASE = "https://www-edgework-app.edgework.ai";
 // Shared identity badge, written by KenomaIdentityParent into global prefs.
 const IDENTITY_PREF_TOKEN = "kenoma.identity.badgeToken";
+// Canonical current-location for every Kenoma product (weather, POI/sensorium).
+const LOCATION_PREF = "kenoma.location.json";
 const STATUS_TIMEOUT_MS = 8000;
 
 export class KenomaAgentParent extends JSWindowActorParent {
@@ -62,8 +64,123 @@ export class KenomaAgentParent extends JSWindowActorParent {
         return this.walletSummary();
       case "KenomaAgent:Topup":
         return this.topup(message.data && message.data.cents);
+      case "KenomaAgent:Ask":
+        return this.offload(String((message.data && message.data.task) || ""));
+      case "KenomaAgent:GetLocation":
+        return this.readLocation();
+      case "KenomaAgent:SetLocation":
+        return { ok: this.writeLocation(message.data) };
+      case "KenomaAgent:Weather":
+        return this.weather(message.data);
+      case "KenomaAgent:GeoSearch":
+        return this.geoSearch(message.data && message.data.q);
     }
     return null;
+  }
+
+  // ── shared current-location store (drives weather + all products) ───────────
+
+  readLocation() {
+    try {
+      const raw = Services.prefs.getStringPref(LOCATION_PREF, "");
+      if (!raw) {
+        return null;
+      }
+      const loc = JSON.parse(raw);
+      if (loc && typeof loc.lat === "number" && typeof loc.lon === "number") {
+        return loc;
+      }
+    } catch (e) {
+      // fall through
+    }
+    return null;
+  }
+
+  writeLocation(loc) {
+    if (!loc || typeof loc.lat !== "number" || typeof loc.lon !== "number") {
+      return false;
+    }
+    Services.prefs.setStringPref(
+      LOCATION_PREF,
+      JSON.stringify({
+        lat: loc.lat,
+        lon: loc.lon,
+        label: String(loc.label || ""),
+      })
+    );
+    return true;
+  }
+
+  async weather(coords) {
+    const loc =
+      coords && typeof coords.lat === "number" ? coords : this.readLocation();
+    if (!loc) {
+      return { ok: false };
+    }
+    try {
+      const data = await this.fetchJson(
+        `${STATUS_BASE.weather}/api/weather/forecast?lat=${loc.lat}&lon=${loc.lon}`
+      );
+      const now = (data && data.now) || {};
+      return {
+        ok: true,
+        tempF: now.tempF,
+        condition: now.condition || "",
+        city: (data && data.city) || loc.label || "",
+      };
+    } catch (e) {
+      return { ok: false };
+    }
+  }
+
+  async geoSearch(q) {
+    const query = String(q || "").trim();
+    if (query.length < 2) {
+      return [];
+    }
+    try {
+      const data = await this.fetchJson(
+        `${STATUS_BASE.weather}/api/geo/search?q=${encodeURIComponent(query)}`
+      );
+      return Array.isArray(data) ? data.slice(0, 8) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  // Offload-first: ask moonshine's instant oracle/monster tiers (no LLM, no
+  // agent) whether a query is plainly answerable. Returns {answered, answer}.
+  async offload(task) {
+    const trimmed = String(task || "").trim();
+    if (!trimmed) {
+      return { answered: false };
+    }
+    const binary = await this.resolveMoonshine();
+    if (!binary) {
+      return { answered: false };
+    }
+    try {
+      const proc = await lazy.Subprocess.call({
+        command: binary,
+        arguments: ["-c", trimmed],
+        environment: { MOONSHINE_ORACLE_ONLY: "1" },
+        environmentAppend: true,
+        stderr: "stdout",
+      });
+      const stdout = await this.readAll(proc.stdout);
+      const { exitCode } = await proc.wait();
+      const lines = String(stdout || "")
+        .split(/\r?\n/)
+        .map(line => line.trim())
+        .filter(Boolean);
+      const answer = lines.length ? lines[lines.length - 1] : "";
+      if (exitCode === 0 && answer) {
+        return { answered: true, answer };
+      }
+      return { answered: false };
+    } catch (e) {
+      return { answered: false };
+    }
   }
 
   // ── sovereign status + wallet (privileged fetch, UCAN-grant aware) ──────────
@@ -267,6 +384,14 @@ export class KenomaAgentParent extends JSWindowActorParent {
     let answer = null;
     let targetBrowser = null;
     try {
+      // Offload-first: if the instant oracle can answer, skip the agent loop.
+      const off = await this.offload(task);
+      if (off && off.answered) {
+        this.emit({ kind: "offload", answer: off.answer });
+        answer = off.answer;
+        return { ok: true, answer, offloaded: true };
+      }
+
       const win = this.chromeWindow();
       if (!win || !win.gBrowser) {
         throw new Error("no browser window");

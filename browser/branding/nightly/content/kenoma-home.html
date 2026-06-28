@@ -17,33 +17,43 @@
             <img src="chrome://branding/content/kenoma-sigil.svg" alt="">
           </span>
           <span class="brand-copy">
-            <strong>Kenoma</strong>
-            <span>operator</span>
+            <span>Kenoma</span>
           </span>
         </a>
 
         <nav class="status-rail" aria-label="Sovereign status">
-          <a class="pill" href="https://storms.watch">
+          <button class="pill weather-display" id="weather-display" type="button" title="Current weather · click to change location">
+            <span class="dot" aria-hidden="true"></span>
+            <span id="weather-display-text">Locating…</span>
+          </button>
+
+          <a class="pill gated" href="https://storms.watch">
             <span class="dot" aria-hidden="true"></span>
             <span id="weather-pill">Storms</span>
           </a>
-          <a class="pill" href="https://memory-api.forkjoin.ai">
+          <a class="pill gated" href="https://memory-api.forkjoin.ai">
             <span class="dot" aria-hidden="true"></span>
             <span id="memory-pill">Memory</span>
           </a>
-          <a class="pill" href="https://todo.forkjoin.ai">
+          <a class="pill gated" href="https://todo.forkjoin.ai">
             <span class="dot" aria-hidden="true"></span>
             <span id="todo-pill">Todos</span>
           </a>
-          <a class="pill" href="https://fact.forkjoin.ai">
+          <a class="pill gated" href="https://fact.forkjoin.ai">
             <span class="dot" aria-hidden="true"></span>
             <span id="fact-pill">Facts</span>
           </a>
-          <button class="pill button-pill" id="wallet-pill" type="button" title="Custodial EDGEWORK wallet">Wallet</button>
+          <button class="pill button-pill gated" id="wallet-pill" type="button" title="Custodial EDGEWORK wallet">Wallet</button>
+
           <button class="pill button-pill" id="identity-pill" type="button">Sign in</button>
           <button class="pill button-pill" id="focus-toggle" type="button">Focus</button>
           <time class="clock" id="clock">--:--</time>
         </nav>
+
+        <div class="location-popover is-hidden" id="location-popover" role="dialog" aria-label="Change location">
+          <input id="location-input" type="search" autocomplete="off" placeholder="Search a city or place…">
+          <div class="location-results" id="location-results"></div>
+        </div>
       </header>
 
       <main class="workspace">
@@ -67,9 +77,16 @@
                 autocomplete="off"
                 placeholder="Search the wiki, proofs, apps, frames..."
               >
-              <button type="submit">Run</button>
-              <button type="button" id="agent-run" title="Run as a Moonshine browser agent">Agent</button>
-              <button type="button" id="agent-stop" class="is-hidden" title="Stop the agent">Stop</button>
+              <div class="command-actions" id="command-actions">
+                <button type="submit" class="action-run">Run</button>
+                <button type="button" class="action-caret" id="action-menu-toggle" aria-haspopup="true" aria-expanded="false" aria-label="More actions">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+                </button>
+                <div class="action-menu" id="action-menu" role="menu">
+                  <button type="button" id="agent-run" role="menuitem" title="Run as a Moonshine browser agent">Agent</button>
+                  <button type="button" id="agent-stop" role="menuitem" class="is-hidden" title="Stop the agent">Stop</button>
+                </div>
+              </div>
             </div>
           </form>
 

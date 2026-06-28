@@ -334,28 +334,59 @@ function wireWidgetControls() {
 function wireInteractions() {
   const formInput = qs("#q");
   const form = qs(".command-form");
+
+  const submitQuery = () => {
+    if (!(form instanceof HTMLFormElement)) {
+      return;
+    }
+    if (typeof form.requestSubmit === "function") {
+      form.requestSubmit();
+    } else {
+      form.submit();
+    }
+  };
+
   for (const chip of document.querySelectorAll("[data-query]")) {
     chip.addEventListener("click", () => {
       if (!(formInput instanceof HTMLInputElement)) {
         return;
       }
-      const query = chip.getAttribute("data-query") || "";
-      formInput.value = query;
-      // Perform the labeled action: run the wiki search for this query.
-      recordRecent(query, "wiki search");
-      if (form instanceof HTMLFormElement) {
-        form.submit();
-      } else {
-        formInput.focus();
-      }
+      formInput.value = chip.getAttribute("data-query") || "";
+      submitQuery();
     });
   }
 
   if (form instanceof HTMLFormElement) {
-    form.addEventListener("submit", () => {
-      if (formInput instanceof HTMLInputElement) {
-        recordRecent(formInput.value, "wiki search");
+    form.addEventListener("submit", event => {
+      const query =
+        formInput instanceof HTMLInputElement ? formInput.value.trim() : "";
+      if (!query) {
+        return;
       }
+      recordRecent(query, "search");
+      const api = window.KenomaAgent;
+      if (!api || typeof api.ask !== "function") {
+        // No offload available; let the native wiki search proceed.
+        return;
+      }
+      // Offload-first: try moonshine's instant oracle before a web search.
+      event.preventDefault();
+      Promise.resolve(api.ask(query))
+        .then(res => {
+          if (res && res.answered) {
+            const list = qs(".in-flight .run-list");
+            if (list) {
+              list.insertAdjacentHTML(
+                "afterbegin",
+                `<div class="run"><span class="run-dot lime"></span><span><strong>${kenomaEscape(res.answer)}</strong><small>${kenomaEscape(query)} · offloaded</small></span><em>ANSWER</em></div>`
+              );
+            }
+            recordRecent(`${query} = ${res.answer}`, "offload");
+          } else {
+            form.submit();
+          }
+        })
+        .catch(() => form.submit());
     });
   }
 
@@ -437,6 +468,13 @@ function wireAgent() {
         log("violet", kenomaDescribeAction(event.action), `step ${event.step}`, "ACT");
       } else if (event.kind === "error") {
         log("", "error", event.error, "ERR");
+      } else if (event.kind === "offload") {
+        log(
+          "lime",
+          event.answer != null ? String(event.answer) : "(answer)",
+          "instant oracle · no agent",
+          "OFFLOAD"
+        );
       } else if (event.kind === "stopped") {
         log("", "stopped", "", "STOP");
         setRunning(false);
@@ -676,7 +714,14 @@ function renderIdentity(identity) {
   if (!pill) {
     return;
   }
-  if (identity && identity.profile) {
+  const signedIn = !!(identity && identity.profile);
+  // Gate the data pills + wallet behind sign-in; weather/identity/focus/clock
+  // stay visible always.
+  const shell = qs(".operator-shell");
+  if (shell) {
+    shell.classList.toggle("is-signed-in", signedIn);
+  }
+  if (signedIn) {
     const who = identity.profile.identity || {};
     pill.textContent = who.name || who.email || "Signed in";
     pill.dataset.signedIn = "1";
@@ -702,20 +747,73 @@ function wireIdentity() {
   pill.addEventListener("click", async () => {
     try {
       if (pill.dataset.signedIn === "1") {
+        console.log("[kenoma] sign-out: requesting");
         await api.signOut();
+        console.log("[kenoma] sign-out: done");
+        renderIdentity(null);
       } else {
-        await api.signIn();
+        console.log("[kenoma] sign-in: calling api.signIn()…");
+        pill.textContent = "Signing in…";
+        // Render directly from the resolved badge; onChange is a backstop that
+        // may not fire on the same page that initiated sign-in.
+        let identity = await api.signIn();
+        console.log(
+          "[kenoma] sign-in: signIn() resolved:",
+          identity ? JSON.stringify(identity).slice(0, 600) : String(identity)
+        );
+        // signIn can resolve without a profile; fall back to the stored badge.
+        if (!identity || !identity.profile) {
+          console.warn(
+            "[kenoma] sign-in: no profile on signIn result; trying getBadge()"
+          );
+          try {
+            identity = await api.getBadge();
+            console.log(
+              "[kenoma] sign-in: getBadge() returned:",
+              identity ? JSON.stringify(identity).slice(0, 600) : String(identity)
+            );
+          } catch (e2) {
+            console.error("[kenoma] sign-in: getBadge() failed:", e2);
+          }
+        }
+        renderIdentity(identity);
+        console.log(
+          "[kenoma] sign-in: pill is now",
+          JSON.stringify(pill.textContent),
+          "signedIn=",
+          pill.dataset.signedIn
+        );
       }
+      refreshStatus();
+      refreshWallet();
     } catch (e) {
-      // Leave the pill state unchanged on failure.
+      // Surface the failure instead of silently reverting, so it is diagnosable.
+      const msg = (e && e.message) || String(e);
+      console.error("[kenoma] sign-in FAILED:", msg, e);
+      pill.textContent = "Sign in failed";
+      pill.dataset.signedIn = "";
+      pill.title = msg;
+      window.setTimeout(() => renderIdentity(null), 5000);
     }
   });
   api.onChange(identity => {
+    console.log(
+      "[kenoma] identity onChange:",
+      identity ? JSON.stringify(identity).slice(0, 600) : String(identity)
+    );
     renderIdentity(identity);
     refreshStatus();
     refreshWallet();
   });
-  Promise.resolve(api.getBadge()).then(renderIdentity).catch(() => {});
+  Promise.resolve(api.getBadge())
+    .then(identity => {
+      console.log(
+        "[kenoma] initial getBadge():",
+        identity ? JSON.stringify(identity).slice(0, 300) : String(identity)
+      );
+      renderIdentity(identity);
+    })
+    .catch(e => console.error("[kenoma] initial getBadge() failed:", e));
 }
 
 // ── custodial wallet (user-only) ────────────────────────────────────────────
@@ -807,24 +905,210 @@ function updateFooter() {
     .catch(() => {});
 }
 
+// ── inline weather + shared current-location ────────────────────────────────
+
+let kenomaLocationInit = false;
+
+async function refreshWeather() {
+  const text = qs("#weather-display-text");
+  const dot = qs("#weather-display .dot");
+  const api = window.KenomaAgent;
+  if (!text || !api || typeof api.weather !== "function") {
+    return;
+  }
+  let info;
+  try {
+    info = await api.weather();
+  } catch (e) {
+    return;
+  }
+  if (info && info.ok && info.tempF != null) {
+    let label = `${Math.round(info.tempF)}°`;
+    if (info.condition) {
+      label += ` ${info.condition}`;
+    }
+    if (info.city) {
+      label += ` · ${info.city}`;
+    }
+    text.textContent = label;
+    if (dot) {
+      dot.classList.add("is-ok");
+      dot.classList.remove("is-down");
+    }
+  } else {
+    text.textContent = "Set location";
+    if (dot) {
+      dot.classList.remove("is-ok");
+    }
+  }
+}
+
+// Seed the shared location once (stored pref → browser geolocation → manual).
+async function ensureLocation() {
+  const api = window.KenomaAgent;
+  if (!api || typeof api.location !== "function") {
+    return;
+  }
+  if (kenomaLocationInit) {
+    refreshWeather();
+    return;
+  }
+  kenomaLocationInit = true;
+  let loc = null;
+  try {
+    loc = await api.location();
+  } catch (e) {
+    loc = null;
+  }
+  if (loc) {
+    refreshWeather();
+    return;
+  }
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      async pos => {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+        try {
+          await api.setLocation({ lat, lon, label: "" });
+          const w = await api.weather({ lat, lon });
+          if (w && w.ok && w.city) {
+            await api.setLocation({ lat, lon, label: w.city });
+          }
+        } catch (e) {
+          // keep going; refreshWeather reflects whatever stuck
+        }
+        refreshWeather();
+      },
+      () => refreshWeather(),
+      { timeout: 8000, maximumAge: 600000 }
+    );
+  } else {
+    refreshWeather();
+  }
+}
+
+function wireWeather() {
+  const display = qs("#weather-display");
+  const popover = qs("#location-popover");
+  const input = qs("#location-input");
+  const results = qs("#location-results");
+  if (!display) {
+    return;
+  }
+  if (popover) {
+    display.addEventListener("click", () => {
+      popover.classList.toggle("is-hidden");
+      if (!popover.classList.contains("is-hidden") && input) {
+        input.focus();
+      }
+    });
+    document.addEventListener("click", event => {
+      if (!popover.contains(event.target) && !display.contains(event.target)) {
+        popover.classList.add("is-hidden");
+      }
+    });
+  }
+  if (input && results) {
+    let timer = null;
+    input.addEventListener("input", () => {
+      const q = input.value.trim();
+      if (timer) {
+        window.clearTimeout(timer);
+      }
+      if (q.length < 2) {
+        results.innerHTML = "";
+        return;
+      }
+      timer = window.setTimeout(async () => {
+        const api = window.KenomaAgent;
+        if (!api || typeof api.geoSearch !== "function") {
+          return;
+        }
+        let list = [];
+        try {
+          list = await api.geoSearch(q);
+        } catch (e) {
+          list = [];
+        }
+        results.innerHTML = "";
+        for (const place of list) {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.textContent = place.label || place.name || "";
+          button.addEventListener("click", async () => {
+            try {
+              await api.setLocation({
+                lat: place.lat,
+                lon: place.lon,
+                label: place.label || place.name || "",
+              });
+            } catch (e) {
+              // ignore
+            }
+            if (popover) {
+              popover.classList.add("is-hidden");
+            }
+            input.value = "";
+            results.innerHTML = "";
+            refreshWeather();
+          });
+          results.append(button);
+        }
+      }, 250);
+    });
+  }
+}
+
+// Desktop split-button: caret toggles the Agent/Stop dropdown.
+function wireActionMenu() {
+  const toggle = qs("#action-menu-toggle");
+  const actions = qs("#command-actions");
+  if (!toggle || !actions) {
+    return;
+  }
+  const close = () => {
+    actions.classList.remove("is-open");
+    toggle.setAttribute("aria-expanded", "false");
+  };
+  toggle.addEventListener("click", event => {
+    event.preventDefault();
+    const open = actions.classList.toggle("is-open");
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  document.addEventListener("click", event => {
+    if (!actions.contains(event.target)) {
+      close();
+    }
+  });
+  for (const item of actions.querySelectorAll(".action-menu button")) {
+    item.addEventListener("click", close);
+  }
+}
+
 function kenomaOnAgentReady() {
   refreshStatus();
   updateFooter();
   refreshWallet();
+  ensureLocation();
 }
 
 buildField();
 renderRecent();
 wireForkStepper();
+wireActionMenu();
 wireInteractions();
 wireAgent();
 wireIdentity();
 wireWallet();
+wireWeather();
 updateClock();
 updateFooter();
 refreshStatus();
+ensureLocation();
 setInterval(updateClock, 15000);
 setInterval(refreshStatus, 60000);
+setInterval(refreshWeather, 600000);
 mountKineticWiremark();
 
 window.addEventListener("KenomaAgent:ready", kenomaOnAgentReady);

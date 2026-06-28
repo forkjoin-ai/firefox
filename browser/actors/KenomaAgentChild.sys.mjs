@@ -49,6 +49,15 @@ export class KenomaAgentChild extends JSWindowActorChild {
     Cu.exportFunction(this.status.bind(this), api, { defineAs: "status" });
     Cu.exportFunction(this.wallet.bind(this), api, { defineAs: "wallet" });
     Cu.exportFunction(this.topup.bind(this), api, { defineAs: "topup" });
+    Cu.exportFunction(this.ask.bind(this), api, { defineAs: "ask" });
+    Cu.exportFunction(this.location.bind(this), api, { defineAs: "location" });
+    Cu.exportFunction(this.setLocation.bind(this), api, {
+      defineAs: "setLocation",
+    });
+    Cu.exportFunction(this.weather.bind(this), api, { defineAs: "weather" });
+    Cu.exportFunction(this.geoSearch.bind(this), api, {
+      defineAs: "geoSearch",
+    });
     try {
       Object.freeze(api);
     } catch (e) {
@@ -105,6 +114,39 @@ export class KenomaAgentChild extends JSWindowActorChild {
   topup(cents) {
     return this.queryForContent("KenomaAgent:Topup", {
       cents: Number(cents) || 500,
+    });
+  }
+
+  ask(task) {
+    return this.queryForContent("KenomaAgent:Ask", {
+      task: String(task || ""),
+    });
+  }
+
+  location() {
+    return this.queryForContent("KenomaAgent:GetLocation");
+  }
+
+  setLocation(loc) {
+    return this.queryForContent("KenomaAgent:SetLocation", {
+      lat: loc && Number(loc.lat),
+      lon: loc && Number(loc.lon),
+      label: (loc && String(loc.label || "")) || "",
+    });
+  }
+
+  weather(coords) {
+    return this.queryForContent(
+      "KenomaAgent:Weather",
+      coords && typeof coords.lat === "number"
+        ? { lat: Number(coords.lat), lon: Number(coords.lon) }
+        : {}
+    );
+  }
+
+  geoSearch(q) {
+    return this.queryForContent("KenomaAgent:GeoSearch", {
+      q: String(q || ""),
     });
   }
 

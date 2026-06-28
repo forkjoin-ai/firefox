@@ -278,7 +278,7 @@ a {
 }
 
 h1 {
-  margin: 0;
+  margin: 0 0 clamp(20px, 3.2vw, 34px);
   font-family: "Iowan Old Style", "New York", Georgia, serif;
   font-size: clamp(5rem, 12vw, 8.5rem);
   font-weight: 500;
@@ -390,6 +390,77 @@ h1 {
 
 .widget-band.is-hidden {
   display: none;
+}
+
+.is-hidden {
+  display: none !important;
+}
+
+/* Rail pills gated behind sign-in: hidden until the shell is signed in. */
+.gated {
+  display: none;
+}
+
+.operator-shell.is-signed-in .gated {
+  display: inline-flex;
+}
+
+/* Always-on inline weather display + its location-change popover. */
+.weather-display {
+  cursor: pointer;
+}
+
+.location-popover {
+  position: absolute;
+  z-index: 40;
+  top: 54px;
+  right: clamp(16px, 4vw, 30px);
+  width: min(320px, 90vw);
+  padding: 10px;
+  border: 1px solid var(--line2);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5);
+}
+
+.location-popover input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--line2);
+  border-radius: 10px;
+  background: var(--elevated);
+  color: var(--ink);
+  font-size: 14px;
+  outline: 0;
+}
+
+.location-popover input:focus {
+  border-color: var(--accent);
+}
+
+.location-results {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.location-results button {
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.location-results button:hover {
+  background: var(--elevated);
 }
 
 .widget {
@@ -606,7 +677,7 @@ h1 {
   color: var(--accent);
 }
 
-@media (max-width: 860px) {
+@media (max-width: 600px) {
   .operator-shell {
     overflow: auto;
   }
@@ -642,10 +713,124 @@ h1 {
     flex-direction: column;
   }
 
+  /* Mobile: expand the split-button back into stacked full-width actions. */
+  .command-actions {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .action-run {
+    width: 100%;
+    border-radius: 10px !important;
+  }
+
+  .action-caret {
+    display: none;
+  }
+
+  .action-menu {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    gap: 8px;
+  }
+
+  .action-menu button {
+    width: 100%;
+    border: 1px solid var(--line2);
+    border-radius: 10px;
+    background: var(--elevated);
+    text-align: center;
+    padding: 8px 14px;
+    font-weight: 700;
+  }
+
   .widget-band {
     margin-top: 34px;
   }
 }
+
+/* Desktop split-button: Run + caret dropdown for Agent/Stop, inset on one line. */
+@media (min-width: 601px) {
+.command-actions {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: center;
+}
+
+.action-run {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.action-caret {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 7px !important;
+  border-left: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.action-caret svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  transition: transform 0.18s ease;
+}
+
+.command-actions.is-open .action-caret {
+  color: var(--accent);
+}
+
+.command-actions.is-open .action-caret svg {
+  transform: rotate(180deg);
+}
+
+.action-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 30;
+  display: none;
+  flex-direction: column;
+  min-width: 150px;
+  padding: 6px;
+  border: 1px solid var(--line2);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+}
+
+.command-actions.is-open .action-menu {
+  display: flex;
+}
+
+.action-menu button {
+  width: 100%;
+  border: 0 !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  text-align: left;
+  padding: 8px 10px;
+}
+
+.action-menu button:hover {
+  background: var(--elevated) !important;
+}
+}
+/* end @media (min-width: 601px) split-button */
 
 /* Live status dots on the sovereign pills */
 .dot.is-ok {
