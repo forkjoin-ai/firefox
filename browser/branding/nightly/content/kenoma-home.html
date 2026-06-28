@@ -24,13 +24,23 @@
 
         <nav class="status-rail" aria-label="Sovereign status">
           <a class="pill" href="https://storms.watch">
-            <span class="dot dot-weather" aria-hidden="true"></span>
-            <span id="weather-pill">Storms Watch</span>
+            <span class="dot" aria-hidden="true"></span>
+            <span id="weather-pill">Storms</span>
           </a>
           <a class="pill" href="https://memory-api.forkjoin.ai">
-            <span class="dot dot-memory" aria-hidden="true"></span>
-            <span id="memory-pill">Fractal Memory</span>
+            <span class="dot" aria-hidden="true"></span>
+            <span id="memory-pill">Memory</span>
           </a>
+          <a class="pill" href="https://todo.forkjoin.ai">
+            <span class="dot" aria-hidden="true"></span>
+            <span id="todo-pill">Todos</span>
+          </a>
+          <a class="pill" href="https://fact.forkjoin.ai">
+            <span class="dot" aria-hidden="true"></span>
+            <span id="fact-pill">Facts</span>
+          </a>
+          <button class="pill button-pill" id="wallet-pill" type="button" title="Custodial EDGEWORK wallet">Wallet</button>
+          <button class="pill button-pill" id="identity-pill" type="button">Sign in</button>
           <button class="pill button-pill" id="focus-toggle" type="button">Focus</button>
           <time class="clock" id="clock">--:--</time>
         </nav>
@@ -45,7 +55,11 @@
           <form class="command-form" action="https://wiki.forkjoin.ai/search" method="get">
             <label for="q" class="visually-hidden">Search the Forkjoin wiki</label>
             <div class="command-row">
-              <span class="fork-label">FORK x3</span>
+              <span class="fork-stepper" role="group" aria-label="Agent fork count">
+                <button type="button" id="fork-down" aria-label="Fewer forks">&minus;</button>
+                <span class="fork-label" id="fork-count">FORK x1</span>
+                <button type="button" id="fork-up" aria-label="More forks">+</button>
+              </span>
               <input
                 id="q"
                 name="q"
@@ -75,36 +89,13 @@
               </span>
               <span class="widget-title">In Flight</span>
               <span class="widget-spacer"></span>
-              <strong>3 live</strong>
+              <strong id="inflight-count">&mdash;</strong>
               <button class="collapse-button" type="button" aria-label="Collapse In Flight" aria-expanded="true">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
               </button>
             </div>
             <div class="widget-body run-list">
-              <a class="run" href="aeon://wiki.forkjoin.ai">
-                <span class="run-dot cyan"></span>
-                <span>
-                  <strong>Wiki over Aeon</strong>
-                  <small>scheme resolver · frames</small>
-                </span>
-                <em>RACING</em>
-              </a>
-              <a class="run" href="https://memory-api.forkjoin.ai">
-                <span class="run-dot violet"></span>
-                <span>
-                  <strong>Fractal Memory</strong>
-                  <small>facts · spaces · snapshots</small>
-                </span>
-                <em>READY</em>
-              </a>
-              <a class="run" href="https://storms.watch">
-                <span class="run-dot lime"></span>
-                <span>
-                  <strong>Storms Watch</strong>
-                  <small>weather mesh · alerts</small>
-                </span>
-                <em>LIVE</em>
-              </a>
+              <div class="run run-empty"><span class="run-dot"></span><span><strong>Probing services…</strong><small>live sovereign status</small></span><em>…</em></div>
             </div>
           </article>
 
@@ -120,11 +111,8 @@
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
               </button>
             </div>
-            <ul class="widget-body recent-list">
-              <li><span>Kenoma about page</span><em>about:kenoma</em></li>
-              <li><span>Aeon native bridge</span><em>UDP · Pneuma · Lacey</em></li>
-              <li><span>Session receipts</span><em>knotchain append</em></li>
-              <li><span>Commercial junk purge</span><em>locked</em></li>
+            <ul class="widget-body recent-list" id="recent-list">
+              <li class="recent-empty"><span>No recent activity</span><em>local</em></li>
             </ul>
           </article>
 
@@ -154,7 +142,7 @@
 
       <footer class="footer">
         <a href="https://memory-api.forkjoin.ai">memory · fractal-memory</a>
-        <span>38% context · browser bridge warm · aeon:// enabled</span>
+        <span id="build-id">aeon:// enabled</span>
       </footer>
     </div>
   </body>

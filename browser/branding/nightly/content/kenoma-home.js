@@ -329,11 +329,28 @@ function wireWidgetControls() {
 
 function wireInteractions() {
   const formInput = qs("#q");
+  const form = qs(".command-form");
   for (const chip of document.querySelectorAll("[data-query]")) {
     chip.addEventListener("click", () => {
-      if (formInput instanceof HTMLInputElement) {
-        formInput.value = chip.getAttribute("data-query") || "";
+      if (!(formInput instanceof HTMLInputElement)) {
+        return;
+      }
+      const query = chip.getAttribute("data-query") || "";
+      formInput.value = query;
+      // Perform the labeled action: run the wiki search for this query.
+      recordRecent(query, "wiki search");
+      if (form instanceof HTMLFormElement) {
+        form.submit();
+      } else {
         formInput.focus();
+      }
+    });
+  }
+
+  if (form instanceof HTMLFormElement) {
+    form.addEventListener("submit", () => {
+      if (formInput instanceof HTMLInputElement) {
+        recordRecent(formInput.value, "wiki search");
       }
     });
   }
@@ -383,8 +400,13 @@ function wireAgent() {
   let running = false;
   const setRunning = on => {
     running = on;
+    kenomaAgentRunning = on;
     stopBtn.classList.toggle("is-hidden", !on);
     runBtn.disabled = on;
+    if (!on) {
+      // Agent freed the In-Flight list; repaint live service status.
+      refreshStatus();
+    }
   };
   // window.KenomaAgent is injected by the KenomaAgent child actor. It may land
   // just after this deferred script runs, so wire on ready as well as now.
@@ -400,6 +422,13 @@ function wireAgent() {
       }
       if (event.kind === "observe") {
         log("cyan", `looking (${event.tabs} tabs)`, event.url || "", `STEP ${event.step}`);
+      } else if (event.kind === "fork") {
+        log(
+          "violet",
+          kenomaDescribeAction(event.action),
+          `fork ${event.fork} · step ${event.step}`,
+          "VOTE"
+        );
       } else if (event.kind === "decide") {
         log("violet", kenomaDescribeAction(event.action), `step ${event.step}`, "ACT");
       } else if (event.kind === "error") {
@@ -420,9 +449,10 @@ function wireAgent() {
       if (list) {
         list.innerHTML = "";
       }
+      recordRecent(task, "agent task");
       log("cyan", task, "agent task", "RUNNING");
       setRunning(true);
-      Promise.resolve(api.run(task)).catch(error => {
+      Promise.resolve(api.run(task, kenomaForkCount())).catch(error => {
         log("", "error", error && error.message ? error.message : String(error), "ERR");
         setRunning(false);
       });
@@ -445,9 +475,328 @@ function wireAgent() {
   }
 }
 
+// ── sovereign status, identity, wallet, fork count, recents ─────────────────
+
+let kenomaAgentRunning = false;
+
+function kenomaAgentApi() {
+  const api = window.KenomaAgent;
+  return api && typeof api.status === "function" ? api : null;
+}
+
+function kenomaIdentityApi() {
+  const api = window.KenomaIdentity;
+  return api && typeof api.getBadge === "function" ? api : null;
+}
+
+const KENOMA_SERVICES = [
+  { key: "weather", title: "Storms Watch", sub: "weather mesh · alerts", href: "https://storms.watch" },
+  { key: "memory", title: "Fractal Memory", sub: "facts · spaces · snapshots", href: "https://memory-api.forkjoin.ai" },
+  { key: "todos", title: "Fractal Todo", sub: "tasks · ops", href: "https://todo.forkjoin.ai" },
+  { key: "facts", title: "Fractal Fact", sub: "claims · nodes", href: "https://fact.forkjoin.ai" },
+];
+
+function setPill(id, info) {
+  const el = qs("#" + id);
+  if (!el) {
+    return;
+  }
+  const ok = Boolean(info && info.ok);
+  el.textContent = info && info.label ? info.label : "offline";
+  const dot = el.parentElement && el.parentElement.querySelector(".dot");
+  if (dot) {
+    dot.classList.toggle("is-ok", ok);
+    dot.classList.toggle("is-down", !ok);
+  }
+}
+
+async function refreshStatus() {
+  const api = kenomaAgentApi();
+  if (!api) {
+    return;
+  }
+  let summary;
+  try {
+    summary = await api.status();
+  } catch (e) {
+    return;
+  }
+  if (!summary) {
+    return;
+  }
+  setPill("weather-pill", summary.weather);
+  setPill("memory-pill", summary.memory);
+  setPill("todo-pill", summary.todos);
+  setPill("fact-pill", summary.facts);
+
+  const live = KENOMA_SERVICES.filter(s => summary[s.key] && summary[s.key].ok).length;
+  const countEl = qs("#inflight-count");
+  if (countEl) {
+    countEl.textContent = `${live} live`;
+  }
+
+  // The In-Flight run-list doubles as the agent's render target; only paint
+  // service rows when the agent isn't actively streaming into it.
+  if (kenomaAgentRunning) {
+    return;
+  }
+  const list = qs(".in-flight .run-list");
+  if (!list) {
+    return;
+  }
+  list.innerHTML = "";
+  for (const svc of KENOMA_SERVICES) {
+    const info = summary[svc.key] || {};
+    const ok = Boolean(info.ok);
+    const row = document.createElement("a");
+    row.className = "run";
+    row.href = svc.href;
+    row.innerHTML =
+      `<span class="run-dot ${ok ? "lime" : ""}"></span>` +
+      `<span><strong>${kenomaEscape(svc.title)}</strong>` +
+      `<small>${kenomaEscape(info.label || svc.sub)}</small></span>` +
+      `<em>${ok ? "LIVE" : "DOWN"}</em>`;
+    list.append(row);
+  }
+}
+
+// ── fork count ──────────────────────────────────────────────────────────────
+
+const KENOMA_FORK_KEY = "kenoma.operator.forks.v1";
+
+function kenomaForkCount() {
+  const n = parseInt(localStorage.getItem(KENOMA_FORK_KEY) || "1", 10);
+  return Math.max(1, Math.min(5, Number.isFinite(n) ? n : 1));
+}
+
+function renderForkCount() {
+  const el = qs("#fork-count");
+  if (el) {
+    el.textContent = `FORK x${kenomaForkCount()}`;
+  }
+}
+
+function setForkCount(n) {
+  const clamped = Math.max(1, Math.min(5, n));
+  try {
+    localStorage.setItem(KENOMA_FORK_KEY, String(clamped));
+  } catch (e) {
+    // Storage may be unavailable; the readout still reflects the request.
+  }
+  renderForkCount();
+}
+
+function wireForkStepper() {
+  renderForkCount();
+  const down = qs("#fork-down");
+  const up = qs("#fork-up");
+  if (down) {
+    down.addEventListener("click", () => setForkCount(kenomaForkCount() - 1));
+  }
+  if (up) {
+    up.addEventListener("click", () => setForkCount(kenomaForkCount() + 1));
+  }
+}
+
+// ── recent (real local operator history) ────────────────────────────────────
+
+const KENOMA_RECENT_KEY = "kenoma.operator.recent.v1";
+
+function loadRecent() {
+  try {
+    const v = JSON.parse(localStorage.getItem(KENOMA_RECENT_KEY) || "[]");
+    return Array.isArray(v) ? v : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function recordRecent(text, kind) {
+  const trimmed = String(text == null ? "" : text).trim();
+  if (!trimmed) {
+    return;
+  }
+  const items = loadRecent().filter(it => it && it.text !== trimmed.slice(0, 80));
+  items.unshift({ text: trimmed.slice(0, 80), kind: String(kind || "") });
+  try {
+    localStorage.setItem(KENOMA_RECENT_KEY, JSON.stringify(items.slice(0, 8)));
+  } catch (e) {
+    // ignore quota / disabled storage
+  }
+  renderRecent();
+}
+
+function renderRecent() {
+  const list = qs("#recent-list");
+  if (!list) {
+    return;
+  }
+  const items = loadRecent();
+  if (!items.length) {
+    list.innerHTML = `<li class="recent-empty"><span>No recent activity</span><em>local</em></li>`;
+    return;
+  }
+  list.innerHTML = items
+    .map(it => `<li><span>${kenomaEscape(it.text)}</span><em>${kenomaEscape(it.kind)}</em></li>`)
+    .join("");
+}
+
+// ── identity (sign in / out via window.KenomaIdentity) ──────────────────────
+
+function renderIdentity(identity) {
+  const pill = qs("#identity-pill");
+  if (!pill) {
+    return;
+  }
+  if (identity && identity.profile) {
+    const who = identity.profile.identity || {};
+    pill.textContent = who.name || who.email || "Signed in";
+    pill.dataset.signedIn = "1";
+    pill.title = "Sign out";
+  } else {
+    pill.textContent = "Sign in";
+    pill.dataset.signedIn = "";
+    pill.title = "Sign in with ForkJoin identity";
+  }
+}
+
+function wireIdentity() {
+  const pill = qs("#identity-pill");
+  if (!pill) {
+    return;
+  }
+  const api = kenomaIdentityApi();
+  if (!api) {
+    pill.disabled = true;
+    pill.title = "Identity bridge unavailable";
+    return;
+  }
+  pill.addEventListener("click", async () => {
+    try {
+      if (pill.dataset.signedIn === "1") {
+        await api.signOut();
+      } else {
+        await api.signIn();
+      }
+    } catch (e) {
+      // Leave the pill state unchanged on failure.
+    }
+  });
+  api.onChange(identity => {
+    renderIdentity(identity);
+    refreshStatus();
+    refreshWallet();
+  });
+  Promise.resolve(api.getBadge()).then(renderIdentity).catch(() => {});
+}
+
+// ── custodial wallet (user-only) ────────────────────────────────────────────
+
+function formatEdgework(balanceWei) {
+  try {
+    const wei = BigInt(balanceWei || "0");
+    const whole = wei / 1000000000000000000n;
+    const frac = (wei % 1000000000000000000n) / 1000000000000000n;
+    return `${whole.toString()}.${frac.toString().padStart(3, "0")}`;
+  } catch (e) {
+    return "0";
+  }
+}
+
+async function refreshWallet() {
+  const pill = qs("#wallet-pill");
+  const api = window.KenomaAgent;
+  if (!pill || !api || typeof api.wallet !== "function") {
+    return;
+  }
+  let info;
+  try {
+    info = await api.wallet();
+  } catch (e) {
+    return;
+  }
+  if (!info || !info.signedIn) {
+    pill.textContent = "Sign in to fund";
+    pill.dataset.fund = "";
+    return;
+  }
+  if (info.error || info.balanceWei == null) {
+    pill.textContent = "Wallet";
+    pill.dataset.fund = "1";
+    return;
+  }
+  pill.textContent = `${formatEdgework(info.balanceWei)} EDGE`;
+  pill.dataset.fund = "1";
+}
+
+function wireWallet() {
+  const pill = qs("#wallet-pill");
+  if (!pill) {
+    return;
+  }
+  pill.addEventListener("click", async () => {
+    const api = window.KenomaAgent;
+    if (pill.dataset.fund !== "1") {
+      const idApi = kenomaIdentityApi();
+      if (idApi) {
+        try {
+          await idApi.signIn();
+        } catch (e) {
+          // ignore
+        }
+      }
+      return;
+    }
+    if (!api || typeof api.topup !== "function") {
+      return;
+    }
+    try {
+      const res = await api.topup(500);
+      if (res && res.ok && res.url) {
+        window.open(res.url, "_blank", "noopener");
+      }
+    } catch (e) {
+      // ignore
+    }
+  });
+  refreshWallet();
+}
+
+// ── footer build id ─────────────────────────────────────────────────────────
+
+function updateFooter() {
+  const el = qs("#build-id");
+  const api = window.KenomaAgent;
+  if (!el || !api || typeof api.version !== "function") {
+    return;
+  }
+  Promise.resolve(api.version())
+    .then(info => {
+      if (info && info.appVersion) {
+        el.textContent = `v${info.appVersion} · build ${info.appBuildID || "?"} · aeon:// enabled`;
+      }
+    })
+    .catch(() => {});
+}
+
+function kenomaOnAgentReady() {
+  refreshStatus();
+  updateFooter();
+  refreshWallet();
+}
+
 buildField();
+renderRecent();
+wireForkStepper();
 wireInteractions();
 wireAgent();
+wireIdentity();
+wireWallet();
 updateClock();
+updateFooter();
+refreshStatus();
 setInterval(updateClock, 15000);
+setInterval(refreshStatus, 60000);
 mountKineticWiremark();
+
+window.addEventListener("KenomaAgent:ready", kenomaOnAgentReady);

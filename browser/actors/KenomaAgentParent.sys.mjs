@@ -25,16 +25,206 @@ const MOONSHINE_CANDIDATES = [
   "/Users/buley/Documents/Code/monorepo/open-source/gnosis/moonshine/target/debug/moonshine",
 ];
 
+// Sovereign status sources. Every request goes through this privileged actor
+// (system principal) so the operator page never makes a cross-origin fetch.
+// Storms + fact reads are public; memory + todo are UCAN-gated, so we mint a
+// guest-or-user read grant via each app's /auth/ucan/global and cache it.
+const STATUS_BASE = {
+  weather: "https://storms.watch",
+  memory: "https://memory-api.forkjoin.ai",
+  todos: "https://todo.forkjoin.ai",
+  facts: "https://fact.forkjoin.ai",
+};
+const EDGEWORK_BASE = "https://www-edgework-app.edgework.ai";
+// Shared identity badge, written by KenomaIdentityParent into global prefs.
+const IDENTITY_PREF_TOKEN = "kenoma.identity.badgeToken";
+const STATUS_TIMEOUT_MS = 8000;
+
 export class KenomaAgentParent extends JSWindowActorParent {
   async receiveMessage(message) {
     switch (message.name) {
       case "KenomaAgent:Run":
-        return this.runTask(String((message.data && message.data.task) || ""));
+        return this.runTask(
+          String((message.data && message.data.task) || ""),
+          message.data && message.data.forks
+        );
       case "KenomaAgent:Stop":
         this._stop = true;
         return true;
+      case "KenomaAgent:GetVersion":
+        return {
+          appVersion: Services.appinfo.version,
+          appBuildID: Services.appinfo.appBuildID,
+        };
+      case "KenomaAgent:Status":
+        return this.statusSummary();
+      case "KenomaAgent:Wallet":
+        return this.walletSummary();
+      case "KenomaAgent:Topup":
+        return this.topup(message.data && message.data.cents);
     }
     return null;
+  }
+
+  // ── sovereign status + wallet (privileged fetch, UCAN-grant aware) ──────────
+
+  readBadgeToken() {
+    try {
+      return Services.prefs.getStringPref(IDENTITY_PREF_TOKEN, "") || "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  async fetchJson(url, options, timeoutMs = STATUS_TIMEOUT_MS) {
+    const controller = new AbortController();
+    const win = this.chromeWindow();
+    const timer = (win || globalThis).setTimeout(
+      () => controller.abort(),
+      timeoutMs
+    );
+    try {
+      const res = await fetch(url, {
+        ...(options || {}),
+        signal: controller.signal,
+      });
+      if (!res.ok) {
+        throw new Error(`http ${res.status}`);
+      }
+      return await res.json();
+    } finally {
+      (win || globalThis).clearTimeout(timer);
+    }
+  }
+
+  // Mint (or reuse) a guest-or-user read UCAN for a UCAN-gated app's `global`
+  // space. The grant is bound to the current badge, so signing in re-scopes it.
+  async getGrant(kind) {
+    const base = STATUS_BASE[kind];
+    const now = Date.now();
+    this._grants = this._grants || {};
+    const badge = this.readBadgeToken();
+    const cached = this._grants[kind];
+    if (cached && cached.badge === badge && cached.expiresAt - now > 30000) {
+      return cached.token;
+    }
+    const headers = { "content-type": "application/json" };
+    if (badge) {
+      headers.authorization = `Bearer ${badge}`;
+    }
+    const data = await this.fetchJson(`${base}/auth/ucan/global`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ permissions: "read" }),
+    });
+    const token = data && (data.sessionToken || data.ucanToken);
+    if (!token) {
+      throw new Error("no grant token");
+    }
+    this._grants[kind] = {
+      token,
+      badge,
+      expiresAt:
+        typeof data.expiresAt === "number" ? data.expiresAt : now + 3600000,
+    };
+    return token;
+  }
+
+  async statusSummary() {
+    const out = {
+      weather: { ok: false, label: "offline", count: null },
+      memory: { ok: false, label: "offline", count: null },
+      todos: { ok: false, label: "offline", count: null },
+      facts: { ok: false, label: "offline", count: null },
+    };
+    await Promise.allSettled([
+      (async () => {
+        const data = await this.fetchJson(
+          `${STATUS_BASE.weather}/api/live/current-storms`
+        );
+        const n = Number(data && data.activeCount) || 0;
+        out.weather = {
+          ok: true,
+          count: n,
+          label: n > 0 ? `${n} active` : "Quiet skies",
+        };
+      })(),
+      (async () => {
+        const token = await this.getGrant("memory");
+        const data = await this.fetchJson(
+          `${STATUS_BASE.memory}/api/spaces/global/api/memory/pool`,
+          { headers: { authorization: `Bearer ${token}` } }
+        );
+        const n =
+          typeof data.count === "number"
+            ? data.count
+            : Array.isArray(data.entries)
+              ? data.entries.length
+              : 0;
+        out.memory = { ok: true, count: n, label: `${n} memories` };
+      })(),
+      (async () => {
+        const token = await this.getGrant("todos");
+        const data = await this.fetchJson(
+          `${STATUS_BASE.todos}/api/spaces/global/api/sync/pull`,
+          { headers: { authorization: `Bearer ${token}` } }
+        );
+        const n = Array.isArray(data.operations) ? data.operations.length : 0;
+        out.todos = { ok: true, count: n, label: `${n} ops` };
+      })(),
+      (async () => {
+        const data = await this.fetchJson(
+          `${STATUS_BASE.facts}/api/spaces/global/api/sync/pull`
+        );
+        const n = Array.isArray(data.nodes)
+          ? data.nodes.length
+          : Array.isArray(data.operations)
+            ? data.operations.length
+            : 0;
+        out.facts = { ok: true, count: n, label: `${n} facts` };
+      })(),
+    ]);
+    return out;
+  }
+
+  async walletSummary() {
+    const badge = this.readBadgeToken();
+    if (!badge) {
+      return { signedIn: false };
+    }
+    try {
+      const data = await this.fetchJson(`${EDGEWORK_BASE}/api/edgework/wallet`, {
+        headers: { authorization: `Bearer ${badge}` },
+      });
+      return {
+        signedIn: true,
+        address: data.address || null,
+        balanceWei: data.balanceWei || "0",
+      };
+    } catch (e) {
+      return { signedIn: true, error: (e && e.message) || String(e) };
+    }
+  }
+
+  async topup(cents) {
+    const badge = this.readBadgeToken();
+    if (!badge) {
+      return { ok: false, error: "not signed in" };
+    }
+    const amount = Math.max(100, Math.trunc(Number(cents) || 500));
+    try {
+      const data = await this.fetchJson(`${EDGEWORK_BASE}/api/edgework/topup`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${badge}`,
+        },
+        body: JSON.stringify({ cents: amount }),
+      });
+      return { ok: true, url: data.url || null };
+    } catch (e) {
+      return { ok: false, error: (e && e.message) || String(e) };
+    }
   }
 
   emit(event) {
@@ -56,13 +246,14 @@ export class KenomaAgentParent extends JSWindowActorParent {
     });
   }
 
-  async runTask(task) {
+  async runTask(task, forks) {
     if (this._running) {
       return { ok: false, error: "already running" };
     }
     this._running = true;
     this._stop = false;
-    this.emit({ kind: "start", task });
+    this._forks = Math.max(1, Math.min(5, Math.trunc(Number(forks) || 1)));
+    this.emit({ kind: "start", task, forks: this._forks });
 
     let answer = null;
     let targetBrowser = null;
@@ -87,7 +278,12 @@ export class KenomaAgentParent extends JSWindowActorParent {
           url: observation.active && observation.active.url,
         });
 
-        const action = await this.decide(task, observation);
+        const action = await this.decide(
+          task,
+          observation,
+          this._forks,
+          step
+        );
         this.emit({ kind: "decide", step, action });
 
         const verb = action.action;
@@ -188,7 +384,46 @@ export class KenomaAgentParent extends JSWindowActorParent {
     return wg.getActor("KenomaAgent").sendQuery(name, data);
   }
 
-  async decide(task, observation) {
+  // FORK xN: spawn N moonshine deciders in parallel for one step, fold their
+  // proposals by majority action (then first-valid). forks<=1 keeps the single
+  // decideOnce path unchanged.
+  async decide(task, observation, forks, step) {
+    const n = Math.max(1, Math.min(5, Math.trunc(Number(forks) || 1)));
+    if (n <= 1) {
+      return this.decideOnce(task, observation);
+    }
+    const proposals = await Promise.all(
+      Array.from({ length: n }, () => this.decideOnce(task, observation))
+    );
+    proposals.forEach((action, i) => {
+      this.emit({ kind: "fork", step, fork: i, action });
+    });
+    return this.foldActions(proposals);
+  }
+
+  foldActions(proposals) {
+    const valid = proposals.filter(
+      a => a && typeof a.action === "string" && ACTIONS.has(a.action)
+    );
+    if (!valid.length) {
+      return { action: "done", answer: "(no action parsed)" };
+    }
+    const counts = new Map();
+    for (const a of valid) {
+      counts.set(a.action, (counts.get(a.action) || 0) + 1);
+    }
+    let best = valid[0].action;
+    let bestN = 0;
+    for (const [verb, c] of counts) {
+      if (c > bestN) {
+        bestN = c;
+        best = verb;
+      }
+    }
+    return valid.find(a => a.action === best) || valid[0];
+  }
+
+  async decideOnce(task, observation) {
     const binary = await this.resolveMoonshine();
     if (!binary) {
       return { action: "done", answer: "(moonshine binary not found)" };

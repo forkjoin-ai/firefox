@@ -45,6 +45,10 @@ export class KenomaAgentChild extends JSWindowActorChild {
     Cu.exportFunction(this.run.bind(this), api, { defineAs: "run" });
     Cu.exportFunction(this.stop.bind(this), api, { defineAs: "stop" });
     Cu.exportFunction(this.onEvent.bind(this), api, { defineAs: "onEvent" });
+    Cu.exportFunction(this.version.bind(this), api, { defineAs: "version" });
+    Cu.exportFunction(this.status.bind(this), api, { defineAs: "status" });
+    Cu.exportFunction(this.wallet.bind(this), api, { defineAs: "wallet" });
+    Cu.exportFunction(this.topup.bind(this), api, { defineAs: "topup" });
     try {
       Object.freeze(api);
     } catch (e) {
@@ -63,14 +67,19 @@ export class KenomaAgentChild extends JSWindowActorChild {
     );
   }
 
-  run(task) {
+  // Resolve a sendQuery, cloning the result into the content realm.
+  queryForContent(...args) {
     return this.wrapPromise(
       (async () =>
-        Cu.cloneInto(
-          await this.sendQuery("KenomaAgent:Run", { task: String(task || "") }),
-          this.contentWindow
-        ))()
+        Cu.cloneInto(await this.sendQuery(...args), this.contentWindow))()
     );
+  }
+
+  run(task, forks) {
+    return this.queryForContent("KenomaAgent:Run", {
+      task: String(task || ""),
+      forks: Number(forks) || 1,
+    });
   }
 
   stop() {
@@ -79,6 +88,24 @@ export class KenomaAgentChild extends JSWindowActorChild {
         await this.sendQuery("KenomaAgent:Stop");
       })()
     );
+  }
+
+  version() {
+    return this.queryForContent("KenomaAgent:GetVersion");
+  }
+
+  status() {
+    return this.queryForContent("KenomaAgent:Status");
+  }
+
+  wallet() {
+    return this.queryForContent("KenomaAgent:Wallet");
+  }
+
+  topup(cents) {
+    return this.queryForContent("KenomaAgent:Topup", {
+      cents: Number(cents) || 500,
+    });
   }
 
   onEvent(callback) {
