@@ -126,7 +126,7 @@ export class KenomaAgentChild extends JSWindowActorChild {
       el.setAttribute("data-kenoma-id", id);
       return `[data-kenoma-id="${id}"]`;
     };
-    const MAX = 12;
+    const MAX = 6;
     const links = [];
     const buttons = [];
     const fields = [];
@@ -159,7 +159,7 @@ export class KenomaAgentChild extends JSWindowActorChild {
     return {
       title: doc.title,
       url: (this.contentWindow && this.contentWindow.location.href) || "",
-      text: (doc.body ? doc.body.innerText : "").slice(0, 1200),
+      text: (doc.body ? doc.body.innerText : "").slice(0, 400),
       links,
       buttons,
       fields,
