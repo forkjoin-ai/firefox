@@ -122,6 +122,46 @@ function generateIconset(svgPath) {
   rmSync(iconsetPath, { recursive: true, force: true });
 }
 
+// Pack PNG-per-size buffers into a Vista+ PNG-compressed .ico (no ImageMagick).
+function packIco(pngEntries) {
+  const count = pngEntries.length;
+  const header = Buffer.alloc(6);
+  header.writeUInt16LE(0, 0); // reserved
+  header.writeUInt16LE(1, 2); // type: 1 = icon
+  header.writeUInt16LE(count, 4);
+  const dir = [];
+  let offset = 6 + count * 16;
+  for (const { size, buf } of pngEntries) {
+    const e = Buffer.alloc(16);
+    e.writeUInt8(size >= 256 ? 0 : size, 0); // width  (0 means 256)
+    e.writeUInt8(size >= 256 ? 0 : size, 1); // height (0 means 256)
+    e.writeUInt8(0, 2); // palette color count
+    e.writeUInt8(0, 3); // reserved
+    e.writeUInt16LE(1, 4); // color planes
+    e.writeUInt16LE(32, 6); // bits per pixel
+    e.writeUInt32LE(buf.length, 8);
+    e.writeUInt32LE(offset, 12);
+    dir.push(e);
+    offset += buf.length;
+  }
+  return Buffer.concat([header, ...dir, ...pngEntries.map((p) => p.buf)]);
+}
+
+// Build a multi-resolution Windows .ico (the .exe icon) from the sigil SVG.
+function generateIco(svgPath, outPath, sizes) {
+  const tmpDir = join(brandingRoot, ".kenoma-ico-tmp");
+  rmSync(tmpDir, { recursive: true, force: true });
+  mkdirSync(tmpDir, { recursive: true });
+  const entries = [];
+  for (const size of sizes) {
+    const pngPath = join(tmpDir, `i${size}.png`);
+    renderPng(svgPath, pngPath, size);
+    entries.push({ size, buf: readFileSync(pngPath) });
+  }
+  writeFileSync(outPath, packIco(entries));
+  rmSync(tmpDir, { recursive: true, force: true });
+}
+
 requireFile(sigilSource);
 requireFile(splashSource);
 mkdirSync(brandingContentRoot, { recursive: true });
@@ -147,5 +187,9 @@ writeFileSync(
   `<svg xmlns="http://www.w3.org/2000/svg" width="560" height="120" viewBox="0 0 560 120"><text x="0" y="88" fill="#f7efe0" font-family="Georgia, serif" font-size="96" letter-spacing="-8">Kenoma</text></svg>\n`
 );
 generateIconset(sigilPath);
+
+// Windows .exe icons (the macOS .app uses firefox.icns above).
+generateIco(sigilPath, join(brandingRoot, "firefox.ico"), [16, 32, 48, 64, 128, 256]);
+generateIco(sigilPath, join(brandingRoot, "firefox64.ico"), [16, 24, 32, 48, 64]);
 
 console.log(`Generated Kenoma branding into ${brandingRoot}`);

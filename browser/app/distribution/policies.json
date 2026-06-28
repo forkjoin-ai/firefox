@@ -32,41 +32,248 @@
     },
     "Bookmarks": [
       {
-        "Title": "Wiki",
-        "URL": "https://wiki.forkjoin.ai",
+        "Title": "Forkjoin",
+        "URL": "https://forkjoin.ai",
         "Placement": "toolbar"
       },
       {
-        "Title": "Storms Watch",
-        "URL": "https://storms.watch",
-        "Placement": "toolbar"
+        "Title": "AFFECTIVELY",
+        "URL": "https://self.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
       },
       {
-        "Title": "SkyChat",
-        "URL": "https://skychat.forkjoin.ai",
-        "Placement": "toolbar"
+        "Title": "HFT Cloud",
+        "URL": "https://sycamore.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
       },
       {
-        "Title": "SkyMesh",
-        "URL": "https://skymesh.forkjoin.ai/watch",
-        "Placement": "toolbar"
+        "Title": "HFT Financial",
+        "URL": "https://financial.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
       },
       {
-        "Title": "Edgework",
-        "URL": "https://edgework.forkjoin.ai",
-        "Placement": "menu",
+        "Title": "Dash Studio",
+        "URL": "https://dash.forkjoin.ai",
+        "Placement": "toolbar",
         "Folder": "Forkjoin"
       },
       {
         "Title": "Dashrelay",
-        "URL": "https://dashrelay.forkjoin.ai",
-        "Placement": "menu",
+        "URL": "https://relay.forkjoin.ai",
+        "Placement": "toolbar",
         "Folder": "Forkjoin"
       },
       {
-        "Title": "Forkjoin App",
-        "URL": "https://forkjoin.ai",
-        "Placement": "menu",
+        "Title": "Aeon Logic Studio",
+        "URL": "https://logic.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Polyglot Scanner",
+        "URL": "https://scanner.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Halos Agency",
+        "URL": "https://agency.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Halo Community",
+        "URL": "https://community.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Halo Place",
+        "URL": "https://place.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Bitwise",
+        "URL": "https://bitwise.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Stars Fish",
+        "URL": "https://stars.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Storms Watch",
+        "URL": "https://storms.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Voids (Void OS)",
+        "URL": "https://voids.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Gnosis Church",
+        "URL": "https://church.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Note Yoga",
+        "URL": "https://note.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Them Yoga",
+        "URL": "https://them.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Hexwar (ucan.guide)",
+        "URL": "https://hexwar.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Memo Yoga",
+        "URL": "https://memory.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Memo Yoga (MCP)",
+        "URL": "https://memory-mcp.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Memo Yoga (API)",
+        "URL": "https://memory-api.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Card Yoga",
+        "URL": "https://card.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Mechcog",
+        "URL": "https://mech.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Datacore (Rosetta)",
+        "URL": "https://rosetta.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Aunt Sandy",
+        "URL": "https://sandy.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Edgework",
+        "URL": "https://edge.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Forgo Cloud",
+        "URL": "https://forgo.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Wallington Lab",
+        "URL": "https://wallington.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Helix",
+        "URL": "https://helix.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Task Yoga",
+        "URL": "https://todo.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Todo MCP",
+        "URL": "https://todo-mcp.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Fact Yoga",
+        "URL": "https://fact.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Fact MCP",
+        "URL": "https://fact-mcp.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Fork Cancer",
+        "URL": "https://cancer.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Aeon Foundation",
+        "URL": "https://ide.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Affectively MCP",
+        "URL": "https://affect-mcp.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Language",
+        "URL": "https://language.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Astrolabe (Sound)",
+        "URL": "https://astrolabe.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Proofset (Law)",
+        "URL": "https://proofset.forkjoin.ai",
+        "Placement": "toolbar",
+        "Folder": "Forkjoin"
+      },
+      {
+        "Title": "Monster (Physics)",
+        "URL": "https://monster.forkjoin.ai",
+        "Placement": "toolbar",
         "Folder": "Forkjoin"
       }
     ],
