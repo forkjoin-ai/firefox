@@ -258,10 +258,14 @@ function saveWidgetState(widgetBand) {
   for (const widget of widgets) {
     collapsed[widget.getAttribute("data-widget") || ""] = widget.classList.contains("is-collapsed");
   }
-  localStorage.setItem("kenoma.operator.widgets.v1", JSON.stringify({
-    order: widgets.map(widget => widget.getAttribute("data-widget")).filter(Boolean),
-    collapsed,
-  }));
+  try {
+    localStorage.setItem("kenoma.operator.widgets.v1", JSON.stringify({
+      order: widgets.map(widget => widget.getAttribute("data-widget")).filter(Boolean),
+      collapsed,
+    }));
+  } catch (e) {
+    // storage unavailable on the about: principal; layout still updates live
+  }
 }
 
 function wireWidgetControls() {
@@ -564,9 +568,22 @@ async function refreshStatus() {
 
 const KENOMA_FORK_KEY = "kenoma.operator.forks.v1";
 
+// In-memory source of truth: localStorage throws NS_ERROR_NOT_AVAILABLE on the
+// about: principal, so we keep state in memory and persist best-effort.
+let kenomaForkValue = null;
+
 function kenomaForkCount() {
-  const n = parseInt(localStorage.getItem(KENOMA_FORK_KEY) || "1", 10);
-  return Math.max(1, Math.min(5, Number.isFinite(n) ? n : 1));
+  if (kenomaForkValue == null) {
+    let raw = "1";
+    try {
+      raw = localStorage.getItem(KENOMA_FORK_KEY) || "1";
+    } catch (e) {
+      // storage unavailable on this principal
+    }
+    const n = parseInt(raw, 10);
+    kenomaForkValue = Math.max(1, Math.min(5, Number.isFinite(n) ? n : 1));
+  }
+  return kenomaForkValue;
 }
 
 function renderForkCount() {
@@ -577,11 +594,11 @@ function renderForkCount() {
 }
 
 function setForkCount(n) {
-  const clamped = Math.max(1, Math.min(5, n));
+  kenomaForkValue = Math.max(1, Math.min(5, n));
   try {
-    localStorage.setItem(KENOMA_FORK_KEY, String(clamped));
+    localStorage.setItem(KENOMA_FORK_KEY, String(kenomaForkValue));
   } catch (e) {
-    // Storage may be unavailable; the readout still reflects the request.
+    // best-effort persistence; in-memory value still drives the session
   }
   renderForkCount();
 }
@@ -602,13 +619,21 @@ function wireForkStepper() {
 
 const KENOMA_RECENT_KEY = "kenoma.operator.recent.v1";
 
+let kenomaRecentItems = null;
+
 function loadRecent() {
-  try {
-    const v = JSON.parse(localStorage.getItem(KENOMA_RECENT_KEY) || "[]");
-    return Array.isArray(v) ? v : [];
-  } catch (e) {
-    return [];
+  if (kenomaRecentItems == null) {
+    kenomaRecentItems = [];
+    try {
+      const v = JSON.parse(localStorage.getItem(KENOMA_RECENT_KEY) || "[]");
+      if (Array.isArray(v)) {
+        kenomaRecentItems = v;
+      }
+    } catch (e) {
+      // storage unavailable on this principal
+    }
   }
+  return kenomaRecentItems;
 }
 
 function recordRecent(text, kind) {
@@ -616,12 +641,15 @@ function recordRecent(text, kind) {
   if (!trimmed) {
     return;
   }
-  const items = loadRecent().filter(it => it && it.text !== trimmed.slice(0, 80));
+  const items = loadRecent().filter(
+    it => it && it.text !== trimmed.slice(0, 80)
+  );
   items.unshift({ text: trimmed.slice(0, 80), kind: String(kind || "") });
+  kenomaRecentItems = items.slice(0, 8);
   try {
-    localStorage.setItem(KENOMA_RECENT_KEY, JSON.stringify(items.slice(0, 8)));
+    localStorage.setItem(KENOMA_RECENT_KEY, JSON.stringify(kenomaRecentItems));
   } catch (e) {
-    // ignore quota / disabled storage
+    // best-effort persistence; in-memory list still drives the session
   }
   renderRecent();
 }

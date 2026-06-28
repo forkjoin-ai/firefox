@@ -165,12 +165,21 @@ export class KenomaAgentParent extends JSWindowActorParent {
       })(),
       (async () => {
         const token = await this.getGrant("todos");
+        // todo's space route is /api/sync/pull/{spaceId} (suffix), unlike
+        // memory/fact which use /api/spaces/{spaceId}/... . Count distinct nodes.
         const data = await this.fetchJson(
-          `${STATUS_BASE.todos}/api/spaces/global/api/sync/pull`,
+          `${STATUS_BASE.todos}/api/sync/pull/global`,
           { headers: { authorization: `Bearer ${token}` } }
         );
-        const n = Array.isArray(data.operations) ? data.operations.length : 0;
-        out.todos = { ok: true, count: n, label: `${n} ops` };
+        const ops = Array.isArray(data.operations) ? data.operations : [];
+        const ids = new Set();
+        for (const op of ops) {
+          if (op && op.nodeId) {
+            ids.add(op.nodeId);
+          }
+        }
+        const n = ids.size || ops.length;
+        out.todos = { ok: true, count: n, label: `${n} todos` };
       })(),
       (async () => {
         const data = await this.fetchJson(
