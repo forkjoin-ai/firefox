@@ -12,15 +12,6 @@
       <div class="field" aria-hidden="true"></div>
 
       <header class="topbar">
-        <a class="brand" href="about:kenoma" aria-label="Kenoma home">
-          <span class="brand-mark" aria-hidden="true">
-            <img src="chrome://branding/content/kenoma-sigil.svg" alt="">
-          </span>
-          <span class="brand-copy">
-            <span>Kenoma</span>
-          </span>
-        </a>
-
         <nav class="status-rail" aria-label="Sovereign status">
           <button class="pill weather-display" id="weather-display" type="button" title="Current weather · click to change location">
             <span class="dot" aria-hidden="true"></span>
@@ -54,12 +45,22 @@
           <input id="location-input" type="search" autocomplete="off" placeholder="Search a city or place…">
           <div class="location-results" id="location-results"></div>
         </div>
+
+        <div class="kenoma-modal is-hidden" id="kenoma-modal" role="dialog" aria-modal="true" aria-label="Item detail">
+          <div class="kenoma-modal-card">
+            <div class="kenoma-modal-head">
+              <strong id="kenoma-modal-title">Detail</strong>
+              <button type="button" class="kenoma-modal-close" id="kenoma-modal-close" aria-label="Close">&times;</button>
+            </div>
+            <div class="kenoma-modal-body" id="kenoma-modal-body"></div>
+          </div>
+        </div>
       </header>
 
       <main class="workspace">
         <section class="command-core" aria-labelledby="kenoma-title">
           <canvas id="wiremark" class="wiremark" width="240" height="240" aria-hidden="true"></canvas>
-          <p class="eyebrow">Aeon browser · sovereign transport · no borrowed sky</p>
+          <p class="eyebrow"><a href="aeon://forkjoin.ai">forkjoin.ai</a></p>
           <h1 id="kenoma-title">Kenoma</h1>
 
           <form class="command-form" action="https://wiki.forkjoin.ai/search" method="get">

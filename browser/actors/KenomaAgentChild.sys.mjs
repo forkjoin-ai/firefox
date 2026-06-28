@@ -61,6 +61,10 @@ export class KenomaAgentChild extends JSWindowActorChild {
     Cu.exportFunction(this.detectLocation.bind(this), api, {
       defineAs: "detectLocation",
     });
+    Cu.exportFunction(this.recent.bind(this), api, { defineAs: "recent" });
+    Cu.exportFunction(this.setRecent.bind(this), api, {
+      defineAs: "setRecent",
+    });
     try {
       Object.freeze(api);
     } catch (e) {
@@ -155,6 +159,14 @@ export class KenomaAgentChild extends JSWindowActorChild {
 
   detectLocation() {
     return this.queryForContent("KenomaAgent:DetectLocation");
+  }
+
+  recent() {
+    return this.queryForContent("KenomaAgent:GetRecent");
+  }
+
+  setRecent(items) {
+    return this.queryForContent("KenomaAgent:SetRecent", { items });
   }
 
   onEvent(callback) {

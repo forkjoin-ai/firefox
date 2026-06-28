@@ -40,6 +40,9 @@ const EDGEWORK_BASE = "https://www-edgework-app.edgework.ai";
 const IDENTITY_PREF_TOKEN = "kenoma.identity.badgeToken";
 // Canonical current-location for every Kenoma product (weather, POI/sensorium).
 const LOCATION_PREF = "kenoma.location.json";
+// Operator's recent activity — persisted in prefs since about: pages have no
+// usable localStorage.
+const RECENT_PREF = "kenoma.recent.json";
 const STATUS_TIMEOUT_MS = 8000;
 
 export class KenomaAgentParent extends JSWindowActorParent {
@@ -76,8 +79,40 @@ export class KenomaAgentParent extends JSWindowActorParent {
         return this.geoSearch(message.data && message.data.q);
       case "KenomaAgent:DetectLocation":
         return this.detectLocation();
+      case "KenomaAgent:GetRecent":
+        return this.readRecent();
+      case "KenomaAgent:SetRecent":
+        return { ok: this.writeRecent(message.data && message.data.items) };
     }
     return null;
+  }
+
+  readRecent() {
+    try {
+      const raw = Services.prefs.getStringPref(RECENT_PREF, "");
+      if (!raw) {
+        return [];
+      }
+      const items = JSON.parse(raw);
+      return Array.isArray(items) ? items : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  writeRecent(items) {
+    if (!Array.isArray(items)) {
+      return false;
+    }
+    try {
+      Services.prefs.setStringPref(
+        RECENT_PREF,
+        JSON.stringify(items.slice(0, 12))
+      );
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   // IP-based location from Cloudflare edge geo (no geolocation prompt). The

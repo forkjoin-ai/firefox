@@ -256,7 +256,9 @@ export class KenomaIdentityChild extends JSWindowActorChild {
     });
     const data = await this.readJsonOrThrow(res, "iam/badge/issue");
     if (!res.ok || !data.ok || !data.token) {
-      throw new Error(data.error || `badge_issue_${res.status}`);
+      throw new Error(
+        data.detail || data.error || `badge_issue_${res.status}`
+      );
     }
     const claims = this.decodeBadge(data.token) || {};
     return {

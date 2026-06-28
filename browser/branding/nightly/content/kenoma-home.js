@@ -363,10 +363,11 @@ function wireInteractions() {
       if (!query) {
         return;
       }
-      recordRecent(query, "search");
+      const wikiUrl = `https://wiki.forkjoin.ai/search?q=${encodeURIComponent(query)}`;
       const api = window.KenomaAgent;
       if (!api || typeof api.ask !== "function") {
         // No offload available; let the native wiki search proceed.
+        recordRecent(query, "search", { query, opened: wikiUrl });
         return;
       }
       // Offload-first: try moonshine's instant oracle before a web search.
@@ -376,13 +377,23 @@ function wireInteractions() {
           if (res && res.answered) {
             const list = qs(".in-flight .run-list");
             if (list) {
-              list.insertAdjacentHTML(
-                "afterbegin",
-                `<div class="run"><span class="run-dot lime"></span><span><strong>${kenomaEscape(res.answer)}</strong><small>${kenomaEscape(query)} · offloaded</small></span><em>ANSWER</em></div>`
-              );
+              const row = document.createElement("div");
+              row.className = "run";
+              row.innerHTML =
+                `<span class="run-dot lime"></span>` +
+                `<span><strong>${kenomaEscape(res.answer)}</strong>` +
+                `<small>${kenomaEscape(query)} · offloaded</small></span>` +
+                `<em>ANSWER</em>`;
+              attachDetail(row, "Offloaded answer", {
+                query,
+                answer: res.answer,
+                source: "moonshine oracle (no agent)",
+              });
+              list.prepend(row);
             }
-            recordRecent(`${query} = ${res.answer}`, "offload");
+            recordRecent(query, "offload", { query, answer: res.answer });
           } else {
+            recordRecent(query, "search", { query, opened: wikiUrl });
             form.submit();
           }
         })
@@ -423,14 +434,24 @@ function wireAgent() {
   if (!runBtn || !stopBtn || !input) {
     return;
   }
-  const log = (dotClass, title, sub, tag) => {
+  const log = (dotClass, title, sub, tag, detail) => {
     if (!list) {
       return;
     }
-    list.insertAdjacentHTML(
-      "afterbegin",
-      `<div class="run"><span class="run-dot ${dotClass}"></span><span><strong>${kenomaEscape(title)}</strong><small>${kenomaEscape(sub)}</small></span><em>${kenomaEscape(tag)}</em></div>`
-    );
+    const row = document.createElement("div");
+    row.className = "run";
+    row.innerHTML =
+      `<span class="run-dot ${dotClass}"></span>` +
+      `<span><strong>${kenomaEscape(title)}</strong>` +
+      `<small>${kenomaEscape(sub)}</small></span>` +
+      `<em>${kenomaEscape(tag)}</em>`;
+    attachDetail(row, title, {
+      status: tag,
+      detail: sub,
+      ...(detail || {}),
+      when: new Date().toLocaleTimeString(),
+    });
+    list.prepend(row);
   };
   let running = false;
   const setRunning = on => {
@@ -491,7 +512,7 @@ function wireAgent() {
       if (list) {
         list.innerHTML = "";
       }
-      recordRecent(task, "agent task");
+      recordRecent(task, "agent", { task, forks: kenomaForkCount() });
       log("cyan", task, "agent task", "RUNNING");
       setRunning(true);
       Promise.resolve(api.run(task, kenomaForkCount())).catch(error => {
@@ -598,6 +619,12 @@ async function refreshStatus() {
       `<span><strong>${kenomaEscape(svc.title)}</strong>` +
       `<small>${kenomaEscape(info.label || svc.sub)}</small></span>` +
       `<em>${ok ? "LIVE" : "DOWN"}</em>`;
+    attachDetail(row, svc.title, {
+      status: ok ? "LIVE" : "DOWN",
+      reading: info.label || "—",
+      count: info.count != null ? String(info.count) : "—",
+      open: svc.href,
+    });
     list.append(row);
   }
 }
@@ -653,7 +680,77 @@ function wireForkStepper() {
   }
 }
 
-// ── recent (real local operator history) ────────────────────────────────────
+// ── click-to-detail modal (In-Flight + Recent) ──────────────────────────────
+
+function kenomaCloseModal() {
+  const modal = qs("#kenoma-modal");
+  if (modal) {
+    modal.classList.add("is-hidden");
+  }
+}
+
+function kenomaOpenModal(title, detail) {
+  const modal = qs("#kenoma-modal");
+  const body = qs("#kenoma-modal-body");
+  const titleEl = qs("#kenoma-modal-title");
+  if (!modal || !body) {
+    return;
+  }
+  if (titleEl) {
+    titleEl.textContent = title || "Detail";
+  }
+  const rows = [];
+  for (const [key, value] of Object.entries(detail || {})) {
+    if (value == null || value === "") {
+      continue;
+    }
+    const str = String(value);
+    const v = /^(https?:|aeon:)/.test(str)
+      ? `<a href="${kenomaEscape(str)}">${kenomaEscape(str)}</a>`
+      : kenomaEscape(str);
+    rows.push(
+      `<div class="kenoma-modal-row"><span class="k">${kenomaEscape(key)}</span><span class="v">${v}</span></div>`
+    );
+  }
+  body.innerHTML = rows.length
+    ? rows.join("")
+    : `<div class="kenoma-modal-row"><span class="v">Nothing else known.</span></div>`;
+  modal.classList.remove("is-hidden");
+}
+
+function wireModal() {
+  const modal = qs("#kenoma-modal");
+  const close = qs("#kenoma-modal-close");
+  if (close) {
+    close.addEventListener("click", kenomaCloseModal);
+  }
+  if (modal) {
+    modal.addEventListener("click", event => {
+      if (event.target === modal) {
+        kenomaCloseModal();
+      }
+    });
+  }
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+      kenomaCloseModal();
+    }
+  });
+}
+
+// Make an element open the detail modal on click (prevents its default nav).
+function attachDetail(el, title, detail) {
+  if (!el) {
+    return;
+  }
+  el.setAttribute("data-kdetail", "1");
+  el.addEventListener("click", event => {
+    event.preventDefault();
+    kenomaOpenModal(title, detail);
+  });
+}
+
+// ── recent (real operator history, persisted via the actor pref) ─────────────
 
 const KENOMA_RECENT_KEY = "kenoma.operator.recent.v1";
 
@@ -668,13 +765,30 @@ function loadRecent() {
         kenomaRecentItems = v;
       }
     } catch (e) {
-      // storage unavailable on this principal
+      // storage unavailable on this principal — actor pref is the real store
     }
   }
   return kenomaRecentItems;
 }
 
-function recordRecent(text, kind) {
+// Hydrate from the actor pref (survives reload, unlike about:-page localStorage).
+async function loadRecentFromActor() {
+  const api = window.KenomaAgent;
+  if (!api || typeof api.recent !== "function") {
+    return;
+  }
+  try {
+    const items = await api.recent();
+    if (Array.isArray(items) && items.length) {
+      kenomaRecentItems = items;
+      renderRecent();
+    }
+  } catch (e) {
+    // keep whatever is in memory
+  }
+}
+
+function recordRecent(text, kind, detail) {
   const trimmed = String(text == null ? "" : text).trim();
   if (!trimmed) {
     return;
@@ -682,14 +796,23 @@ function recordRecent(text, kind) {
   const items = loadRecent().filter(
     it => it && it.text !== trimmed.slice(0, 80)
   );
-  items.unshift({ text: trimmed.slice(0, 80), kind: String(kind || "") });
-  kenomaRecentItems = items.slice(0, 8);
+  items.unshift({
+    text: trimmed.slice(0, 80),
+    kind: String(kind || ""),
+    detail: detail || null,
+    when: new Date().toISOString(),
+  });
+  kenomaRecentItems = items.slice(0, 12);
+  renderRecent();
+  const api = window.KenomaAgent;
+  if (api && typeof api.setRecent === "function") {
+    Promise.resolve(api.setRecent(kenomaRecentItems)).catch(() => {});
+  }
   try {
     localStorage.setItem(KENOMA_RECENT_KEY, JSON.stringify(kenomaRecentItems));
   } catch (e) {
-    // best-effort persistence; in-memory list still drives the session
+    // best-effort; the actor pref is the durable store
   }
-  renderRecent();
 }
 
 function renderRecent() {
@@ -698,13 +821,28 @@ function renderRecent() {
     return;
   }
   const items = loadRecent();
+  list.innerHTML = "";
   if (!items.length) {
     list.innerHTML = `<li class="recent-empty"><span>No recent activity</span><em>local</em></li>`;
     return;
   }
-  list.innerHTML = items
-    .map(it => `<li><span>${kenomaEscape(it.text)}</span><em>${kenomaEscape(it.kind)}</em></li>`)
-    .join("");
+  for (const it of items) {
+    const li = document.createElement("li");
+    li.innerHTML = `<span>${kenomaEscape(it.text)}</span><em>${kenomaEscape(it.kind)}</em>`;
+    const detail = {
+      kind: it.kind,
+      ...(it.detail || {}),
+    };
+    if (it.when) {
+      try {
+        detail.when = new Date(it.when).toLocaleString();
+      } catch (e) {
+        detail.when = it.when;
+      }
+    }
+    attachDetail(li, it.text, detail);
+    list.append(li);
+  }
 }
 
 // ── identity (sign in / out via window.KenomaIdentity) ──────────────────────
@@ -1097,10 +1235,12 @@ function kenomaOnAgentReady() {
   updateFooter();
   refreshWallet();
   ensureLocation();
+  loadRecentFromActor();
 }
 
 buildField();
 renderRecent();
+wireModal();
 wireForkStepper();
 wireActionMenu();
 wireInteractions();
@@ -1112,6 +1252,7 @@ updateClock();
 updateFooter();
 refreshStatus();
 ensureLocation();
+loadRecentFromActor();
 setInterval(updateClock, 15000);
 setInterval(refreshStatus, 60000);
 setInterval(refreshWeather, 600000);
