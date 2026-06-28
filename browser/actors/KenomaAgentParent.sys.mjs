@@ -74,6 +74,22 @@ export class KenomaAgentParent extends JSWindowActorParent {
         return this.weather(message.data);
       case "KenomaAgent:GeoSearch":
         return this.geoSearch(message.data && message.data.q);
+      case "KenomaAgent:DetectLocation":
+        return this.detectLocation();
+    }
+    return null;
+  }
+
+  // IP-based location from Cloudflare edge geo (no geolocation prompt). The
+  // privileged fetch carries the user's IP, so storms-watch geolocates them.
+  async detectLocation() {
+    try {
+      const data = await this.fetchJson(`${STATUS_BASE.weather}/api/geo/here`);
+      if (data && data.ok && typeof data.lat === "number") {
+        return { lat: data.lat, lon: data.lon, label: data.label || "" };
+      }
+    } catch (e) {
+      // fall through
     }
     return null;
   }

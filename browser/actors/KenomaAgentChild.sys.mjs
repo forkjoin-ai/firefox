@@ -58,6 +58,9 @@ export class KenomaAgentChild extends JSWindowActorChild {
     Cu.exportFunction(this.geoSearch.bind(this), api, {
       defineAs: "geoSearch",
     });
+    Cu.exportFunction(this.detectLocation.bind(this), api, {
+      defineAs: "detectLocation",
+    });
     try {
       Object.freeze(api);
     } catch (e) {
@@ -148,6 +151,10 @@ export class KenomaAgentChild extends JSWindowActorChild {
     return this.queryForContent("KenomaAgent:GeoSearch", {
       q: String(q || ""),
     });
+  }
+
+  detectLocation() {
+    return this.queryForContent("KenomaAgent:DetectLocation");
   }
 
   onEvent(callback) {

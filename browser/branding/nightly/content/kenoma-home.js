@@ -964,28 +964,34 @@ async function ensureLocation() {
     refreshWeather();
     return;
   }
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      async pos => {
-        const lat = pos.coords.latitude;
-        const lon = pos.coords.longitude;
-        try {
-          await api.setLocation({ lat, lon, label: "" });
-          const w = await api.weather({ lat, lon });
-          if (w && w.ok && w.city) {
-            await api.setLocation({ lat, lon, label: w.city });
-          }
-        } catch (e) {
-          // keep going; refreshWeather reflects whatever stuck
+  // IP-based detection via the actor (Cloudflare edge geo) — no prompt, works
+  // on the chrome about: page where navigator.geolocation has no provider.
+  try {
+    const detected =
+      typeof api.detectLocation === "function"
+        ? await api.detectLocation()
+        : null;
+    if (detected && typeof detected.lat === "number") {
+      const label = detected.label || "";
+      await api.setLocation({ lat: detected.lat, lon: detected.lon, label });
+      if (!label) {
+        const w = await api.weather({
+          lat: detected.lat,
+          lon: detected.lon,
+        });
+        if (w && w.ok && w.city) {
+          await api.setLocation({
+            lat: detected.lat,
+            lon: detected.lon,
+            label: w.city,
+          });
         }
-        refreshWeather();
-      },
-      () => refreshWeather(),
-      { timeout: 8000, maximumAge: 600000 }
-    );
-  } else {
-    refreshWeather();
+      }
+    }
+  } catch (e) {
+    // leave as "Set location" if detection fails
   }
+  refreshWeather();
 }
 
 function wireWeather() {
