@@ -21,15 +21,26 @@
     "default_popup": "commandbar.html"
   },
   "background": {
-    "scripts": ["run.js"]
+    "scripts": [
+      "run.js",
+      "browser-agent.js",
+      "mesh-worker.js"
+    ]
   },
   "content_scripts": [
     {
-      "matches": ["*://*.forkjoin.ai/*", "*://*.affectively.ai/*"],
-      "js": ["kenoma-content.js"],
+      "matches": [
+        "*://*.forkjoin.ai/*",
+        "*://*.affectively.ai/*"
+      ],
+      "js": [
+        "kenoma-content.js"
+      ],
       "run_at": "document_start",
       "all_frames": false
     }
   ],
-  "web_accessible_resources": ["kenoma-page.js"]
+  "web_accessible_resources": [
+    "kenoma-page.js"
+  ]
 }

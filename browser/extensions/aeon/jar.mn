@@ -5,6 +5,8 @@
 browser.jar:
     builtin-addons/aeon/manifest.json (manifest.json)
     builtin-addons/aeon/run.js (run.js)
+    builtin-addons/aeon/browser-agent.js (browser-agent.js)
+    builtin-addons/aeon/mesh-worker.js (mesh-worker.js)
     builtin-addons/aeon/kenoma-content.js (kenoma-content.js)
     builtin-addons/aeon/kenoma-page.js (kenoma-page.js)
     builtin-addons/aeon/commandbar.html (commandbar.html)
