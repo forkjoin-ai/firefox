@@ -125,6 +125,24 @@ export class KenomaIdentityChild extends JSWindowActorChild {
 
   // ── card.yoga browser-auth + badge-issue flow ──────────────────────────────
 
+  // Read a response as JSON, but on a non-JSON body throw a descriptive error
+  // (with status + a snippet) instead of an opaque "JSON.parse" failure, so the
+  // operator page can show exactly which step failed and what came back.
+  async readJsonOrThrow(res, tag) {
+    const text = await res.text();
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      const snippet = (text || "(empty body)")
+        .slice(0, 200)
+        .replace(/\s+/g, " ")
+        .trim();
+      throw new Error(
+        `${tag} returned non-JSON (HTTP ${res.status}): ${snippet}`
+      );
+    }
+  }
+
   async runSignIn() {
     const win = this.contentWindow;
     // Open the popup synchronously so it keeps the click's user gesture; we
@@ -147,7 +165,7 @@ export class KenomaIdentityChild extends JSWindowActorChild {
           returnOrigin: RETURN_ORIGIN,
         }),
       });
-      const start = await startRes.json();
+      const start = await this.readJsonOrThrow(startRes, "auth/browser/start");
       if (!start.ok || !start.signInUrl || !start.statusUrl) {
         throw new Error(start.error || "start_failed");
       }
@@ -190,13 +208,14 @@ export class KenomaIdentityChild extends JSWindowActorChild {
 
   async pollStatus(statusUrl, popup) {
     const deadline = Date.now() + POLL_TIMEOUT_MS;
+    let lastError = null;
     while (Date.now() < deadline) {
       try {
         const sep = statusUrl.includes("?") ? "&" : "?";
         const res = await fetch(`${statusUrl}${sep}consume=false`, {
           cache: "no-store",
         });
-        const data = await res.json();
+        const data = await this.readJsonOrThrow(res, "auth/browser/status");
         if (data.status === "complete" && data.auth) {
           return data.auth;
         }
@@ -207,14 +226,19 @@ export class KenomaIdentityChild extends JSWindowActorChild {
         if (e && e.message === "auth_failed") {
           throw e;
         }
+        lastError = e;
         // transient; keep polling
       }
       if (popup && popup.closed) {
-        throw new Error("popup_closed");
+        throw new Error(
+          "popup_closed" + (lastError ? ` (last: ${lastError.message})` : "")
+        );
       }
       await new Promise(r => this.contentWindow.setTimeout(r, POLL_INTERVAL_MS));
     }
-    throw new Error("timeout");
+    throw new Error(
+      "timeout" + (lastError ? ` (last: ${lastError.message})` : "")
+    );
   }
 
   async issueBadge(auth) {
@@ -230,7 +254,7 @@ export class KenomaIdentityChild extends JSWindowActorChild {
         ttlSeconds: BADGE_TTL_SECONDS,
       }),
     });
-    const data = await res.json();
+    const data = await this.readJsonOrThrow(res, "iam/badge/issue");
     if (!res.ok || !data.ok || !data.token) {
       throw new Error(data.error || `badge_issue_${res.status}`);
     }
