@@ -1230,6 +1230,28 @@ function wireActionMenu() {
   }
 }
 
+// about: content can't link to privileged schemes (aeon://, …) directly —
+// Gecko blocks it. Route those clicks through the actor's system-principal open.
+function wireSchemeLinks() {
+  document.addEventListener("click", event => {
+    const target = event.target;
+    const anchor =
+      target && target.closest ? target.closest("a[href]") : null;
+    if (!anchor) {
+      return;
+    }
+    const href = anchor.getAttribute("href") || "";
+    if (!/^aeon:/i.test(href)) {
+      return;
+    }
+    event.preventDefault();
+    const api = window.KenomaAgent;
+    if (api && typeof api.open === "function") {
+      Promise.resolve(api.open(href)).catch(() => {});
+    }
+  });
+}
+
 function kenomaOnAgentReady() {
   refreshStatus();
   updateFooter();
@@ -1241,6 +1263,7 @@ function kenomaOnAgentReady() {
 buildField();
 renderRecent();
 wireModal();
+wireSchemeLinks();
 wireForkStepper();
 wireActionMenu();
 wireInteractions();

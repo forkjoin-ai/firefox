@@ -69,6 +69,8 @@ export class KenomaAgentParent extends JSWindowActorParent {
         return this.topup(message.data && message.data.cents);
       case "KenomaAgent:Ask":
         return this.offload(String((message.data && message.data.task) || ""));
+      case "KenomaAgent:Open":
+        return this.openUrl(String((message.data && message.data.url) || ""));
       case "KenomaAgent:GetLocation":
         return this.readLocation();
       case "KenomaAgent:SetLocation":
@@ -196,6 +198,30 @@ export class KenomaAgentParent extends JSWindowActorParent {
       return Array.isArray(data) ? data.slice(0, 8) : [];
     } catch (e) {
       return [];
+    }
+  }
+
+  // Navigate to a URL with the system principal. Content at about:kenoma can't
+  // link to privileged schemes (aeon://, etc.) itself, so the page routes such
+  // clicks here. Opens in a new foreground tab to keep the operator page.
+  openUrl(url) {
+    const target = String(url || "").trim();
+    if (!target) {
+      return { ok: false };
+    }
+    try {
+      const win = this.chromeWindow();
+      if (!win || !win.gBrowser) {
+        return { ok: false, error: "no browser window" };
+      }
+      const principal = Services.scriptSecurityManager.getSystemPrincipal();
+      const tab = win.gBrowser.addTab(target, {
+        triggeringPrincipal: principal,
+      });
+      win.gBrowser.selectedTab = tab;
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, error: (e && e.message) || String(e) };
     }
   }
 

@@ -991,9 +991,8 @@ h1 {
 /* Eyebrow is now a hyperlink to aeon://forkjoin.ai */
 .eyebrow a {
   color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1px;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .eyebrow a:hover {

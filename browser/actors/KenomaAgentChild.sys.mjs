@@ -50,6 +50,7 @@ export class KenomaAgentChild extends JSWindowActorChild {
     Cu.exportFunction(this.wallet.bind(this), api, { defineAs: "wallet" });
     Cu.exportFunction(this.topup.bind(this), api, { defineAs: "topup" });
     Cu.exportFunction(this.ask.bind(this), api, { defineAs: "ask" });
+    Cu.exportFunction(this.open.bind(this), api, { defineAs: "open" });
     Cu.exportFunction(this.location.bind(this), api, { defineAs: "location" });
     Cu.exportFunction(this.setLocation.bind(this), api, {
       defineAs: "setLocation",
@@ -127,6 +128,12 @@ export class KenomaAgentChild extends JSWindowActorChild {
   ask(task) {
     return this.queryForContent("KenomaAgent:Ask", {
       task: String(task || ""),
+    });
+  }
+
+  open(url) {
+    return this.queryForContent("KenomaAgent:Open", {
+      url: String(url || ""),
     });
   }
 
