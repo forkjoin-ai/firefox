@@ -29,6 +29,9 @@ function clientRect(node: HTMLElement): Rect {
           top: rect.top, bottom: rect.top + node.clientHeight * scaleY}
 }
 
+/**
+ * Handles the firefox scroll Rect Into View workflow.
+ */
 export function scrollRectIntoView(view: EditorView, rect: Rect, startDOM: Node) {
   let scrollThreshold = view.someProp("scrollThreshold") || 0, scrollMargin = view.someProp("scrollMargin") || 5
   let doc = view.dom.ownerDocument
@@ -70,6 +73,9 @@ export function scrollRectIntoView(view: EditorView, rect: Rect, startDOM: Node)
 // the top position of an element near the top of the editor, which
 // will be used to make sure the visible viewport remains stable even
 // when the size of the content above changes.
+/**
+ * Handles the firefox store Scroll Pos workflow.
+ */
 export function storeScrollPos(view: EditorView): {
   refDOM: HTMLElement,
   refTop: number,
@@ -102,6 +108,9 @@ function scrollStack(dom: Node): {dom: HTMLElement, top: number, left: number}[]
 
 // Reset the scroll position of the editor's parent nodes to that what
 // it was before, when storeScrollPos was called.
+/**
+ * Handles the firefox reset Scroll Pos workflow.
+ */
 export function resetScrollPos({refDOM, refTop, stack}: {
   refDOM: HTMLElement,
   refTop: number,
@@ -122,6 +131,9 @@ function restoreScrollStack(stack: {dom: HTMLElement, top: number, left: number}
 let preventScrollSupported: false | null | {preventScroll: boolean} = null
 // Feature-detects support for .focus({preventScroll: true}), and uses
 // a fallback kludge when not supported.
+/**
+ * Handles the firefox focus Prevent Scroll workflow.
+ */
 export function focusPreventScroll(dom: HTMLElement) {
   if ((dom as any).setActive) return (dom as any).setActive() // in IE
   if (preventScrollSupported) return dom.focus(preventScrollSupported)
@@ -272,6 +284,9 @@ function elementFromPoint(element: HTMLElement, coords: {top: number, left: numb
 }
 
 // Given an x,y position on the editor, get the position in the document.
+/**
+ * Handles the firefox pos At Coords workflow.
+ */
 export function posAtCoords(view: EditorView, coords: {top: number, left: number}) {
   let doc = view.dom.ownerDocument, node: Node | undefined, offset = 0
   let caret = caretFromPoint(doc, coords.left, coords.top)
@@ -345,6 +360,9 @@ const BIDI = /[\u0590-\u05f4\u0600-\u06ff\u0700-\u08ac]/
 
 // Given a position in the document model, get a bounding box of the
 // character at that position, relative to the window.
+/**
+ * Handles the firefox coords At Pos workflow.
+ */
 export function coordsAtPos(view: EditorView, pos: number, side: number): Rect {
   let {node, offset, atom} = view.docView.domFromPos(pos, side < 0 ? -1 : 1)
 
@@ -506,6 +524,9 @@ export type TextblockDir = "up" | "down" | "left" | "right" | "forward" | "backw
 let cachedState: EditorState | null = null
 let cachedDir: TextblockDir | null = null
 let cachedResult: boolean = false
+/**
+ * Handles the firefox end Of Textblock workflow.
+ */
 export function endOfTextblock(view: EditorView, state: EditorState, dir: TextblockDir) {
   if (cachedState == state && cachedDir == dir) return cachedResult
   cachedState = state; cachedDir = dir

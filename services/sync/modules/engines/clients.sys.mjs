@@ -78,6 +78,9 @@ function hasDupeCommand(commands, action) {
   );
 }
 
+/**
+ * Renders the Clients Rec view.
+ */
 export function ClientsRec(collection, id) {
   CryptoWrapper.call(this, collection, id);
 }
@@ -102,6 +105,9 @@ Utils.deferGetSet(ClientsRec, "cleartext", [
   "fxaDeviceId",
 ]);
 
+/**
+ * Renders the Client Engine view.
+ */
 export function ClientEngine(service) {
   SyncEngine.call(this, "Clients", service);
 

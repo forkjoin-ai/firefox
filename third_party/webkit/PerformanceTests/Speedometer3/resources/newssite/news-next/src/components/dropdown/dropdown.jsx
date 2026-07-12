@@ -5,6 +5,9 @@ import { useDataContext } from "@/context/data-context";
 
 import styles from "news-site-css/dist/dropdown.module.css";
 
+/**
+ * Renders the Dropdown view.
+ */
 export default function Dropdown({ children, animatedIconClass }) {
     const [isOpen, setIsOpen] = useState(false);
     const { buttons } = useDataContext();

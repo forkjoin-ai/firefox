@@ -17,6 +17,9 @@ const hasValidMin = (value, min) => {
     return value.length >= min;
 };
 
+/**
+ * Renders the Input view.
+ */
 export function Input({ onSubmit, placeholder, label, defaultValue, onBlur }) {
     const handleBlur = useCallback(() => {
         if (onBlur)

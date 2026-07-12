@@ -25,6 +25,9 @@ const GROUP_CLAUSE = `
         (:includeSubdomains AND name LIKE :pattern ESCAPE '/')
 `;
 
+/**
+ * Renders the Content Pref Service2 view.
+ */
 export function ContentPrefService2() {
   if (Services.appinfo.processType === Services.appinfo.PROCESS_TYPE_CONTENT) {
     return ChromeUtils.importESModule(

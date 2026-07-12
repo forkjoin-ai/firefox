@@ -3475,6 +3475,9 @@ class PictureInPictureChildVideoWrapper {
   }
 }
 
+/**
+ * Handles the firefox get Actor For workflow.
+ */
 export function getActorFor(videoElement) {
   return gOriginatingVideoMap.get(videoElement);
 }

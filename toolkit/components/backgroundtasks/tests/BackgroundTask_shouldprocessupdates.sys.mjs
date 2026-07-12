@@ -2,6 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+/**
+ * Handles the firefox run Background Task workflow.
+ */
 export async function runBackgroundTask() {
   const get = Services.env.get("MOZ_TEST_SHOULD_NOT_PROCESS_UPDATES");
   let exitCode = 81;

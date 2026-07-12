@@ -37,6 +37,9 @@ let s_defaultLimits = undefined;
 
 let defaultRequestAdapterOptions;
 
+/**
+ * Handles the firefox set Default Request Adapter Options workflow.
+ */
 export function setDefaultRequestAdapterOptions(options) {
   // It's okay to call this if you don't change the options
   if (objectEquals(options, defaultRequestAdapterOptions)) {
@@ -48,6 +51,9 @@ export function setDefaultRequestAdapterOptions(options) {
   defaultRequestAdapterOptions = { ...options };
 }
 
+/**
+ * Handles the firefox get Default Request Adapter Options workflow.
+ */
 export function getDefaultRequestAdapterOptions() {
   return defaultRequestAdapterOptions;
 }

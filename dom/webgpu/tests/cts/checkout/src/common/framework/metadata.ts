@@ -14,6 +14,9 @@ export type TestMetadataListing = {
   [testQuery: string]: TestMetadata;
 };
 
+/**
+ * Loads the Metadata For Suite.
+ */
 export function loadMetadataForSuite(suiteDir: string): TestMetadataListing | null {
   assert(typeof require !== 'undefined', 'loadMetadataForSuite is only implemented on Node');
   /* eslint-disable-next-line n/no-restricted-require */

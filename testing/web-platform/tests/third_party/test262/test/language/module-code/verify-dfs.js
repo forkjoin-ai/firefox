@@ -17,6 +17,9 @@ import './verify-dfs-a_FIXTURE.js';
 import './verify-dfs-b_FIXTURE.js';
 
 // rely on function hoisting to create shared array
+/**
+ * Handles the firefox evaluated workflow.
+ */
 export function evaluated(name) {
   if (!evaluated.order) {
     evaluated.order = [];
@@ -24,6 +27,9 @@ export function evaluated(name) {
   evaluated.order.push(name);
 }
 
+/**
+ * Handles the firefox check workflow.
+ */
 export function check(promise) {
   promise.then(() => {
     assert.sameValue(evaluated.order.length, 2);

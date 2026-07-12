@@ -9,6 +9,9 @@
 // access the uri. This prevents, for example, a source document from tricking
 // the user into dragging a chrome url.
 
+/**
+ * Renders the Content Area Drop Listener view.
+ */
 export function ContentAreaDropListener() {}
 
 ContentAreaDropListener.prototype = {

@@ -1,5 +1,8 @@
 import '/resources/WebIDLParser.js';
 
+/**
+ * Handles the firefox get Event Handler Attribute With Interface Names workflow.
+ */
 export async function getEventHandlerAttributeWithInterfaceNames() {
   let attributeNamesWithInterfaceName = [];
   function isAttributeImplemented(interfaceName, name) {

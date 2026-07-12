@@ -26,6 +26,9 @@ ChromeUtils.defineESModuleGetters(lazy, {
     "resource://gre/modules/FxAccountsProfileClient.sys.mjs",
 });
 
+/**
+ * Renders the Fx Accounts Profile view.
+ */
 export var FxAccountsProfile = function (options = {}) {
   this._currentFetchPromise = null;
   this._cachedAt = 0; // when we saved the cached version.

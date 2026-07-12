@@ -234,6 +234,9 @@ function restoreBlackBoxedSources(sources) {
   };
 }
 
+/**
+ * Handles the firefox new Original Sources workflow.
+ */
 export function newOriginalSources(originalSourcesInfo) {
   return async ({ dispatch, getState }) => {
     const state = getState();
@@ -288,6 +291,9 @@ export function newOriginalSources(originalSourcesInfo) {
 }
 
 // Wrapper around newGeneratedSources, only used by tests
+/**
+ * Handles the firefox new Generated Source workflow.
+ */
 export function newGeneratedSource(sourceInfo) {
   return async ({ dispatch }) => {
     const sources = await dispatch(newGeneratedSources([sourceInfo]));
@@ -295,6 +301,9 @@ export function newGeneratedSource(sourceInfo) {
   };
 }
 
+/**
+ * Handles the firefox new Generated Sources workflow.
+ */
 export function newGeneratedSources(sourceResources) {
   return async ({ dispatch, getState }) => {
     if (!sourceResources.length) {
@@ -378,6 +387,9 @@ export function newGeneratedSources(sourceResources) {
   };
 }
 
+/**
+ * Handles the firefox new Style Sheet Sources workflow.
+ */
 export function newStyleSheetSources(styleSheetResources) {
   return async ({ dispatch }) => {
     if (!styleSheetResources.length) {

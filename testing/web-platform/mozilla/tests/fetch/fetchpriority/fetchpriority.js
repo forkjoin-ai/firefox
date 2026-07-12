@@ -94,6 +94,9 @@ function runSingleTest(aTestData, aTestFolderName) {
   }, aTestData.testFileName + ": test different 'fetchpriority' values");
 }
 
+/**
+ * Handles the firefox run Tests workflow.
+ */
 export function runTests(aRunConfig) {
   for (const testGroup of kTestGroups) {
     const testDataKey = aRunConfig.testDataKey;

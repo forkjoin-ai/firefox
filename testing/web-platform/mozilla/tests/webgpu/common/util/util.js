@@ -420,6 +420,9 @@ data)
   return { type, data };
 }
 
+/**
+ * Creates the Typed Array.
+ */
 export function createTypedArray(
 type,
 data)

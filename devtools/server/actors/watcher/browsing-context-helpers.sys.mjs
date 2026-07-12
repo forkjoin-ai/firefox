@@ -88,6 +88,9 @@ export function getAddonIdForWindowGlobal(windowGlobal) {
 // The goal of this method is to gather all checks done against BrowsingContext and WindowGlobal interfaces
 // which leads it to be a lengthy method. So disable the complexity rule which is counter productive here.
 // eslint-disable-next-line complexity
+/**
+ * Returns whether is Browsing Context Part Of Context is true.
+ */
 export function isBrowsingContextPartOfContext(
   browsingContext,
   sessionContext,

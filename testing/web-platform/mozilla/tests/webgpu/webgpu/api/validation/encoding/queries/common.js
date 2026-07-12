@@ -11,6 +11,9 @@ count)
   });
 }
 
+/**
+ * Handles the firefox begin Render Pass With Query Set workflow.
+ */
 export function beginRenderPassWithQuerySet(
 t,
 encoder,

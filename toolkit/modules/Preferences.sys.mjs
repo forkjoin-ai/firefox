@@ -9,6 +9,9 @@
 const MAX_INT = 0x7fffffff; // Math.pow(2, 31) - 1
 const MIN_INT = -0x80000000;
 
+/**
+ * Renders the Preferences view.
+ */
 export function Preferences(args) {
   this._cachedPrefBranch = null;
   if (isObject(args)) {

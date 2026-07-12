@@ -281,6 +281,9 @@ export class TestTree {
 
 // MAINTENANCE_TODO: Consider having subqueriesToExpand actually impact the depth-order of params
 // in the tree.
+/**
+ * Loads the Tree For Query.
+ */
 export async function loadTreeForQuery(
 loader,
 queryToLoad,

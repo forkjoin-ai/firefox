@@ -18,6 +18,9 @@ const getRoute = () => {
     return route;
 };
 
+/**
+ * Renders the App view.
+ */
 export default function App() {
     const [, setUpdatedAt] = useState(Date.now());
     const [route, setRoute] = useState("all");

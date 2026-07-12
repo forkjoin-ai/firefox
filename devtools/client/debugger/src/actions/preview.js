@@ -218,6 +218,9 @@ export function getPausedPreview(target, tokenPos, editor) {
   };
 }
 
+/**
+ * Handles the firefox get Exception Preview workflow.
+ */
 export function getExceptionPreview(target, tokenPos, editor) {
   return async ({ getState }) => {
     const matches = await findExpressionMatches(getState(), editor, tokenPos);

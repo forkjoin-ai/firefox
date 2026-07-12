@@ -10,6 +10,9 @@ ChromeUtils.defineESModuleGetters(lazy, {
 
 import { AppConstants } from "resource://gre/modules/AppConstants.sys.mjs";
 
+/**
+ * Handles the firefox ns Web Handler App workflow.
+ */
 export function nsWebHandlerApp() {}
 
 nsWebHandlerApp.prototype = {

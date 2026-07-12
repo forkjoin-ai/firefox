@@ -45,6 +45,9 @@ const ProfileCardPopOver = () => {
     );
 };
 
+/**
+ * Renders the Top Bar view.
+ */
 export const TopBar = () => {
     const numSettings = 5;
     return (

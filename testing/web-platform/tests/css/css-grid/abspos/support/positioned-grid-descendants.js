@@ -10,6 +10,9 @@ for (const size of colSizes)
 for (const size of rowSizes)
   rowOffsets.push(size + rowOffsets[rowOffsets.length - 1]);
 
+/**
+ * Handles the firefox run Tests workflow.
+ */
 export function runTests({left, top, right, bottom, orthogonal = false}) {
   // Iterate all pairs of grid lines, where 0 and 4 represent "auto".
   for (let colStart = 0; colStart < 4; ++colStart)

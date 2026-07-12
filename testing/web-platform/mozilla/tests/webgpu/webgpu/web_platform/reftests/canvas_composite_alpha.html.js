@@ -4,6 +4,9 @@
 
 
 
+/**
+ * Handles the firefox run workflow.
+ */
 export function run(
 format,
 alphaMode,

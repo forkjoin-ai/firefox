@@ -43,6 +43,9 @@ const SITEPERMS_ADDON_ID_SUFFIX = "@siteperms.mozilla.org";
 // NOTE: `generateSalt` is exported for testing purpose, should not be
 // used outside of tests.
 let SALT;
+/**
+ * Handles the firefox generate Salt workflow.
+ */
 export function generateSalt() {
   // Throw if we're not in test and SALT is already defined
   if (

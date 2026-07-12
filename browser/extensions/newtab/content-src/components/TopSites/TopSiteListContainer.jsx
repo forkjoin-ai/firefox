@@ -11,6 +11,9 @@ import { isSponsored, TOP_SITES_SOURCE } from "./TopSitesConstants";
 import { useTopSitesDnD } from "./useTopSitesDnD.jsx";
 
 // Build the displayed list: truncate/extend to the grid and place the Add button.
+/**
+ * Builds the Top Sites List.
+ */
 export function buildTopSitesList(rows, topSitesRows, maxSitesPerRow) {
   let topSites = rows.slice();
   topSites.length =
@@ -47,6 +50,9 @@ const isShiftable = site => !!site.isPinned;
 
 // Owns the DnD concern and feeds it to the presentational TopSiteList. Later this
 // is the one spot a pref swaps classic vs. grouped DnD.
+/**
+ * Renders the Top Site List Container view.
+ */
 export function TopSiteListContainer(props) {
   const dispatch = useDispatch();
 

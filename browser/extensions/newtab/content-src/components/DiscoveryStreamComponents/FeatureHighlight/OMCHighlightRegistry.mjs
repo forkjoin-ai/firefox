@@ -47,6 +47,9 @@ export const OMC_HIGHLIGHT_REGISTRY = Object.freeze({
   },
 });
 
+/**
+ * Handles the firefox get Registry Entry workflow.
+ */
 export const getRegistryEntry = messageType => {
   if (!messageType) {
     return null;
@@ -54,6 +57,9 @@ export const getRegistryEntry = messageType => {
   return OMC_HIGHLIGHT_REGISTRY[messageType] || null;
 };
 
+/**
+ * Resolves the Text.
+ */
 export const resolveText = ({ content, rawKey, l10nKey, defaultL10nId }) => {
   const raw = content?.[rawKey];
   if (raw) {
@@ -69,6 +75,9 @@ export const resolveText = ({ content, rawKey, l10nKey, defaultL10nId }) => {
   return null;
 };
 
+/**
+ * Resolves the Image.
+ */
 export const resolveImage = ({ content, defaults }) => {
   if (content?.hideImage) {
     return null;

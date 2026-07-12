@@ -1,5 +1,8 @@
 import { h } from "preact";
 
+/**
+ * Renders the Todo Header view.
+ */
 export default function TodoHeader({ onKeyDown }) {
     return (
         <header class="header">

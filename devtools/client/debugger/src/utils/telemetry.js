@@ -51,6 +51,9 @@ if (isNode()) {
   telemetry = new Telemetry();
 }
 
+/**
+ * Handles the firefox set Toolbox Telemetry workflow.
+ */
 export function setToolboxTelemetry(toolboxTelemetry) {
   telemetry = toolboxTelemetry;
 }

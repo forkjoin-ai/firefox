@@ -40,6 +40,9 @@ export function setEngine(name: string, crypto: ICryptoEngine | Crypto, subtle: 
  * @since 3.0.0
  */
 export function setEngine(name: string, crypto?: ICryptoEngine): void;
+/**
+ * Handles the firefox set Engine workflow.
+ */
 export function setEngine(name: string, ...args: any[]): void {
   let crypto: ICryptoEngine | null = null;
   if (args.length < 2) {
@@ -98,6 +101,9 @@ export function setEngine(name: string, ...args: any[]): void {
   }
 }
 
+/**
+ * Handles the firefox get Engine workflow.
+ */
 export function getEngine(): GlobalCryptoEngine {
   //#region We are in Node
   if ((typeof process !== "undefined") && ("pid" in process) && (typeof global !== "undefined") && (typeof window === "undefined")) {
@@ -133,6 +139,9 @@ export function getCrypto(safety?: boolean): ICryptoEngine | null;
  * @throws Throws {@link Error} if `subtle` is empty
  */
 export function getCrypto(safety: true): ICryptoEngine;
+/**
+ * Handles the firefox get Crypto workflow.
+ */
 export function getCrypto(safety = false): ICryptoEngine | null {
   const _engine = getEngine();
 
@@ -168,6 +177,9 @@ export function getOIDByAlgorithm(algorithm: Algorithm, safety?: boolean, target
  * @param operation Kind of operation: "sign", "encrypt", "generateKey", "importKey", "exportKey", "verify"
  */
 // TODO Add safety
+/**
+ * Handles the firefox get Algorithm Parameters workflow.
+ */
 export function getAlgorithmParameters(algorithmName: string, operation: CryptoEngineAlgorithmOperation): CryptoEngineAlgorithmParams {
   return getCrypto(true).getAlgorithmParameters(algorithmName, operation);
 }
@@ -240,6 +252,9 @@ export function createECDSASignatureFromCMS(cmsSignature: asn1js.AsnType, pointS
  */
 export function getAlgorithmByOID<T extends Algorithm = Algorithm>(oid: string, safety?: boolean, target?: string): T | object;
 export function getAlgorithmByOID<T extends Algorithm = Algorithm>(oid: string, safety: true, target?: string): T;
+/**
+ * Handles the firefox get Algorithm By OID workflow.
+ */
 export function getAlgorithmByOID(oid: string, safety = false, target?: string): any {
   return getCrypto(true).getAlgorithmByOID(oid, safety, target);
 }

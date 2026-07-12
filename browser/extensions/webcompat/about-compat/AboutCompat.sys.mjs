@@ -5,6 +5,9 @@
 const addonID = "webcompat@mozilla.org";
 const addonPageRelativeURL = "/about-compat/aboutCompat.html";
 
+/**
+ * Renders the About Compat view.
+ */
 export function AboutCompat() {
   this.chromeURL =
     WebExtensionPolicy.getByID(addonID).getURL(addonPageRelativeURL);

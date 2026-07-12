@@ -14,6 +14,9 @@ import type {
   TestResult,
 } from './types.js';
 
+/**
+ * Handles the firefox extend Process Env workflow.
+ */
 export function extendProcessEnv(envs: object[]): NodeJS.ProcessEnv {
   const env = envs.reduce(
     (acc: object, item: object) => {
@@ -47,14 +50,23 @@ export function extendProcessEnv(envs: object[]): NodeJS.ProcessEnv {
   return env as NodeJS.ProcessEnv;
 }
 
+/**
+ * Handles the firefox get Filename workflow.
+ */
 export function getFilename(file: string): string {
   return path.basename(file).replace(path.extname(file), '');
 }
 
+/**
+ * Handles the firefox read JSON workflow.
+ */
 export function readJSON(path: string): unknown {
   return JSON.parse(fs.readFileSync(path, 'utf-8'));
 }
 
+/**
+ * Handles the firefox write JSON workflow.
+ */
 export function writeJSON(path: string, json: unknown): unknown {
   return fs.writeFileSync(path, JSON.stringify(json, null, 2));
 }
@@ -68,10 +80,16 @@ export function filterByPlatform<T extends {platforms: NodeJS.Platform[]}>(
   });
 }
 
+/**
+ * Handles the firefox pretty Print JSON workflow.
+ */
 export function prettyPrintJSON(json: unknown): void {
   console.log(JSON.stringify(json, null, 2));
 }
 
+/**
+ * Handles the firefox get Suggestions For Action workflow.
+ */
 export function getSuggestionsForAction(
   recommendations: RecommendedExpectation[],
   action: RecommendedExpectation['action'],
@@ -81,6 +99,9 @@ export function getSuggestionsForAction(
   });
 }
 
+/**
+ * Handles the firefox print Suggestions workflow.
+ */
 export function printSuggestions(
   recommendations: RecommendedExpectation[],
   message: string,
@@ -106,6 +127,9 @@ export function printSuggestions(
   }
 }
 
+/**
+ * Handles the firefox filter By Parameters workflow.
+ */
 export function filterByParameters(
   expectations: TestExpectation[],
   parameters: string[],
@@ -137,10 +161,16 @@ export interface RecommendedExpectation {
   basedOn?: TestExpectation;
 }
 
+/**
+ * Returns whether is Wild Card Pattern is true.
+ */
 export function isWildCardPattern(testIdPattern: string): boolean {
   return testIdPattern.includes('*');
 }
 
+/**
+ * Handles the firefox get Expectation Updates workflow.
+ */
 export function getExpectationUpdates(
   results: MochaResults,
   expectations: TestExpectation[],
@@ -270,18 +300,27 @@ export function getExpectationUpdates(
   return [...output.values()];
 }
 
+/**
+ * Handles the firefox get Test Result For Failure workflow.
+ */
 export function getTestResultForFailure(
   test: Pick<MochaTestResult, 'err'>,
 ): TestResult {
   return test.err?.code === 'ERR_MOCHA_TIMEOUT' ? 'TIMEOUT' : 'FAIL';
 }
 
+/**
+ * Handles the firefox get Test Id workflow.
+ */
 export function getTestId(file: string, fullTitle?: string): string {
   return fullTitle
     ? `[${getFilename(file)}] ${fullTitle}`
     : `[${getFilename(file)}]`;
 }
 
+/**
+ * Handles the firefox test Id Matches Expectation Pattern workflow.
+ */
 export function testIdMatchesExpectationPattern(
   test: MochaTestResult | Pick<Mocha.Test, 'title' | 'file' | 'fullTitle'>,
   pattern: string,

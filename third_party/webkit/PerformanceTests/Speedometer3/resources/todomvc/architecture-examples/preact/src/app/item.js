@@ -1,6 +1,9 @@
 import cx from "classnames";
 import { h } from "preact";
 import { useState, useEffect, useRef } from "preact/hooks";
+/**
+ * Renders the Todo Item view.
+ */
 export default function TodoItem({ onSave, onRemove, onToggle, todo, index }) {
     const [editing, setEditing] = useState(false);
     const inputRef = useRef(null);

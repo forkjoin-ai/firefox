@@ -53,6 +53,9 @@ function shortenSuiteName(query) {
   return [suite, ...parts].join(':');
 }
 
+/**
+ * Parses the Query.
+ */
 export function parseQuery(queryLike) {
   try {
     const query = shortenSuiteName(convertPathLikeToQuery(queryLike));

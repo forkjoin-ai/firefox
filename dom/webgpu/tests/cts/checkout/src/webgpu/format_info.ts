@@ -2205,6 +2205,9 @@ export function getBaseFormatForTextureFormat(
   return kTextureFormatInfo[format].baseFormat!;
 }
 
+/**
+ * Handles the firefox get Base Format For Regular Texture Format workflow.
+ */
 export function getBaseFormatForRegularTextureFormat(
   format: RegularTextureFormat
 ): RegularTextureFormat | undefined {
@@ -2249,6 +2252,9 @@ function isTextureFormatTier2EnablesStorageReadWrite(format: GPUTextureFormat) {
   return kTextureFormatsTier2EnablesStorageReadWrite.includes(format as ColorTextureFormat);
 }
 
+/**
+ * Handles the firefox can Copy To Aspect Of Texture Format workflow.
+ */
 export function canCopyToAspectOfTextureFormat(format: GPUTextureFormat, aspect: GPUTextureAspect) {
   const info = kTextureFormatInfo[format];
   switch (aspect) {
@@ -2267,6 +2273,9 @@ export function canCopyToAspectOfTextureFormat(format: GPUTextureFormat, aspect:
   }
 }
 
+/**
+ * Handles the firefox can Copy From Aspect Of Texture Format workflow.
+ */
 export function canCopyFromAspectOfTextureFormat(
   format: GPUTextureFormat,
   aspect: GPUTextureAspect
@@ -2312,38 +2321,65 @@ export function canCopyFromAllAspectsOfTextureFormat(format: GPUTextureFormat) {
   );
 }
 
+/**
+ * Returns whether is Compressed Texture Format is true.
+ */
 export function isCompressedTextureFormat(format: GPUTextureFormat) {
   return format in kCompressedTextureFormatInfo;
 }
 
+/**
+ * Returns whether is BCTexture Format is true.
+ */
 export function isBCTextureFormat(format: GPUTextureFormat) {
   return format in kBCTextureFormatInfo;
 }
 
+/**
+ * Returns whether is ASTCTexture Format is true.
+ */
 export function isASTCTextureFormat(format: GPUTextureFormat) {
   return format in kASTCTextureFormatInfo;
 }
 
+/**
+ * Returns whether is Color Texture Format is true.
+ */
 export function isColorTextureFormat(format: GPUTextureFormat) {
   return !!kTextureFormatInfo[format].color;
 }
 
+/**
+ * Returns whether is Depth Texture Format is true.
+ */
 export function isDepthTextureFormat(format: GPUTextureFormat) {
   return !!kTextureFormatInfo[format].depth;
 }
 
+/**
+ * Returns whether is Stencil Texture Format is true.
+ */
 export function isStencilTextureFormat(format: GPUTextureFormat) {
   return !!kTextureFormatInfo[format].stencil;
 }
 
+/**
+ * Returns whether is Depth Stencil Texture Format is true.
+ */
 export function isDepthStencilTextureFormat(format: GPUTextureFormat) {
   return isDepthTextureFormat(format) && isStencilTextureFormat(format);
 }
 
+/**
+ * Returns whether is Depth Or Stencil Texture Format is true.
+ */
 export function isDepthOrStencilTextureFormat(format: GPUTextureFormat) {
   return isDepthTextureFormat(format) || isStencilTextureFormat(format);
 }
 
+/**
+ * Returns whether is Encodable Texture Format is true.
+ */
 export function isEncodableTextureFormat(format: GPUTextureFormat) {
   return kEncodableTextureFormats.includes(format as EncodableTextureFormat);
 }
@@ -2525,10 +2561,16 @@ export function isTextureFormatPossiblyStorageReadWritable(format: GPUTextureFor
   );
 }
 
+/**
+ * Returns whether is16 Float is true.
+ */
 export function is16Float(format: GPUTextureFormat) {
   return format === 'r16float' || format === 'rg16float' || format === 'rgba16float';
 }
 
+/**
+ * Returns whether is32 Float is true.
+ */
 export function is32Float(format: GPUTextureFormat) {
   return format === 'r32float' || format === 'rg32float' || format === 'rgba32float';
 }
@@ -2655,6 +2697,9 @@ function isTextureFormatUsableAsReadWriteStorageTexture(
   return !!kTextureFormatInfo[format].color?.readWriteStorage;
 }
 
+/**
+ * Returns whether is Regular Texture Format is true.
+ */
 export function isRegularTextureFormat(format: GPUTextureFormat) {
   return format in kRegularTextureFormatInfo;
 }

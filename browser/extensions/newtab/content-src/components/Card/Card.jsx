@@ -322,6 +322,9 @@ _Card.defaultProps = { link: {} };
 export const Card = connect(state => ({
   platform: state.Prefs.values.platform,
 }))(_Card);
+/**
+ * Renders the Placeholder Card view.
+ */
 export const PlaceholderCard = props => (
   <Card placeholder={true} className={props.className} />
 );

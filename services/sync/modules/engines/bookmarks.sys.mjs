@@ -83,6 +83,9 @@ function getTypeObject(type) {
   return null;
 }
 
+/**
+ * Renders the Places Item view.
+ */
 export function PlacesItem(collection, id, type) {
   CryptoWrapper.call(this, collection, id);
   this.type = type || "item";
@@ -150,6 +153,9 @@ Utils.deferGetSet(PlacesItem, "cleartext", [
   "dateAdded",
 ]);
 
+/**
+ * Renders the Bookmark view.
+ */
 export function Bookmark(collection, id, type) {
   PlacesItem.call(this, collection, id, type || "bookmark");
 }
@@ -187,6 +193,9 @@ Utils.deferGetSet(Bookmark, "cleartext", [
   "keyword",
 ]);
 
+/**
+ * Renders the Bookmark Query view.
+ */
 export function BookmarkQuery(collection, id) {
   Bookmark.call(this, collection, id, "query");
 }
@@ -212,6 +221,9 @@ Object.setPrototypeOf(BookmarkQuery.prototype, Bookmark.prototype);
 
 Utils.deferGetSet(BookmarkQuery, "cleartext", ["folderName", "queryId"]);
 
+/**
+ * Renders the Bookmark Folder view.
+ */
 export function BookmarkFolder(collection, id, type) {
   PlacesItem.call(this, collection, id, type || "folder");
 }
@@ -242,6 +254,9 @@ Utils.deferGetSet(BookmarkFolder, "cleartext", [
   "children",
 ]);
 
+/**
+ * Renders the Livemark view.
+ */
 export function Livemark(collection, id) {
   BookmarkFolder.call(this, collection, id, "livemark");
 }
@@ -269,6 +284,9 @@ Object.setPrototypeOf(Livemark.prototype, BookmarkFolder.prototype);
 
 Utils.deferGetSet(Livemark, "cleartext", ["siteUri", "feedUri"]);
 
+/**
+ * Renders the Bookmark Separator view.
+ */
 export function BookmarkSeparator(collection, id) {
   PlacesItem.call(this, collection, id, "separator");
 }

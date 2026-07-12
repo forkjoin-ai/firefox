@@ -67,6 +67,9 @@ class VAPID {
   }
 };
 
+/**
+ * Creates the Vapid.
+ */
 export async function createVapid() {
   // https://datatracker.ietf.org/doc/html/rfc8292#section-2
   // The signature MUST use ECDSA on the NIST P-256 curve [FIPS186]

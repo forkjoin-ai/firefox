@@ -7,6 +7,9 @@ import { filterSortedArray } from "./filtering";
 import { mappingContains } from "./mappingContains";
 import { getGeneratedLocation } from "../../source-maps";
 
+/**
+ * Handles the firefox original Range Starts Inside workflow.
+ */
 export async function originalRangeStartsInside({ start, end }, thunkArgs) {
   const endPosition = await getGeneratedLocation(end, thunkArgs);
   const startPosition = await getGeneratedLocation(start, thunkArgs);
@@ -18,6 +21,9 @@ export async function originalRangeStartsInside({ start, end }, thunkArgs) {
   return positionCmp(startPosition, endPosition) !== 0;
 }
 
+/**
+ * Handles the firefox get Applicable Bindings For Original Position workflow.
+ */
 export async function getApplicableBindingsForOriginalPosition(
   generatedAstBindings,
   source,

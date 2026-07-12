@@ -44,6 +44,9 @@ function getSelectedSourceActors(state) {
   return getSourceActorsForSource(state, selectedSource.id);
 }
 
+/**
+ * Handles the firefox get Selected Exception workflow.
+ */
 export function getSelectedException(state, line, column) {
   const sourceExceptions = getSelectedSourceExceptions(state);
 

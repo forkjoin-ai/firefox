@@ -46,6 +46,9 @@ function copyStackTrace() {
   };
 }
 
+/**
+ * Handles the firefox show Frame Context Menu workflow.
+ */
 export function showFrameContextMenu(event, frame, hideRestart = false) {
   return async ({ dispatch, getState }) => {
     const items = [];

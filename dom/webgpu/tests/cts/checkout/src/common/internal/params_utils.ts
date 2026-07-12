@@ -19,10 +19,16 @@ export interface TestParamsRW {
 }
 export type TestParamsIterable = Iterable<TestParams>;
 
+/**
+ * Handles the firefox param Key Is Public workflow.
+ */
 export function paramKeyIsPublic(key: string): boolean {
   return !key.startsWith('_');
 }
 
+/**
+ * Handles the firefox extract Public Params workflow.
+ */
 export function extractPublicParams(params: TestParams): TestParams {
   const publicParams: TestParamsRW = {};
   for (const k of Object.keys(params)) {
@@ -40,6 +46,9 @@ export const badParamValueChars = new RegExp(
   '[' + kParamKVSeparator + kParamSeparator + kWildcard + kPercent + ']'
 );
 
+/**
+ * Handles the firefox public Params Equals workflow.
+ */
 export function publicParamsEquals(x: TestParams, y: TestParams): boolean {
   return comparePublicParamsPaths(x, y) === Ordering.Equal;
 }

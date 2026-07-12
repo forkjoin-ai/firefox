@@ -1,3 +1,6 @@
+/**
+ * Provides the use Key Listener hook.
+ */
 export function useKeyListener(props) {
     const { target, event, callbacks } = props;
 

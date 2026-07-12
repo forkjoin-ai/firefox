@@ -28,6 +28,9 @@ const TransitionWrapper = ({ icon, fluentID, ...transitionProps }) => {
   );
 };
 
+/**
+ * Renders the DSMessage Label view.
+ */
 export const DSMessageLabel = props => {
   const { context, context_type, mayHaveSectionsCards } = props;
   const { icon, fluentID } = cardContextTypes[context_type] || {};
@@ -43,6 +46,9 @@ export const DSMessageLabel = props => {
   return null;
 };
 
+/**
+ * Renders the Status Message view.
+ */
 export const StatusMessage = ({ icon, fluentID }) => (
   <div className="status-message">
     <span
@@ -157,6 +163,9 @@ export class DSContextFooter extends React.PureComponent {
   }
 }
 
+/**
+ * Renders the DSMessage Footer view.
+ */
 export const DSMessageFooter = props => {
   const { context, context_type } = props;
 

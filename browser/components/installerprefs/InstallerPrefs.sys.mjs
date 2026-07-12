@@ -36,6 +36,9 @@ import { AppConstants } from "resource://gre/modules/AppConstants.sys.mjs";
 // This constructor can take a list of prefs to override the default one,
 // but this is really only intended for tests to use. Normal usage should be
 // to leave the parameter omitted/undefined.
+/**
+ * Renders the Installer Prefs view.
+ */
 export function InstallerPrefs(prefsList) {
   this.prefsList = prefsList || INSTALLER_PREFS_LIST;
 

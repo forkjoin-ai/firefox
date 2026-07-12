@@ -5,6 +5,9 @@ export type DOMSelectionRange = {
   anchorNode: DOMNode | null, anchorOffset: number
 }
 
+/**
+ * Handles the firefox dom Index workflow.
+ */
 export const domIndex = function(node: Node) {
   for (var index = 0;; index++) {
     node = node.previousSibling!
@@ -12,6 +15,9 @@ export const domIndex = function(node: Node) {
   }
 }
 
+/**
+ * Handles the firefox parent Node workflow.
+ */
 export const parentNode = function(node: Node): Node | null {
   let parent = (node as HTMLSlotElement).assignedSlot || node.parentNode
   return parent && parent.nodeType == 11 ? (parent as ShadowRoot).host : parent
@@ -22,6 +28,9 @@ let reusedRange: Range | null = null
 // Note that this will always return the same range, because DOM range
 // objects are every expensive, and keep slowing down subsequent DOM
 // updates, for some reason.
+/**
+ * Handles the firefox text Range workflow.
+ */
 export const textRange = function(node: Text, from?: number, to?: number) {
   let range = reusedRange || (reusedRange = document.createRange())
   range.setEnd(node, to == null ? node.nodeValue!.length : to)
@@ -29,6 +38,9 @@ export const textRange = function(node: Text, from?: number, to?: number) {
   return range
 }
 
+/**
+ * Handles the firefox clear Reused Range workflow.
+ */
 export const clearReusedRange = function() {
   reusedRange = null
 }
@@ -36,6 +48,9 @@ export const clearReusedRange = function() {
 // Scans forward and backward through DOM positions equivalent to the
 // given one to see if the two are in the same place (i.e. after a
 // text node vs at the end of that text node)
+/**
+ * Returns whether is Equivalent Position is true.
+ */
 export const isEquivalentPosition = function(node: Node, off: number, targetNode: Node, targetOff: number) {
   return targetNode && (scanFor(node, off, targetNode, targetOff, -1) ||
                         scanFor(node, off, targetNode, targetOff, 1))
@@ -68,10 +83,16 @@ function scanFor(node: Node, off: number, targetNode: Node, targetOff: number, d
   }
 }
 
+/**
+ * Handles the firefox node Size workflow.
+ */
 export function nodeSize(node: Node) {
   return node.nodeType == 3 ? node.nodeValue!.length : node.childNodes.length
 }
 
+/**
+ * Handles the firefox text Node Before workflow.
+ */
 export function textNodeBefore(node: Node, offset: number) {
   for (;;) {
     if (node.nodeType == 3 && offset) return node as Text
@@ -88,6 +109,9 @@ export function textNodeBefore(node: Node, offset: number) {
   }
 }
 
+/**
+ * Handles the firefox text Node After workflow.
+ */
 export function textNodeAfter(node: Node, offset: number) {
   for (;;) {
     if (node.nodeType == 3 && offset < node.nodeValue!.length) return node as Text
@@ -104,6 +128,9 @@ export function textNodeAfter(node: Node, offset: number) {
   }
 }
 
+/**
+ * Returns whether is On Edge is true.
+ */
 export function isOnEdge(node: Node, offset: number, parent: Node) {
   for (let atStart = offset == 0, atEnd = offset == nodeSize(node); atStart || atEnd;) {
     if (node == parent) return true
@@ -115,6 +142,9 @@ export function isOnEdge(node: Node, offset: number, parent: Node) {
   }
 }
 
+/**
+ * Returns whether has Block Desc is true.
+ */
 export function hasBlockDesc(dom: Node) {
   let desc
   for (let cur: Node | null = dom; cur; cur = cur.parentNode) if (desc = cur.pmViewDesc) break
@@ -123,11 +153,17 @@ export function hasBlockDesc(dom: Node) {
 
 // Work around Chrome issue https://bugs.chromium.org/p/chromium/issues/detail?id=447523
 // (isCollapsed inappropriately returns true in shadow dom)
+/**
+ * Handles the firefox selection Collapsed workflow.
+ */
 export const selectionCollapsed = function(domSel: DOMSelectionRange) {
   return domSel.focusNode && isEquivalentPosition(domSel.focusNode, domSel.focusOffset,
                                                   domSel.anchorNode!, domSel.anchorOffset)
 }
 
+/**
+ * Handles the firefox key Event workflow.
+ */
 export function keyEvent(keyCode: number, key: string) {
   let event = document.createEvent("Event") as KeyboardEvent
   event.initEvent("keydown", true, true)
@@ -136,12 +172,18 @@ export function keyEvent(keyCode: number, key: string) {
   return event
 }
 
+/**
+ * Handles the firefox deep Active Element workflow.
+ */
 export function deepActiveElement(doc: Document) {
   let elt = doc.activeElement
   while (elt && elt.shadowRoot) elt = elt.shadowRoot.activeElement
   return elt
 }
 
+/**
+ * Handles the firefox caret From Point workflow.
+ */
 export function caretFromPoint(doc: Document, x: number, y: number): {node: Node, offset: number} | undefined {
   if ((doc as any).caretPositionFromPoint) {
     try { // Firefox throws for this call in hard-to-predict circumstances (#994)

@@ -119,6 +119,9 @@ function insertInto(content: Fragment, dist: number, insert: Fragment, parent?: 
   return inner && content.replaceChild(index, child!.copy(inner))
 }
 
+/**
+ * Handles the firefox replace workflow.
+ */
 export function replace($from: ResolvedPos, $to: ResolvedPos, slice: Slice) {
   if (slice.openStart > $from.depth)
     throw new ReplaceError("Inserted content deeper than insertion position")

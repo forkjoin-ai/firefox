@@ -36,6 +36,9 @@ export function getHiddenTabsSources(openedSources, sourceTabEls) {
   return hiddenSources;
 }
 
+/**
+ * Handles the firefox get Tab Menu Items workflow.
+ */
 export function getTabMenuItems() {
   return {
     closeTab: {

@@ -2,6 +2,9 @@
 
 // Calls `createLock` with a file handle for `fileName`. Returns the lock if it
 // succeeds. Returns undefined if it doesn't.
+/**
+ * Handles the firefox try To Create Lock workflow.
+ */
 export async function tryToCreateLock(fileName, createLock) {
   const dir = await navigator.storage.getDirectory();
   const fileHandle = await dir.getFileHandle(fileName, {create: true});
@@ -17,6 +20,9 @@ export async function tryToCreateLock(fileName, createLock) {
 // the `bfcache-test-worker.js` dedicated worker.
 //
 // Will create the dedicated worker if it doesn't already exist.
+/**
+ * Handles the firefox forward To Dedicated Worker workflow.
+ */
 export const forwardToDedicatedWorker = (() => {
   let dedicatedWorker;
 

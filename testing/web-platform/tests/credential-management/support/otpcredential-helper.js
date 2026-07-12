@@ -49,6 +49,9 @@ async function createBrowserSpecificMockImpl() {
 
 const asyncMock = createBrowserSpecificMockImpl();
 
+/**
+ * Handles the firefox expect OTPRequest workflow.
+ */
 export function expectOTPRequest() {
   return {
     async andReturn(callback) {

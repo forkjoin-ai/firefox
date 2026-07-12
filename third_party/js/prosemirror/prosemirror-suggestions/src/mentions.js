@@ -48,6 +48,9 @@ export function addMentionNodes(nodes) {
   });
 }
 
+/**
+ * Handles the firefox markdown Serializer workflow.
+ */
 export function markdownSerializer() {
   return (state, node) => {
     const label = state.esc(node.attrs.label || '');
@@ -57,6 +60,9 @@ export function markdownSerializer() {
   };
 }
 
+/**
+ * Handles the firefox add Mentions To Markdown Serializer workflow.
+ */
 export function addMentionsToMarkdownSerializer(serializer) {
   return new MarkdownSerializer({
     ...serializer.nodes,
@@ -64,6 +70,9 @@ export function addMentionsToMarkdownSerializer(serializer) {
   }, serializer.marks);
 }
 
+/**
+ * Handles the firefox markdown Parser workflow.
+ */
 export function markdownParser() {
   return {
     node: 'mention',
@@ -71,6 +80,9 @@ export function markdownParser() {
   };
 }
 
+/**
+ * Handles the firefox add Mentions To Markdown Parser workflow.
+ */
 export function addMentionsToMarkdownParser(parser) {
   return new MarkdownParser(parser.schema, parser.tokenizer, {
     ...parser.tokens,

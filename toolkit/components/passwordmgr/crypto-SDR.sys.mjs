@@ -8,6 +8,9 @@ ChromeUtils.defineESModuleGetters(lazy, {
   LoginHelper: "resource://gre/modules/LoginHelper.sys.mjs",
 });
 
+/**
+ * Renders the Login Manager Crypto SDR view.
+ */
 export function LoginManagerCrypto_SDR() {
   // Ensure NSS is initialized.
   Cc["@mozilla.org/psm;1"].getService(Ci.nsISupports);

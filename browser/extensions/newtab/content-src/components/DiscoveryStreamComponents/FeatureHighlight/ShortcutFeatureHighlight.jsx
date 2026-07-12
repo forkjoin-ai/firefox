@@ -5,6 +5,9 @@
 import React, { useCallback } from "react";
 import { FeatureHighlight } from "./FeatureHighlight";
 
+/**
+ * Renders the Shortcut Feature Highlight view.
+ */
 export function ShortcutFeatureHighlight({
   dispatch,
   feature,

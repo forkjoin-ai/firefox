@@ -13,6 +13,9 @@ const ProgressBar = ({ teamNumber, value, index }) => {
     );
 };
 
+/**
+ * Renders the Analytics Pop Over view.
+ */
 export const AnalyticsPopOver = ({ className }) => {
     const children = [];
     const numProgressBars = 5;

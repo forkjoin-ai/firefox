@@ -28,6 +28,9 @@ const SIDE_OR_CORNERS = SIDE_OR_CORNERS_BLOCK.concat(
  *            - {Array<string>} list: The list of autocomplete items
  */
 // eslint-disable-next-line complexity
+/**
+ * Handles the firefox get Autocomplete Data For Linear Gradient Function workflow.
+ */
 export function getAutocompleteDataForLinearGradientFunction({
   getCSSValuesForPropertyName,
   functionTokens,

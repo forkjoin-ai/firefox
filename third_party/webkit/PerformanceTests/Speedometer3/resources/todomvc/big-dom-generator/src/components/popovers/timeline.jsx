@@ -38,6 +38,9 @@ const TimelineComponent = (status) => {
     );
 };
 
+/**
+ * Renders the Timeline Pop Over view.
+ */
 export const TimelinePopOver = ({ className }) => {
     const popOverClassName = classnames("spectrum-Popover", "spectrum-Popover--bottom-right", className);
     const inputValues = ["", "1", "0", "", "1"];

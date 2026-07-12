@@ -5,6 +5,9 @@
 import { prefs } from "../../utils/prefs";
 import { getSourceActorsForSource } from "../../selectors/index";
 
+/**
+ * Handles the firefox update Style Sheet Content workflow.
+ */
 export function updateStyleSheetContent(sourceActor, text) {
   return async ({ client }) => {
     await client.updateStyleSheetContent(
@@ -18,6 +21,9 @@ export function updateStyleSheetContent(sourceActor, text) {
 // Note: For pretty printed sources, though the selected location for the sourceActor
 // refers to the original/pretty printed source, the source related to the sourceActor
 // i.e sourceActor.sourceObject is the minimized source.
+/**
+ * Converts input into toggle Stylesheet Visibility.
+ */
 export function toggleStylesheetVisibility(sourceActor) {
   return async ({ client, dispatch, getState }) => {
     const source = sourceActor.sourceObject;

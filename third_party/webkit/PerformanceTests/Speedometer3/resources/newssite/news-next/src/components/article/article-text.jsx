@@ -1,3 +1,6 @@
+/**
+ * Renders the Article Text view.
+ */
 export default function ArticleText({ text, textClass, type = "p" }) {
     if (!text)
         return null;

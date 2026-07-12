@@ -4,6 +4,9 @@
 
 import React from "devtools/client/shared/vendor/react";
 
+/**
+ * Renders the Frame Indent view.
+ */
 export default function FrameIndent({ indentLevel = 1 } = {}) {
   // \xA0 represents the non breakable space &nbsp;
   const indentWidth = 4 * indentLevel;

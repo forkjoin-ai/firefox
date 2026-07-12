@@ -2205,6 +2205,9 @@ format)
   return kTextureFormatInfo[format].baseFormat;
 }
 
+/**
+ * Handles the firefox get Base Format For Regular Texture Format workflow.
+ */
 export function getBaseFormatForRegularTextureFormat(
 format)
 {
@@ -2218,12 +2221,18 @@ export function getRequiredFeatureForTextureFormat(format) {
   return kTextureFormatInfo[format].feature;
 }
 
+/**
+ * Handles the firefox get Features For Formats workflow.
+ */
 export function getFeaturesForFormats(
 formats)
 {
   return Array.from(new Set(formats.map((f) => f ? kTextureFormatInfo[f].feature : undefined)));
 }
 
+/**
+ * Handles the firefox filter Formats By Feature workflow.
+ */
 export function filterFormatsByFeature(
 feature,
 formats)
@@ -2249,6 +2258,9 @@ function isTextureFormatTier2EnablesStorageReadWrite(format) {
   return kTextureFormatsTier2EnablesStorageReadWrite.includes(format);
 }
 
+/**
+ * Handles the firefox can Copy To Aspect Of Texture Format workflow.
+ */
 export function canCopyToAspectOfTextureFormat(format, aspect) {
   const info = kTextureFormatInfo[format];
   switch (aspect) {
@@ -2267,6 +2279,9 @@ export function canCopyToAspectOfTextureFormat(format, aspect) {
   }
 }
 
+/**
+ * Handles the firefox can Copy From Aspect Of Texture Format workflow.
+ */
 export function canCopyFromAspectOfTextureFormat(
 format,
 aspect)
@@ -2312,38 +2327,65 @@ export function canCopyFromAllAspectsOfTextureFormat(format) {
 
 }
 
+/**
+ * Returns whether is Compressed Texture Format is true.
+ */
 export function isCompressedTextureFormat(format) {
   return format in kCompressedTextureFormatInfo;
 }
 
+/**
+ * Returns whether is BCTexture Format is true.
+ */
 export function isBCTextureFormat(format) {
   return format in kBCTextureFormatInfo;
 }
 
+/**
+ * Returns whether is ASTCTexture Format is true.
+ */
 export function isASTCTextureFormat(format) {
   return format in kASTCTextureFormatInfo;
 }
 
+/**
+ * Returns whether is Color Texture Format is true.
+ */
 export function isColorTextureFormat(format) {
   return !!kTextureFormatInfo[format].color;
 }
 
+/**
+ * Returns whether is Depth Texture Format is true.
+ */
 export function isDepthTextureFormat(format) {
   return !!kTextureFormatInfo[format].depth;
 }
 
+/**
+ * Returns whether is Stencil Texture Format is true.
+ */
 export function isStencilTextureFormat(format) {
   return !!kTextureFormatInfo[format].stencil;
 }
 
+/**
+ * Returns whether is Depth Stencil Texture Format is true.
+ */
 export function isDepthStencilTextureFormat(format) {
   return isDepthTextureFormat(format) && isStencilTextureFormat(format);
 }
 
+/**
+ * Returns whether is Depth Or Stencil Texture Format is true.
+ */
 export function isDepthOrStencilTextureFormat(format) {
   return isDepthTextureFormat(format) || isStencilTextureFormat(format);
 }
 
+/**
+ * Returns whether is Encodable Texture Format is true.
+ */
 export function isEncodableTextureFormat(format) {
   return kEncodableTextureFormats.includes(format);
 }
@@ -2525,10 +2567,16 @@ export function isTextureFormatPossiblyStorageReadWritable(format) {
 
 }
 
+/**
+ * Returns whether is16 Float is true.
+ */
 export function is16Float(format) {
   return format === 'r16float' || format === 'rg16float' || format === 'rgba16float';
 }
 
+/**
+ * Returns whether is32 Float is true.
+ */
 export function is32Float(format) {
   return format === 'r32float' || format === 'rg32float' || format === 'rgba32float';
 }
@@ -2655,6 +2703,9 @@ format)
   return !!kTextureFormatInfo[format].color?.readWriteStorage;
 }
 
+/**
+ * Returns whether is Regular Texture Format is true.
+ */
 export function isRegularTextureFormat(format) {
   return format in kRegularTextureFormatInfo;
 }

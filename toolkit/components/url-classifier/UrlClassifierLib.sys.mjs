@@ -170,6 +170,9 @@ function RequestBackoffV4(maxRequests, requestPeriod, provider = null) {
   );
 }
 
+/**
+ * Renders the Url Classifier Lib view.
+ */
 export function UrlClassifierLib() {
   this.wrappedJSObject = {
     RequestBackoff,

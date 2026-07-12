@@ -48,6 +48,9 @@ function updateLocationsInScopes(state, scopes) {
   }
 }
 
+/**
+ * Builds the Mapped Scopes.
+ */
 export async function buildMappedScopes(
   source,
   content,

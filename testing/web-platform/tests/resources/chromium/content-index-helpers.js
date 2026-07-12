@@ -2,6 +2,9 @@ import {ContentIndexService} from '/gen/third_party/blink/public/mojom/content_i
 
 // Returns a promise if the chromium based browser fetches icons for
 // content-index.
+/**
+ * Fetches the fetches Icons.
+ */
 export async function fetchesIcons() {
   const remote = ContentIndexService.getRemote();
   const {iconSizes} = await remote.getIconSizes();

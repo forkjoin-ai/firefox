@@ -9,6 +9,9 @@ import {
   getFirstSourceActorForGeneratedSource,
 } from "../selectors/sources";
 
+/**
+ * Handles the firefox get Source Text Content For Location workflow.
+ */
 export function getSourceTextContentForLocation(state, location) {
   return getSourceTextContentForSource(
     state,
@@ -17,6 +20,9 @@ export function getSourceTextContentForLocation(state, location) {
   );
 }
 
+/**
+ * Handles the firefox get Source Text Content For Source workflow.
+ */
 export function getSourceTextContentForSource(
   state,
   source,
@@ -36,11 +42,17 @@ export function getSourceTextContentForSource(
   );
 }
 
+/**
+ * Handles the firefox get Settled Source Text Content workflow.
+ */
 export function getSettledSourceTextContent(state, location) {
   const content = getSourceTextContentForLocation(state, location);
   return asSettled(content);
 }
 
+/**
+ * Handles the firefox get Selected Source Text Content workflow.
+ */
 export function getSelectedSourceTextContent(state) {
   const location = getSelectedLocation(state);
 
@@ -51,6 +63,9 @@ export function getSelectedSourceTextContent(state) {
   return getSourceTextContentForLocation(state, location);
 }
 
+/**
+ * Handles the firefox get Sources Epoch workflow.
+ */
 export function getSourcesEpoch(state) {
   return state.sourcesContent.epoch;
 }

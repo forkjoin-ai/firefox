@@ -4,6 +4,9 @@
 
 import { Subprocess } from "resource://gre/modules/Subprocess.sys.mjs";
 
+/**
+ * Handles the firefox run Background Task workflow.
+ */
 export async function runBackgroundTask(commandLine) {
   let sentinel = commandLine.getArgument(0);
   let count =

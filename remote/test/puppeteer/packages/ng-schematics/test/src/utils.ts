@@ -35,6 +35,9 @@ export const MULTI_LIBRARY_OPTIONS = {
   name: 'components',
 };
 
+/**
+ * Handles the firefox setup Http Hooks workflow.
+ */
 export function setupHttpHooks(): void {
   // Stop outgoing Request for version fetching
   before(() => {
@@ -51,6 +54,9 @@ export function setupHttpHooks(): void {
   });
 }
 
+/**
+ * Handles the firefox get Angular Json Scripts workflow.
+ */
 export function getAngularJsonScripts(
   tree: UnitTestTree,
   isDefault = true,
@@ -65,6 +71,9 @@ export function getAngularJsonScripts(
   return angularJson['projects']?.[name]?.['architect'][e2eScript];
 }
 
+/**
+ * Handles the firefox get Package Json workflow.
+ */
 export function getPackageJson(tree: UnitTestTree): {
   scripts: Record<string, string>;
   devDependencies: string[];
@@ -78,13 +87,22 @@ export function getPackageJson(tree: UnitTestTree): {
   };
 }
 
+/**
+ * Handles the firefox get Multi Application File workflow.
+ */
 export function getMultiApplicationFile(file: string): string {
   return `/${WORKSPACE_OPTIONS.newProjectRoot}/${MULTI_APPLICATION_OPTIONS.name}/${file}`;
 }
+/**
+ * Handles the firefox get Multi Library File workflow.
+ */
 export function getMultiLibraryFile(file: string): string {
   return `/${WORKSPACE_OPTIONS.newProjectRoot}/${MULTI_LIBRARY_OPTIONS.name}/${file}`;
 }
 
+/**
+ * Builds the Testing Tree.
+ */
 export async function buildTestingTree(
   command: 'ng-add' | 'e2e' | 'config',
   type: 'single' | 'multi' = 'single',
@@ -139,6 +157,9 @@ export async function buildTestingTree(
   return await runner.runSchematic(command, options, workingTree);
 }
 
+/**
+ * Handles the firefox run Schematic workflow.
+ */
 export async function runSchematic(
   tree: UnitTestTree,
   command: 'ng-add' | 'test',

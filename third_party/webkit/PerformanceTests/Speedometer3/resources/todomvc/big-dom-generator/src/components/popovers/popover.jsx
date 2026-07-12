@@ -1,6 +1,9 @@
 import { Children } from "react";
 import classnames from "classnames";
 
+/**
+ * Renders the Pop Over view.
+ */
 export const PopOver = ({ children, className, startRight }) => {
     const popOverClassName = classnames("spectrum-Popover", { "spectrum-Popover--bottom": !startRight }, { "spectrum-Popover--bottom-right": startRight }, className);
     return (
@@ -10,6 +13,9 @@ export const PopOver = ({ children, className, startRight }) => {
     );
 };
 
+/**
+ * Renders the Vertical Pop Over view.
+ */
 export const VerticalPopOver = ({ children, className, startRight }) => {
     const actionItems = Children.toArray(children).map((child, index) =>
         <div key={index} className="spectrum-ActionGroup-item">
@@ -23,6 +29,9 @@ export const VerticalPopOver = ({ children, className, startRight }) => {
     );
 };
 
+/**
+ * Renders the Options Pop Over view.
+ */
 export const OptionsPopOver = ({ numOptions, className, startRight }) => {
     const options = [];
     for (let i = 0; i < numOptions; i++) {

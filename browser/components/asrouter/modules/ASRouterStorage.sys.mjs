@@ -445,6 +445,9 @@ export class ASRouterStorage {
   }
 }
 
+/**
+ * Handles the firefox get Default Options workflow.
+ */
 export function getDefaultOptions(options) {
   return { collapsed: !!options.collapsed };
 }

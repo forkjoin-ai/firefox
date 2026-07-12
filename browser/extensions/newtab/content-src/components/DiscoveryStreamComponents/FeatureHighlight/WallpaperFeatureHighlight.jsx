@@ -7,6 +7,9 @@ import { useSelector } from "react-redux";
 import { actionCreators as ac, actionTypes as at } from "common/Actions.mjs";
 import { FeatureHighlight } from "./FeatureHighlight";
 
+/**
+ * Renders the Wallpaper Feature Highlight view.
+ */
 export function WallpaperFeatureHighlight({
   position,
   dispatch,

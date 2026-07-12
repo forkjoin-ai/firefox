@@ -8,6 +8,9 @@ const TodoArea = () => {
     return <div className="todo-area" />;
 };
 
+/**
+ * Renders the App view.
+ */
 export const App = () => {
     return (
         <div className="main-ui" dir="ltr">

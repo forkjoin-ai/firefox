@@ -119,17 +119,26 @@ const FORCED_CHAT_PHRASES = [
   "your model is",
 ];
 
+/**
+ * Handles the firefox normalize Text For Chat Allowlist workflow.
+ */
 export function normalizeTextForChatAllowlist(s) {
   return s.toLowerCase().normalize("NFKC").replace(/\s+/g, " ").trim();
 }
 
 // Split on non-word chars; letters/numbers/_ are "word" characters
+/**
+ * Converts input into tokenize Text For Chat Allowlist.
+ */
 export function tokenizeTextForChatAllowlist(s) {
   return normalizeTextForChatAllowlist(s)
     .split(/[^\p{L}\p{N}_]+/u)
     .filter(Boolean);
 }
 
+/**
+ * Builds the Chat Allowlist.
+ */
 export function buildChatAllowlist(phrases) {
   const byLen = new Map(); // len -> Set("tok tok ...")
   for (const p of phrases) {
@@ -147,6 +156,9 @@ export function buildChatAllowlist(phrases) {
 }
 
 // Factory: returns a fast checker for “does query contain any isolated phrase?”
+/**
+ * Handles the firefox make Isolated Phrase Checker workflow.
+ */
 export function makeIsolatedPhraseChecker(phrases) {
   const byLen = buildChatAllowlist(phrases);
   const cache = new Map();

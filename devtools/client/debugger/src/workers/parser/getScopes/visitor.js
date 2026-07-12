@@ -35,6 +35,9 @@ function isGeneratedId(id) {
   return !/\/originalSource/.test(id);
 }
 
+/**
+ * Parses the Source Scopes.
+ */
 export function parseSourceScopes(sourceId) {
   const ast = getAst(sourceId);
   if (!ast || !Object.keys(ast).length) {
@@ -44,6 +47,9 @@ export function parseSourceScopes(sourceId) {
   return buildScopeList(ast, sourceId);
 }
 
+/**
+ * Builds the Scope List.
+ */
 export function buildScopeList(ast, sourceId) {
   const { global, lexical } = createGlobalScope(ast, sourceId);
 

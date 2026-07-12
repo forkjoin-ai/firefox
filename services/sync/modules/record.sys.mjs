@@ -747,6 +747,9 @@ CollectionKeyManager.prototype = {
   },
 };
 
+/**
+ * Renders the Collection view.
+ */
 export function Collection(uri, recordObj, service) {
   if (!service) {
     throw new Error("Collection constructor requires a service.");

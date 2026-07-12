@@ -30,6 +30,9 @@ export const kSwizzleTests = [
 export type SwizzleSpec = (typeof kSwizzleTests)[number];
 
 // Returns true if swizzle is identity
+/**
+ * Returns whether is Identity Swizzle is true.
+ */
 export function isIdentitySwizzle(swizzle: GPUTextureComponentSwizzle | undefined): boolean {
   return swizzle === undefined || swizzle === 'rgba';
 }

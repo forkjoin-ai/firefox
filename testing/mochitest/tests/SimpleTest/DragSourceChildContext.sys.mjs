@@ -104,6 +104,9 @@ export class DragSourceChildContext extends DragChildContextBase {
   }
 }
 
+/**
+ * Creates the Drag Source Child Context.
+ */
 export function createDragSourceChildContext(
   aDragWindow,
   aParams,

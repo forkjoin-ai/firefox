@@ -13,6 +13,9 @@ ChromeUtils.defineLazyGetter(lazy, "console", () => {
   });
 });
 
+/**
+ * Renders the Push DB view.
+ */
 export function PushDB(dbName, dbVersion, dbStoreName, keyPath, model) {
   lazy.console.debug("PushDB()");
   this._dbStoreName = dbStoreName;

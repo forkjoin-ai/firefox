@@ -36,6 +36,9 @@ export function setupCreate(dependencies) {
   store = dependencies.store;
 }
 
+/**
+ * Creates the Frame.
+ */
 export async function createFrame(thread, frame, index = 0) {
   // Because of throttling, the source related to the top frame may be available a bit late.
   const sourceActor = await waitForSourceActorToBeRegisteredInStore(
@@ -175,6 +178,9 @@ export async function waitForSourceToBeRegisteredInStore(sourceId) {
 // The last three actually try to represent the exact same thing.
 //
 // Here this method received a SOURCE resource (the 3rd bullet point)
+/**
+ * Handles the firefox make Script Source Id workflow.
+ */
 export function makeScriptSourceId(sourceResource) {
   // Allows Jest to use custom, simplier IDs
   if ("mockedJestID" in sourceResource) {
@@ -210,6 +216,9 @@ export function makeScriptSourceId(sourceResource) {
   return `source-actor-${sourceResource.actor}`;
 }
 
+/**
+ * Handles the firefox make Style Sheet Source Id workflow.
+ */
 export function makeStyleSheetSourceId(sourceResource) {
   return `source-url-${sourceResource.href}`;
 }
@@ -506,6 +515,9 @@ export async function createPause(threadActorID, pausedThreadState) {
   };
 }
 
+/**
+ * Creates the Thread.
+ */
 export function createThread(targetFront) {
   // When debugging a Web Extension, the top level target is always the fallback document.
   // It isn't really a top level document as it won't be the parent of any other.

@@ -7,6 +7,9 @@ import { useDataContext } from "@/context/data-context";
 
 import styles from "news-site-css/dist/icons-group.module.css";
 
+/**
+ * Renders the Social Icons view.
+ */
 export default function SocialIcons({ id }) {
     const { links } = useDataContext();
 

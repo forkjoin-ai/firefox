@@ -21,6 +21,9 @@ ChromeUtils.defineESModuleGetters(lazy, {
 });
 
 // A helper to sanitize address and creditcard records suitable for logging.
+/**
+ * Handles the firefox sanitize Storage Object workflow.
+ */
 export function sanitizeStorageObject(ob) {
   if (!ob) {
     return null;
@@ -40,6 +43,9 @@ export function sanitizeStorageObject(ob) {
   return result;
 }
 
+/**
+ * Renders the Autofill Record view.
+ */
 export function AutofillRecord(collection, id) {
   CryptoWrapper.call(this, collection, id);
 }
@@ -349,6 +355,9 @@ AddressesStore.prototype = {
 };
 Object.setPrototypeOf(AddressesStore.prototype, FormAutofillStore.prototype);
 
+/**
+ * Renders the Addresses Engine view.
+ */
 export function AddressesEngine(service) {
   FormAutofillEngine.call(this, service, "Addresses");
 }
@@ -382,6 +391,9 @@ CreditCardsStore.prototype = {
 };
 Object.setPrototypeOf(CreditCardsStore.prototype, FormAutofillStore.prototype);
 
+/**
+ * Renders the Credit Cards Engine view.
+ */
 export function CreditCardsEngine(service) {
   FormAutofillEngine.call(this, service, "CreditCards");
 }

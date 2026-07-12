@@ -15,6 +15,9 @@ const BROWSER_STYLES = [
   "padding",
 ];
 
+/**
+ * Renders the Embedded Browser view.
+ */
 export const EmbeddedBrowser = props => {
   // Conditionally render the component only if the environment supports XULElements (such as in Spotlight modals)
   return document.createXULElement && props.url ? (

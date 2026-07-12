@@ -68,6 +68,9 @@ class Feature {
   }
 }
 
+/**
+ * Renders the Partitioning Exception List Service view.
+ */
 export function PartitioningExceptionListService() {}
 
 PartitioningExceptionListService.prototype = {

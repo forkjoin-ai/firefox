@@ -13,6 +13,9 @@ await loadBfCacheTestHelperResources();
 // 2. Navigates away, then back via bfcache if this case is supported by the
 //    browser.
 // @param {Object}  testCase - The target element's attributes to test with.
+/**
+ * Handles the firefox run Bfcache Test For Embeds workflow.
+ */
 export function runBfcacheTestForEmbeds(testCase) {
   assert_implements(runBfcacheTest, '`runBfcacheTest()` is unavailable.');
   assert_implements(originSameOrigin, '`originSameOrigin` is unavailable.');

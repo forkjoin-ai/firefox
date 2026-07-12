@@ -96,6 +96,9 @@ export type DeviceSelectionDescriptor =
   | undefined
   | Array<GPUFeatureName | undefined>;
 
+/**
+ * Handles the firefox init Uncanonicalized Device Descriptor workflow.
+ */
 export function initUncanonicalizedDeviceDescriptor(
   descriptor: DeviceSelectionDescriptor
 ): UncanonicalizedDeviceDescriptor {

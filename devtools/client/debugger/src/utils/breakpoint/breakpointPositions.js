@@ -5,6 +5,9 @@
 import { comparePosition } from "../location";
 import { getSelectedLocation } from "../selected-location";
 
+/**
+ * Handles the firefox find Position workflow.
+ */
 export function findPosition(positions, location) {
   if (!positions) {
     return null;

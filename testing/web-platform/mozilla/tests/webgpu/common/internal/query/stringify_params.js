@@ -5,6 +5,9 @@
 import { stringifyParamValue, stringifyParamValueUniquely } from './json_param_value.js';
 import { kParamKVSeparator, kParamSeparator, kWildcard } from './separators.js';
 
+/**
+ * Handles the firefox stringify Public Params workflow.
+ */
 export function stringifyPublicParams(p, addWildcard = false) {
   const parts = Object.keys(p).
   filter((k) => paramKeyIsPublic(k)).
@@ -26,6 +29,9 @@ export function stringifyPublicParamsUniquely(p) {
   join(kParamSeparator);
 }
 
+/**
+ * Handles the firefox stringify Single Param workflow.
+ */
 export function stringifySingleParam(k, v) {
   return `${k}${kParamKVSeparator}${stringifySingleParamValue(v)}`;
 }

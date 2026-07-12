@@ -6,6 +6,9 @@
 '../../capability_info.js';
 
 
+/**
+ * Creates the Texture With State.
+ */
 export function createTextureWithState(
 t,
 state,
@@ -266,6 +269,9 @@ export function getDeviceMismatchedRenderTexture(t, sampleCount = 1) {
   });
 }
 
+/**
+ * Handles the firefox get Device Mismatched Binding Resource workflow.
+ */
 export function getDeviceMismatchedBindingResource(
 t,
 bindingType)

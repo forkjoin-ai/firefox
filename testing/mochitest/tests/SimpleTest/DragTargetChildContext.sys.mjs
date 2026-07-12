@@ -25,6 +25,9 @@ export class DragTargetChildContext extends DragChildContextBase {
   }
 }
 
+/**
+ * Creates the Drag Target Child Context.
+ */
 export function createDragTargetChildContext(
   aDragWindow,
   aParams,

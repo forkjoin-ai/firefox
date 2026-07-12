@@ -364,6 +364,9 @@ function resetIsBackgroundTaskMode() {
 resetIsBackgroundTaskMode();
 
 // Exported for testing only.
+/**
+ * Handles the firefox test Reset Is Background Task Mode workflow.
+ */
 export function testResetIsBackgroundTaskMode() {
   resetIsBackgroundTaskMode();
 }

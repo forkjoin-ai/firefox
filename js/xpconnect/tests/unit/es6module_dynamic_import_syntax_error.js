@@ -6,6 +6,9 @@ import("./es6module_dynamic_import_syntax_error2.js").then(ns => {}, e => {
   resolve(e);
 });
 
+/**
+ * Handles the firefox do Import workflow.
+ */
 export async function doImport() {
   try {
     await import("./es6module_dynamic_import_syntax_error3.js");

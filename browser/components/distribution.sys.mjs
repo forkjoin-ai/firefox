@@ -23,6 +23,9 @@ ChromeUtils.defineESModuleGetters(lazy, {
   PlacesUtils: "resource://gre/modules/PlacesUtils.sys.mjs",
 });
 
+/**
+ * Renders the Distribution Customizer view.
+ */
 export function DistributionCustomizer() {}
 
 DistributionCustomizer.prototype = {

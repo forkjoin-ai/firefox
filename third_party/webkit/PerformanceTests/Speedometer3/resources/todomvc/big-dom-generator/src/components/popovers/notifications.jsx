@@ -2,6 +2,9 @@ import classnames from "classnames";
 
 import CheckmarkIcon from "./../../assets/Smock_Checkmark_18_N.svg";
 
+/**
+ * Renders the Notifications Pop Over view.
+ */
 export const NotificationsPopOver = () => {
     const notifications = [
         {

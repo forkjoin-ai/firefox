@@ -6,6 +6,9 @@ const PORT = '{{ports[webtransport-h3][0]}}';
 const BASE = `https://${HOST}:${PORT}`;
 
 // Create URL for WebTransport session.
+/**
+ * Handles the firefox webtransport url workflow.
+ */
 export function webtransport_url(handler) {
   return `${BASE}/webtransport/handlers/${handler}`;
 }

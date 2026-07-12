@@ -107,6 +107,9 @@ export const TileSchema = Joi.object().keys({
 
 export const UTSessionPing = Joi.array().items(eventsTelemetryExtraKeys);
 
+/**
+ * Handles the firefox chai Assertions workflow.
+ */
 export function chaiAssertions(_chai) {
   const { Assertion } = _chai;
 

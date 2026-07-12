@@ -9,6 +9,9 @@ import { setTimeout } from "resource://gre/modules/Timer.sys.mjs";
 // so it should always time out.
 export const backgroundTaskTimeoutSec = 1;
 
+/**
+ * Handles the firefox run Background Task workflow.
+ */
 export async function runBackgroundTask() {
   await new Promise(resolve => {
     const fiveMinutesInMs = 5 * 60 * 1000;

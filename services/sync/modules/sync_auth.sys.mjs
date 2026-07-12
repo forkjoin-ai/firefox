@@ -65,6 +65,9 @@ const OBSERVER_TOPICS = [
   some other error object (which should do the right thing when toString() is
   called on it)
 */
+/**
+ * Renders the Authentication Error view.
+ */
 export function AuthenticationError(details, source) {
   this.details = details;
   this.source = source;
@@ -82,6 +85,9 @@ AuthenticationError.prototype = {
 // credentials in order to access it.
 //
 
+/**
+ * Renders the Sync Auth Manager view.
+ */
 export function SyncAuthManager() {
   // NOTE: _fxaService and _tokenServerClient are replaced with mocks by
   // the test suite.

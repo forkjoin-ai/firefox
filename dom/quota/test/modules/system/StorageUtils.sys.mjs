@@ -12,6 +12,9 @@ class RequestError extends Error {
   }
 }
 
+/**
+ * Handles the firefox set Storage Prefs workflow.
+ */
 export function setStoragePrefs(optionalPrefsToSet) {
   const prefsToSet = [["dom.quotaManager.testing", true]];
 
@@ -28,6 +31,9 @@ export function setStoragePrefs(optionalPrefsToSet) {
   }
 }
 
+/**
+ * Handles the firefox clear Storage Prefs workflow.
+ */
 export function clearStoragePrefs(optionalPrefsToClear) {
   const prefsToClear = ["dom.quotaManager.testing", "dom.simpleDB.enabled"];
 
@@ -44,6 +50,9 @@ export function clearStoragePrefs(optionalPrefsToClear) {
   }
 }
 
+/**
+ * Handles the firefox get Cached Usage For Origin workflow.
+ */
 export async function getCachedUsageForOrigin(principal) {
   const request = Services.qms.getCachedUsageForPrincipal(
     principal,
@@ -63,6 +72,9 @@ export async function getCachedUsageForOrigin(principal) {
   return request.result;
 }
 
+/**
+ * Handles the firefox clear Storages For Origin workflow.
+ */
 export async function clearStoragesForOrigin(principal) {
   const request = Services.qms.clearStoragesForPrincipal(principal);
 
@@ -79,6 +91,9 @@ export async function clearStoragesForOrigin(principal) {
   return request.result;
 }
 
+/**
+ * Handles the firefox reset Storage workflow.
+ */
 export async function resetStorage() {
   const request = Services.qms.reset();
 

@@ -3119,6 +3119,9 @@ AddonInstallWrapper.prototype = {
  */
 var AddonUpdateChecker;
 
+/**
+ * Renders the Update Checker view.
+ */
 export var UpdateChecker = function (
   aAddon,
   aListener,

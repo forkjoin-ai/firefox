@@ -3,6 +3,9 @@ export const alt_manifest_origin = 'https://{{hosts[alt][]}}:{{ports[https][0]}}
 export const same_site_manifest_origin = 'https://{{hosts[][www1]}}:{{ports[https][0]}}';
 export const default_manifest_path = '/fedcm/support/manifest.py';
 
+/**
+ * Handles the firefox open and wait for popup workflow.
+ */
 export function open_and_wait_for_popup(origin, path) {
   return new Promise(resolve => {
     let popup_window = window.open(origin + path);
@@ -23,6 +26,9 @@ export function open_and_wait_for_popup(origin, path) {
 }
 
 // Set the identity provider cookie.
+/**
+ * Handles the firefox set fedcm cookie workflow.
+ */
 export function set_fedcm_cookie(host) {
   if (host == undefined) {
     document.cookie = 'cookie=1; SameSite=None; Path=/fedcm/support; Secure';
@@ -33,24 +39,39 @@ export function set_fedcm_cookie(host) {
 }
 
 // Set the alternate identity provider cookie.
+/**
+ * Handles the firefox set alt fedcm cookie workflow.
+ */
 export function set_alt_fedcm_cookie() {
   return set_fedcm_cookie(alt_manifest_origin);
 }
 
+/**
+ * Handles the firefox setup accounts push workflow.
+ */
 export function setup_accounts_push(origin = manifest_origin) {
   return open_and_wait_for_popup(origin, '/fedcm/support/push_accounts');
 }
 
+/**
+ * Handles the firefox mark signed in workflow.
+ */
 export function mark_signed_in(origin = manifest_origin) {
   return open_and_wait_for_popup(origin, '/fedcm/support/mark_signedin');
 }
 
+/**
+ * Handles the firefox mark signed out workflow.
+ */
 export function mark_signed_out(origin = manifest_origin) {
   return open_and_wait_for_popup(origin, '/fedcm/support/mark_signedout');
 }
 
 // Returns FedCM CredentialRequestOptions for which navigator.credentials.get()
 // succeeds.
+/**
+ * Handles the firefox request options with mediation required workflow.
+ */
 export function request_options_with_mediation_required(manifest_filename, origin = manifest_origin) {
   if (manifest_filename === undefined) {
     manifest_filename = "manifest.py";
@@ -72,12 +93,18 @@ fedcm/support/${manifest_filename}`;
 
 // Returns alternate FedCM CredentialRequestOptions for which navigator.credentials.get()
 // succeeds.
+/**
+ * Handles the firefox alt request options with mediation required workflow.
+ */
 export function alt_request_options_with_mediation_required(manifest_filename) {
   return request_options_with_mediation_required(manifest_filename, alt_manifest_origin);
 }
 
 // Returns FedCM CredentialRequestOptions with auto re-authentication.
 // succeeds.
+/**
+ * Handles the firefox request options with mediation optional workflow.
+ */
 export function request_options_with_mediation_optional(manifest_filename) {
   let options = alt_request_options_with_mediation_required(manifest_filename);
   // Approved client
@@ -87,6 +114,9 @@ export function request_options_with_mediation_optional(manifest_filename) {
   return options;
 }
 
+/**
+ * Handles the firefox request options with context workflow.
+ */
 export function request_options_with_context(manifest_filename, context) {
   if (manifest_filename === undefined) {
     manifest_filename = "manifest.py";
@@ -106,6 +136,9 @@ fedcm/support/${manifest_filename}`;
   };
 }
 
+/**
+ * Handles the firefox request options with two idps workflow.
+ */
 export function request_options_with_two_idps(mediation = 'required') {
   const first_config = `${manifest_origin}${default_manifest_path}`;
   const second_config = `${alt_manifest_origin}${default_manifest_path}`;
@@ -127,6 +160,9 @@ export function request_options_with_two_idps(mediation = 'required') {
 }
 
 // Test wrapper which does FedCM-specific setup.
+/**
+ * Handles the firefox fedcm test workflow.
+ */
 export function fedcm_test(test_func, test_name) {
   promise_test(async t => {
     assert_implements(window.IdentityCredential, "FedCM is not supported");
@@ -190,6 +226,9 @@ function select_manifest_impl(manifest_url) {
 // Sets the manifest returned by the next fetch of /.well-known/web_identity
 // select_manifest() only affects the next fetch and not any subsequent fetches
 // (ex second next fetch).
+/**
+ * Handles the firefox select manifest workflow.
+ */
 export function select_manifest(test, test_options) {
   // Add cleanup in case that /.well-known/web_identity is not fetched at all.
   test.add_cleanup(async () => {
@@ -199,6 +238,9 @@ export function select_manifest(test, test_options) {
   return select_manifest_impl(manifest_url);
 }
 
+/**
+ * Handles the firefox request options with login hint workflow.
+ */
 export function request_options_with_login_hint(manifest_filename, login_hint) {
   let options = request_options_with_mediation_required(manifest_filename);
   options.identity.providers[0].loginHint = login_hint;
@@ -206,6 +248,9 @@ export function request_options_with_login_hint(manifest_filename, login_hint) {
   return options;
 }
 
+/**
+ * Handles the firefox request options with domain hint workflow.
+ */
 export function request_options_with_domain_hint(manifest_filename, domain_hint) {
   let options = request_options_with_mediation_required(manifest_filename);
   options.identity.providers[0].domainHint = domain_hint;
@@ -213,6 +258,9 @@ export function request_options_with_domain_hint(manifest_filename, domain_hint)
   return options;
 }
 
+/**
+ * Handles the firefox fedcm get dialog type promise workflow.
+ */
 export function fedcm_get_dialog_type_promise(t) {
   return new Promise((resolve, reject) => {
     async function helper() {
@@ -239,6 +287,9 @@ export function fedcm_get_dialog_type_promise(t) {
 }
 
 
+/**
+ * Handles the firefox fedcm settles without dialog workflow.
+ */
 export async function fedcm_settles_without_dialog(t, cred_promise) {
   let dialog_promise = fedcm_get_dialog_type_promise(t);
   let result = await Promise.race([cred_promise, dialog_promise]);
@@ -249,6 +300,9 @@ export async function fedcm_settles_without_dialog(t, cred_promise) {
   throw "expected request to finish, got dialog: " + result;
 }
 
+/**
+ * Handles the firefox fedcm expect dialog workflow.
+ */
 export async function fedcm_expect_dialog(cred_promise, other_promise) {
   let result = await Promise.race([cred_promise, other_promise]);
   // If we got an exception, just pass it through, the caller will ensure it is
@@ -259,6 +313,9 @@ export async function fedcm_expect_dialog(cred_promise, other_promise) {
   return result;
 }
 
+/**
+ * Handles the firefox fedcm get title promise workflow.
+ */
 export function fedcm_get_title_promise(t) {
   return new Promise(resolve => {
     async function helper() {
@@ -275,6 +332,9 @@ export function fedcm_get_title_promise(t) {
   });
 }
 
+/**
+ * Handles the firefox fedcm select account promise workflow.
+ */
 export async function fedcm_select_account_promise(t, account_index) {
   let type = await fedcm_get_dialog_type_promise(t);
   if (type != "AccountChooser")
@@ -282,6 +342,9 @@ export async function fedcm_select_account_promise(t, account_index) {
   await window.test_driver.select_fedcm_account(account_index);
 }
 
+/**
+ * Handles the firefox fedcm get and select first account workflow.
+ */
 export async function fedcm_get_and_select_first_account(t, options) {
   const credentialPromise = navigator.credentials.get(options);
   let type = await fedcm_expect_dialog(
@@ -294,6 +357,9 @@ export async function fedcm_get_and_select_first_account(t, options) {
   return credentialPromise;
 }
 
+/**
+ * Handles the firefox fedcm error dialog dismiss workflow.
+ */
 export function fedcm_error_dialog_dismiss(t) {
   return new Promise(resolve => {
     async function helper() {
@@ -312,6 +378,9 @@ export function fedcm_error_dialog_dismiss(t) {
   });
 }
 
+/**
+ * Handles the firefox fedcm error dialog click button workflow.
+ */
 export function fedcm_error_dialog_click_button(t, button) {
   return new Promise(resolve => {
     async function helper() {
@@ -330,6 +399,9 @@ export function fedcm_error_dialog_click_button(t, button) {
   });
 }
 
+/**
+ * Handles the firefox disconnect options workflow.
+ */
 export function disconnect_options(accountHint, manifest_filename) {
   if (manifest_filename === undefined) {
     manifest_filename = "manifest.py";
@@ -343,6 +415,9 @@ fedcm/support/${manifest_filename}`;
       };
 }
 
+/**
+ * Handles the firefox alt disconnect options workflow.
+ */
 export function alt_disconnect_options(accountHint, manifest_filename) {
   if (manifest_filename === undefined) {
     manifest_filename = "manifest.py";
@@ -356,6 +431,9 @@ fedcm/support/${manifest_filename}`;
   };
 }
 
+/**
+ * Handles the firefox fedcm get flexible tokens credential workflow.
+ */
 export async function fedcm_get_flexible_tokens_credential(t, type) {
   const options = request_options_with_mediation_required(`manifest_flexible_tokens.json`);
   options.identity.providers[0].params = {
@@ -365,6 +443,9 @@ export async function fedcm_get_flexible_tokens_credential(t, type) {
   return await fedcm_get_and_select_first_account(t, options);
 }
 
+/**
+ * Handles the firefox set well known format workflow.
+ */
 export function set_well_known_format(format_type) {
   const url_query = `?format=${encodeURIComponent(format_type)}`;
 

@@ -319,6 +319,9 @@ function getMods(event: KeyboardEvent) {
   return result
 }
 
+/**
+ * Handles the firefox capture Key Down workflow.
+ */
 export function captureKeyDown(view: EditorView, event: KeyboardEvent) {
   let code = event.keyCode, mods = getMods(event)
   if (code == 8 || (browser.mac && code == 72 && mods == "c")) { // Backspace, Ctrl-h on Mac

@@ -68,6 +68,9 @@ ChromeUtils.defineLazyGetter(AppInfo, "isThunderbird", () => {
   return Services.appinfo.ID == ID_THUNDERBIRD;
 });
 
+/**
+ * Handles the firefox get Timeout Multiplier workflow.
+ */
 export function getTimeoutMultiplier() {
   if (
     AppConstants.DEBUG ||

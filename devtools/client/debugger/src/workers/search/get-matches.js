@@ -5,6 +5,9 @@
 import assert from "../../utils/assert";
 import buildQuery from "../../utils/build-query";
 
+/**
+ * Handles the firefox get Matches workflow.
+ */
 export default function getMatches(query, text, options) {
   if (!query || !text || !options) {
     return [];

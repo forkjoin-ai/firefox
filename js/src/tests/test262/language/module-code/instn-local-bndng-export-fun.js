@@ -30,6 +30,9 @@ test262 = null;
 
 assert.sameValue(test262, null, 'binding is mutable');
 
+/**
+ * Handles the firefox test262 workflow.
+ */
 export function test262() { return 23; }
 
 reportCompare(0, 0);

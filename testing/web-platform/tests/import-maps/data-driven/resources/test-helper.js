@@ -135,6 +135,9 @@ async function runTests(j) {
   }
 }
 
+/**
+ * Handles the firefox run Tests From JSON workflow.
+ */
 export async function runTestsFromJSON(jsonURL) {
   const response = await fetch(jsonURL);
   const json = await response.json();

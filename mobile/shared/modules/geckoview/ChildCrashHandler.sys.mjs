@@ -30,6 +30,9 @@ var getPendingMinidump = function (id) {
   });
 };
 
+/**
+ * Handles the firefox crash Pull Callback workflow.
+ */
 export var crashPullCallback = function (matches, requestedByDevs) {
   lazy.EventDispatcher.instance.sendRequest(
     "GeckoView:RemoteSettingsCrashPull",

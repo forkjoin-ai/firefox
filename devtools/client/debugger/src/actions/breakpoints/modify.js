@@ -80,6 +80,9 @@ function clientRemoveBreakpoint(client, state, generatedLocation) {
   return client.removeBreakpoint(breakpointServerLocation);
 }
 
+/**
+ * Handles the firefox enable Breakpoint workflow.
+ */
 export function enableBreakpoint(initialBreakpoint) {
   return thunkArgs => {
     const { dispatch, getState, client } = thunkArgs;
@@ -112,6 +115,9 @@ export function enableBreakpoint(initialBreakpoint) {
   };
 }
 
+/**
+ * Handles the firefox add Breakpoint workflow.
+ */
 export function addBreakpoint(
   initialLocation,
   options = {},

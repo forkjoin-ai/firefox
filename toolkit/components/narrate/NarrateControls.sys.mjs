@@ -10,6 +10,9 @@ var gStrings = Services.strings.createBundle(
   "chrome://global/locale/narrate.properties"
 );
 
+/**
+ * Renders the Narrate Controls view.
+ */
 export function NarrateControls(win, languagePromise) {
   this._winRef = Cu.getWeakReference(win);
   this._languagePromise = languagePromise;

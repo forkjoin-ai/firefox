@@ -2,6 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+/**
+ * Handles the firefox run Background Task workflow.
+ */
 export async function runBackgroundTask(_commandLine) {
   // Disable logging of Console to stdout in order to focus on MOZ_LOG ones
   Services.prefs.setBoolPref("devtools.console.stdout.chrome", false);

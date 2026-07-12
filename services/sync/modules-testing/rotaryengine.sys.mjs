@@ -18,6 +18,9 @@ import { SerializableSet, Utils } from "resource://services-sync/util.sys.mjs";
  * Complete with record, store, and tracker implementations.
  */
 
+/**
+ * Renders the Rotary Record view.
+ */
 export function RotaryRecord(collection, id) {
   CryptoWrapper.call(this, collection, id);
 }
@@ -26,6 +29,9 @@ RotaryRecord.prototype = {};
 Object.setPrototypeOf(RotaryRecord.prototype, CryptoWrapper.prototype);
 Utils.deferGetSet(RotaryRecord, "cleartext", ["denomination"]);
 
+/**
+ * Renders the Rotary Store view.
+ */
 export function RotaryStore(name, engine) {
   Store.call(this, name, engine);
   this.items = {};
@@ -83,6 +89,9 @@ RotaryStore.prototype = {
 
 Object.setPrototypeOf(RotaryStore.prototype, Store.prototype);
 
+/**
+ * Renders the Rotary Tracker view.
+ */
 export function RotaryTracker(name, engine) {
   LegacyTracker.call(this, name, engine);
 }
@@ -90,6 +99,9 @@ export function RotaryTracker(name, engine) {
 RotaryTracker.prototype = {};
 Object.setPrototypeOf(RotaryTracker.prototype, LegacyTracker.prototype);
 
+/**
+ * Renders the Rotary Engine view.
+ */
 export function RotaryEngine(service) {
   SyncEngine.call(this, "Rotary", service);
   // Ensure that the engine starts with a clean slate.

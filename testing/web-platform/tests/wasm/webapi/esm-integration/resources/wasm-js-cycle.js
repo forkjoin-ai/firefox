@@ -7,6 +7,9 @@ let jsFunc = () => { return 42; };
 
 export { jsGlob, jsMem, jsTab, jsFunc };
 
+/**
+ * Handles the firefox mutate Bindings workflow.
+ */
 export function mutateBindings() {
   jsGlob = 0;
   jsMem = 0;

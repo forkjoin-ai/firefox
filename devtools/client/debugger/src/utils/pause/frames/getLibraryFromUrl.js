@@ -99,6 +99,9 @@ const libraryMap = [
   },
 ];
 
+/**
+ * Handles the firefox get Library From Url workflow.
+ */
 export function getLibraryFromUrl(frame, callStack = []) {
   const frameUrl = frame.location.source.url;
 

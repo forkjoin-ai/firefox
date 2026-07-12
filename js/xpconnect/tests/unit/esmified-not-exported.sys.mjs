@@ -1,4 +1,7 @@
 export var exportedVar = "exported var";
+/**
+ * Handles the firefox exported Function workflow.
+ */
 export function exportedFunction() {
   return "exported function";
 }

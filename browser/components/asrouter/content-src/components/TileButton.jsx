@@ -5,6 +5,9 @@
 import React, { useRef } from "react";
 import { Localized } from "./MSLocalized";
 
+/**
+ * Renders the Tile Button view.
+ */
 export const TileButton = props => {
   const { content, handleAction, inputName } = props;
   const ref = useRef(null);

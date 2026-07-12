@@ -40,6 +40,9 @@ function nanoid(size = 21) {
     return id;
 }
 
+/**
+ * Converts input into todo Reducer.
+ */
 export const todoReducer = (state, action) => {
     switch (action.type) {
         case "ADD_ITEM":

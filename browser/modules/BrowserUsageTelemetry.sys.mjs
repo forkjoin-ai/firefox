@@ -2148,6 +2148,9 @@ export let BrowserUsageTelemetry = {
 };
 
 // Used by nsIBrowserUsage
+/**
+ * Handles the firefox get Unique Domains Visited In Past24 Hours workflow.
+ */
 export function getUniqueDomainsVisitedInPast24Hours() {
   return URICountListener.uniqueDomainsVisitedInPast24Hours;
 }

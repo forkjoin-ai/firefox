@@ -74,6 +74,9 @@ const ContentPermissionIntegration = {
   },
 };
 
+/**
+ * Renders the Content Permission Prompt view.
+ */
 export function ContentPermissionPrompt() {}
 
 ContentPermissionPrompt.prototype = {

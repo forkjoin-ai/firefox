@@ -56,6 +56,9 @@ export function registerWebDriverWorkerListenerActor() {
   Services.obs.addObserver(onIpcContentCreated, "ipc:content-created");
 }
 
+/**
+ * Handles the firefox unregister Web Driver Worker Listener Actor workflow.
+ */
 export function unregisterWebDriverWorkerListenerActor() {
   if (!registered) {
     return;
@@ -140,10 +143,16 @@ class WorkerListenerRegistry extends EventEmitter {
 // to broadcast corresponding events.
 export const workerListenerRegistry = new WorkerListenerRegistry();
 
+/**
+ * Handles the firefox notify Worker Registered workflow.
+ */
 export function notifyWorkerRegistered(data) {
   return workerListenerRegistry.notifyWorkerRegistered(data);
 }
 
+/**
+ * Handles the firefox notify Worker Unregistered workflow.
+ */
 export function notifyWorkerUnregistered(data) {
   return workerListenerRegistry.notifyWorkerUnregistered(data);
 }

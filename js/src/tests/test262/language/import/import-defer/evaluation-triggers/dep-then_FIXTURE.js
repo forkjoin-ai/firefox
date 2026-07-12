@@ -3,4 +3,7 @@
 
 globalThis.evaluations.push("then");
 
+/**
+ * Handles the firefox then workflow.
+ */
 export function then(cb) { cb(); }

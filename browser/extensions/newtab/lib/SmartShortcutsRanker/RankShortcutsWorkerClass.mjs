@@ -183,6 +183,9 @@ export function computeLinearScore(scores, weights) {
   return final;
 }
 
+/**
+ * Handles the firefox process Seasonality workflow.
+ */
 export function processSeasonality(guids, input, tau, curtime) {
   const { hists } = input;
   const { pvec } = input;
@@ -326,6 +329,9 @@ const _applyVectorFeature = (
   });
 };
 
+/**
+ * Handles the firefox weighted Sample Top Sites workflow.
+ */
 export async function weightedSampleTopSites(input) {
   const alpha = input.alpha ?? 1;
   const beta = input.beta ?? 1;
@@ -454,6 +460,9 @@ export async function weightedSampleTopSites(input) {
   return { score_map, norms: updated_norms };
 }
 
+/**
+ * Handles the firefox clamp Weights workflow.
+ */
 export function clampWeights(weights, maxNorm = 100) {
   const norm = Math.hypot(...Object.values(weights));
   if (norm > maxNorm) {

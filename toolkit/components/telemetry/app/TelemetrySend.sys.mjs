@@ -201,6 +201,9 @@ export function gzipCompressString(string) {
 
 const STANDALONE_PING_TIMEOUT = 30 * 1000; // 30 seconds
 
+/**
+ * Handles the firefox send Standalone Ping workflow.
+ */
 export function sendStandalonePing(endpoint, payload, extraHeaders = {}) {
   return new Promise((resolve, reject) => {
     let request = new ServiceRequest({ mozAnon: true });

@@ -814,6 +814,9 @@ export const HandlerServiceHelpers = {
 
 // Utilities
 
+/**
+ * Handles the firefox get File Display Name workflow.
+ */
 export function getFileDisplayName(file) {
   if (AppConstants.platform == "win") {
     if (file instanceof Ci.nsILocalFileWin) {
@@ -832,6 +835,9 @@ export function getFileDisplayName(file) {
   return file.leafName;
 }
 
+/**
+ * Handles the firefox get Local Handler App workflow.
+ */
 export function getLocalHandlerApp(aFile) {
   var localHandlerApp = Cc[
     "@mozilla.org/uriloader/local-handler-app;1"
@@ -855,6 +861,9 @@ function getIconURLForFile(aFile) {
   return "moz-icon://" + urlSpec + "?size=16";
 }
 
+/**
+ * Handles the firefox get Icon URLFor Handler App workflow.
+ */
 export function getIconURLForHandlerApp(aHandlerApp) {
   if (aHandlerApp instanceof Ci.nsILocalHandlerApp) {
     return getIconURLForFile(aHandlerApp.executable);
@@ -872,6 +881,9 @@ export function getIconURLForHandlerApp(aHandlerApp) {
   return "";
 }
 
+/**
+ * Handles the firefox get Icon URLFor Web App workflow.
+ */
 export function getIconURLForWebApp(aWebAppURITemplate) {
   var uri = Services.io.newURI(aWebAppURITemplate);
 

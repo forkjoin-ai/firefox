@@ -38,5 +38,8 @@ const useKeyEvent =
     };
   };
 
+/**
+ * Handles the Key Press request flow.
+ */
 export const handleKeyPress = (host, ...args) =>
   new (withSimpleController(host, useKeyEvent("keydown"), ...args))();

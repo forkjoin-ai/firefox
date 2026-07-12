@@ -4,6 +4,9 @@
 
 import { EnterprisePolicyTesting } from "resource://testing-common/EnterprisePolicyTesting.sys.mjs";
 
+/**
+ * Handles the firefox run Background Task workflow.
+ */
 export async function runBackgroundTask(commandLine) {
   let filePath = commandLine.getArgument(0);
   await EnterprisePolicyTesting.setupPolicyEngineWithJson(filePath);

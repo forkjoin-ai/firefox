@@ -6,6 +6,9 @@ import React from "react";
 
 // Widget wrapper can be a place to normalize widget functionality, and
 // wrap the more widget specific functionality.
+/**
+ * Renders the Widget Wrapper view.
+ */
 export function WidgetWrapper({ className, children, ...rest }) {
   const merged = ["widget-wrapper", "col-4", className]
     .filter(Boolean)

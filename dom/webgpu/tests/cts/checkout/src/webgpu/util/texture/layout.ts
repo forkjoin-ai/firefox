@@ -55,12 +55,7 @@ export interface TextureCopyLayout extends TextureSubCopyLayout {
 }
 
 /**
- * Computes layout information for a copy of the whole subresource at `mipLevel` of a GPUTexture
- * of size `baseSize` with the provided `format` and `dimension`.
- *
- * Computes default values for `bytesPerRow` and `rowsPerImage` if not specified.
- *
- * MAINTENANCE_TODO: Change input/output to Required<GPUExtent3DDict> for consistency.
+ * Handles the firefox get Texture Copy Layout workflow.
  */
 export function getTextureCopyLayout(
   format: GPUTextureFormat,

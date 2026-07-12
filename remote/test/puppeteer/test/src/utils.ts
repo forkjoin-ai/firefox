@@ -81,10 +81,16 @@ export const attachFrame = async (
   return await handle.contentFrame();
 };
 
+/**
+ * Returns whether is Favicon is true.
+ */
 export const isFavicon = (request: {url: () => string | string[]}): boolean => {
   return request.url().includes('favicon.ico');
 };
 
+/**
+ * Handles the firefox detach Frame workflow.
+ */
 export async function detachFrame(
   pageOrFrame: Page | Frame,
   frameId: string,
@@ -95,6 +101,9 @@ export async function detachFrame(
   }, frameId);
 }
 
+/**
+ * Handles the firefox navigate Frame workflow.
+ */
 export async function navigateFrame(
   pageOrFrame: Page | Frame,
   frameId: string,
@@ -164,6 +173,9 @@ export interface FilePlaceholder {
   [Symbol.dispose](): void;
 }
 
+/**
+ * Handles the firefox get Unique Video File Placeholder workflow.
+ */
 export function getUniqueVideoFilePlaceholder(
   debugging = false,
 ): FilePlaceholder {
@@ -181,10 +193,16 @@ export function getUniqueVideoFilePlaceholder(
   };
 }
 
+/**
+ * Handles the firefox rm If Exists workflow.
+ */
 export function rmIfExists(file: string): Promise<void> {
   return rm(file).catch(() => {});
 }
 
+/**
+ * Handles the firefox wait For File Existence workflow.
+ */
 export async function waitForFileExistence(
   filePath: string,
   timeout = 1000,
@@ -216,6 +234,9 @@ export async function waitForFileExistence(
   }
 }
 
+/**
+ * Handles the firefox html workflow.
+ */
 export function html(
   strings: TemplateStringsArray,
   ...values: unknown[]
@@ -237,6 +258,9 @@ export function html(
 </html>`;
 }
 
+/**
+ * Handles the firefox html Raw workflow.
+ */
 export function htmlRaw(
   strings: TemplateStringsArray,
   ...values: unknown[]

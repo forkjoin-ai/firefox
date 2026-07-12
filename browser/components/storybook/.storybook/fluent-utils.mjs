@@ -51,6 +51,9 @@ function updatePseudoStrategy(strategy = STRATEGY_DEFAULT) {
   }
 }
 
+/**
+ * Handles the firefox connect Fluent workflow.
+ */
 export function connectFluent() {
   document.l10n = new DOMLocalization([], generateBundles);
   document.l10n.connectRoot(document.documentElement);
@@ -61,6 +64,9 @@ function* generateBundles() {
   yield* [storybookBundle];
 }
 
+/**
+ * Handles the firefox insert FTLIf Needed workflow.
+ */
 export async function insertFTLIfNeeded(fileName) {
   if (loadedResources.has(fileName)) {
     return;
@@ -118,6 +124,9 @@ export async function insertFTLIfNeeded(fileName) {
   provideFluent(ftlContents, fileName);
 }
 
+/**
+ * Handles the firefox provide Fluent workflow.
+ */
 export function provideFluent(ftlContents, fileName) {
   let ftlResource = new FluentResource(ftlContents);
   storybookBundle.addResource(ftlResource);

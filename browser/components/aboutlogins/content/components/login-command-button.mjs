@@ -15,6 +15,9 @@ import {
 } from "chrome://global/content/vendor/lit.all.mjs";
 import { MozLitElement } from "chrome://global/content/lit-utils.mjs";
 
+/**
+ * Handles the firefox styles Template workflow.
+ */
 export const stylesTemplate = () =>
   html`<link
       rel="stylesheet"

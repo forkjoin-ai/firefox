@@ -10,6 +10,9 @@ import { createEditor } from "./create-editor";
 
 let editor;
 
+/**
+ * Handles the firefox get Editor workflow.
+ */
 export function getEditor() {
   if (editor) {
     return editor;
@@ -19,6 +22,9 @@ export function getEditor() {
   return editor;
 }
 
+/**
+ * Handles the firefox remove Editor workflow.
+ */
 export function removeEditor() {
   editor = null;
 }
@@ -33,6 +39,9 @@ export function updateEditorLineWrapping(value) {
   editor.setLineWrapping(value);
 }
 
+/**
+ * Converts input into Wasm Source Line.
+ */
 export function toWasmSourceLine(offset) {
   return editor.wasmOffsetToLine(offset) || 0;
 }
@@ -52,6 +61,9 @@ export function toEditorLine(source, lineOrOffset) {
   return lineOrOffset;
 }
 
+/**
+ * Handles the firefox from Editor Line workflow.
+ */
 export function fromEditorLine(source, line) {
   // Also ignore the original source related to the .wasm file.
   if (editor.isWasm && !source.isOriginal) {
@@ -61,6 +73,9 @@ export function fromEditorLine(source, line) {
   return line;
 }
 
+/**
+ * Converts input into Editor Position.
+ */
 export function toEditorPosition(location) {
   // Note that Spidermonkey, Debugger frontend and CodeMirror are all consistent regarding column
   // and are 0-based. But only CodeMirror consider the line to be 0-based while the two others
@@ -72,6 +87,9 @@ export function toEditorPosition(location) {
   };
 }
 
+/**
+ * Converts input into Source Line.
+ */
 export function toSourceLine(source, line) {
   if (editor.isWasm && !source.isOriginal) {
     return editor.lineToWasmOffset(line - 1);

@@ -14,6 +14,9 @@ import {
 
 // A helper function so code can check what fields are able to be stored by
 // the storage manager without having a reference to a manager instance.
+/**
+ * Renders the Fx Accounts Storage Manager Can Store Field view.
+ */
 export function FxAccountsStorageManagerCanStoreField(fieldName) {
   return (
     FXA_PWDMGR_PLAINTEXT_FIELDS.has(fieldName) ||
@@ -22,6 +25,9 @@ export function FxAccountsStorageManagerCanStoreField(fieldName) {
 }
 
 // The storage manager object.
+/**
+ * Renders the Fx Accounts Storage Manager view.
+ */
 export var FxAccountsStorageManager = function (options = {}) {
   this.options = {
     filename: options.filename || DEFAULT_STORAGE_FILENAME,

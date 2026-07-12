@@ -34,6 +34,9 @@ import { AppConstants } from "resource://gre/modules/AppConstants.sys.mjs";
 const RE_PROTOCOL = /^\w+:/;
 const RE_PREF_ITEM = /^(|test-|ref-)pref\((.+?),(.*)\)$/;
 
+/**
+ * Renders the Read Top Manifest view.
+ */
 export function ReadTopManifest(aFileURL, aFilter, aManifestID) {
   var url = g.ioService.newURI(aFileURL);
   if (!url) {
@@ -869,6 +872,9 @@ function ServeTestBase(aURL, depth) {
   );
 }
 
+/**
+ * Renders the Create Urls view.
+ */
 export function CreateUrls(test) {
   let manifestURL = g.ioService.newURI(test.manifest);
 

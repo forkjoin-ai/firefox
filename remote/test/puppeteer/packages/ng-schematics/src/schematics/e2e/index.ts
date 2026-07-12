@@ -23,6 +23,9 @@ import {
 
 // You don't have to export the function as default. You can also have more than one rule
 // factory per file.
+/**
+ * Handles the firefox e2e workflow.
+ */
 export function e2e(userArgs: Record<string, string>): Rule {
   const options = parseUserTestArgs(userArgs);
 

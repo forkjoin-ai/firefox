@@ -8,6 +8,9 @@ import { useDataContext } from "@/context/data-context";
 
 import styles from "news-site-css/dist/footer.module.css";
 
+/**
+ * Renders the Footer view.
+ */
 export default function Footer() {
     const [showPortal, setShowPortal] = useState(false);
     const { footer, links } = useDataContext();

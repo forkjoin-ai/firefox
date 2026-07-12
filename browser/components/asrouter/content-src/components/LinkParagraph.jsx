@@ -59,6 +59,9 @@ function renderSegment(segment, index, handleAction) {
   );
 }
 
+/**
+ * Renders the Link Paragraph view.
+ */
 export const LinkParagraph = props => {
   const { text_content, handleAction } = props;
   const text = text_content?.text;

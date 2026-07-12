@@ -20,6 +20,9 @@ const defaultUrl = {
 };
 
 const parseCache = new Map();
+/**
+ * Parses the parse.
+ */
 export function parse(url) {
   if (parseCache.has(url)) {
     return parseCache.get(url);
@@ -70,6 +73,9 @@ export function parse(url) {
   return urlObj;
 }
 
+/**
+ * Handles the firefox same Origin workflow.
+ */
 export function sameOrigin(firstUrl, secondUrl) {
   return parse(firstUrl).origin == parse(secondUrl).origin;
 }

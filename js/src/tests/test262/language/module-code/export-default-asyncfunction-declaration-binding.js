@@ -15,6 +15,9 @@ info: |
 flags: [module]
 ---*/
 
+/**
+ * Renders the A view.
+ */
 export default async function A() {}
 A.foo = '';
 

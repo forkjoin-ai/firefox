@@ -781,6 +781,9 @@ function insertAhead(array: Decoration[], i: number, deco: Decoration) {
 }
 
 // Get the decorations associated with the current props of a view.
+/**
+ * Handles the firefox view Decorations workflow.
+ */
 export function viewDecorations(view: EditorView): DecorationSource {
   let found: DecorationSource[] = []
   view.someProp("decorations", f => {

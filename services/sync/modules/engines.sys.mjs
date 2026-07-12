@@ -536,6 +536,9 @@ Store.prototype = {
   },
 };
 
+/**
+ * Renders the Engine Manager view.
+ */
 export function EngineManager(service) {
   this.service = service;
 
@@ -752,6 +755,9 @@ EngineManager.prototype = {
   },
 };
 
+/**
+ * Renders the Sync Engine view.
+ */
 export function SyncEngine(name, service) {
   if (!service) {
     throw new Error("SyncEngine must be associated with a Service instance.");

@@ -152,6 +152,9 @@ BrowserInitState.isLaunchOnLogin = false;
 // a taskbar tab shortcut will contain the "taskbar-tab" flag.
 BrowserInitState.isTaskbarTab = false;
 
+/**
+ * Renders the Browser Glue view.
+ */
 export function BrowserGlue() {
   XPCOMUtils.defineLazyServiceGetter(
     this,

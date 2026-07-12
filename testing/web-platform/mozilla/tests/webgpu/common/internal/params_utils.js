@@ -19,10 +19,16 @@ import { kWildcard, kParamSeparator, kParamKVSeparator } from './query/separator
 
 
 
+/**
+ * Handles the firefox param Key Is Public workflow.
+ */
 export function paramKeyIsPublic(key) {
   return !key.startsWith('_');
 }
 
+/**
+ * Handles the firefox extract Public Params workflow.
+ */
 export function extractPublicParams(params) {
   const publicParams = {};
   for (const k of Object.keys(params)) {
@@ -40,6 +46,9 @@ export const badParamValueChars = new RegExp(
   '[' + kParamKVSeparator + kParamSeparator + kWildcard + kPercent + ']'
 );
 
+/**
+ * Handles the firefox public Params Equals workflow.
+ */
 export function publicParamsEquals(x, y) {
   return comparePublicParamsPaths(x, y) === Ordering.Equal;
 }

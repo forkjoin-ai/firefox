@@ -1,5 +1,8 @@
 export let x = 0;
 
+/**
+ * Handles the firefox increment workflow.
+ */
 export function increment() {
   x++;
 };
@@ -40,6 +43,9 @@ ChromeUtils.defineESModuleGetters(lazyDevTools, {
   object: "resource://test/es6module_devtoolsLoader.js",
 }, { global: "devtools" });
 
+/**
+ * Handles the firefox import Lazy Dev Tools workflow.
+ */
 export function importLazyDevTools() {
   return lazyDevTools.object;
 }
@@ -49,6 +55,9 @@ ChromeUtils.defineESModuleGetters(lazyShared, {
   object: "resource://test/es6module_devtoolsLoader.js",
 }, { global: "shared" });
 
+/**
+ * Handles the firefox import Lazy Shared workflow.
+ */
 export function importLazyShared() {
   return lazyShared.object;
 }
@@ -58,6 +67,9 @@ ChromeUtils.defineESModuleGetters(lazyCurrent, {
   object: "resource://test/es6module_devtoolsLoader.js",
 }, { global: "current" });
 
+/**
+ * Handles the firefox import Lazy Current workflow.
+ */
 export function importLazyCurrent() {
   return lazyCurrent.object;
 }
@@ -67,6 +79,9 @@ ChromeUtils.defineESModuleGetters(lazyContextual, {
   object: "resource://test/es6module_devtoolsLoader.js",
 }, { global: "contextual" });
 
+/**
+ * Handles the firefox import Lazy Contextual workflow.
+ */
 export function importLazyContextual() {
   return lazyContextual.object;
 }

@@ -3,6 +3,9 @@ import classNames from "classnames";
 
 import styles from "news-site-css/dist/navbar.module.css";
 
+/**
+ * Renders the Nav List Item view.
+ */
 export default function NavListItem({ id, label, url, callback, itemClass }) {
     return (
         <li className={classNames(styles["navbar-item"], itemClass)} onClick={callback}>

@@ -1,5 +1,8 @@
 const patternSize = 4;
 
+/**
+ * Creates the Pattern Data URL.
+ */
 export default function createPatternDataURL() {
   const ctx = document.createElement('canvas').getContext('2d');
   ctx.canvas.width = patternSize;

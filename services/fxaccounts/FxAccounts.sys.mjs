@@ -91,6 +91,9 @@ const OAUTH_MIN_TIME_LEFT_SECS = 60;
 // }
 // If the state has changed between the function being called and the promise
 // being resolved, the .resolve() call will actually be rejected.
+/**
+ * Renders the Account State view.
+ */
 export function AccountState(storageManager) {
   this.storageManager = storageManager;
   this.inFlightTokenRequests = new Map();
@@ -1539,6 +1542,9 @@ FxAccountsInternal.prototype = {
 
 let fxAccountsSingleton = null;
 
+/**
+ * Handles the firefox get Fx Accounts Singleton workflow.
+ */
 export function getFxAccountsSingleton() {
   if (fxAccountsSingleton) {
     return fxAccountsSingleton;

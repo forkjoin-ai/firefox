@@ -50,6 +50,9 @@ export const setSelectedLocation = (
 });
 
 // This is only used by jest tests (and within this module)
+/**
+ * Handles the firefox set Pending Selected Location workflow.
+ */
 export const setPendingSelectedLocation = (url, options) => ({
   type: "SET_PENDING_SELECTED_LOCATION",
   url,
@@ -58,10 +61,16 @@ export const setPendingSelectedLocation = (url, options) => ({
 });
 
 // This is only used by jest tests (and within this module)
+/**
+ * Handles the firefox clear Selected Location workflow.
+ */
 export const clearSelectedLocation = () => ({
   type: "CLEAR_SELECTED_LOCATION",
 });
 
+/**
+ * Handles the firefox set Default Selected Location workflow.
+ */
 export const setDefaultSelectedLocation = shouldSelectOriginalLocation => ({
   type: "SET_DEFAULT_SELECTED_LOCATION",
   shouldSelectOriginalLocation,
@@ -470,6 +479,9 @@ export function jumpToMappedLocation(location) {
   };
 }
 
+/**
+ * Handles the firefox jump To Mapped Selected Location workflow.
+ */
 export function jumpToMappedSelectedLocation() {
   return async function ({ dispatch, getState }) {
     const location = getSelectedLocation(getState());

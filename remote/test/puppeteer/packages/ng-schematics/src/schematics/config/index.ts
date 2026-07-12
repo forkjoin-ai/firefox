@@ -16,6 +16,9 @@ import {TestRunner, type AngularProject} from '../utils/types.js';
 
 // You don't have to export the function as default. You can also have more than one rule
 // factory per file.
+/**
+ * Handles the firefox config workflow.
+ */
 export function config(): Rule {
   return (tree: Tree, context: SchematicContext) => {
     return chain([addPuppeteerConfig()])(tree, context);

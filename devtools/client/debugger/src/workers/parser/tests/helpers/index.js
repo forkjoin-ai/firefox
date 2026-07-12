@@ -9,6 +9,9 @@ import { makeMockSourceAndContent } from "../../../../utils/test-mockup";
 import { setSource } from "../../sources";
 import * as asyncValue from "../../../../utils/async-value";
 
+/**
+ * Handles the firefox get Fixture workflow.
+ */
 export function getFixture(name, type = "js") {
   return fs.readFileSync(
     path.join(__dirname, `../fixtures/${name}.${type}`),
@@ -36,12 +39,18 @@ function getSourceContent(name, type = "js") {
   };
 }
 
+/**
+ * Handles the firefox get Source workflow.
+ */
 export function getSource(name, type) {
   const { value: text, contentType } = getSourceContent(name, type);
 
   return makeMockSourceAndContent(undefined, name, contentType, text);
 }
 
+/**
+ * Handles the firefox populate Source workflow.
+ */
 export function populateSource(name, type) {
   const { content, ...source } = getSource(name, type);
   setSource({
@@ -56,10 +65,16 @@ export function populateSource(name, type) {
   };
 }
 
+/**
+ * Handles the firefox get Original Source workflow.
+ */
 export function getOriginalSource(name, type) {
   return getOriginalSourceWithContent(name, type);
 }
 
+/**
+ * Handles the firefox get Original Source With Content workflow.
+ */
 export function getOriginalSourceWithContent(name, type) {
   const { value: text, contentType } = getSourceContent(name, type);
 
@@ -71,6 +86,9 @@ export function getOriginalSourceWithContent(name, type) {
   );
 }
 
+/**
+ * Handles the firefox populate Original Source workflow.
+ */
 export function populateOriginalSource(name, type) {
   const { content, ...source } = getOriginalSourceWithContent(name, type);
   setSource({

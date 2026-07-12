@@ -33,6 +33,9 @@ export interface FilesOptions {
   movePath?: string;
 }
 
+/**
+ * Handles the firefox add Files To Projects workflow.
+ */
 export function addFilesToProjects(
   projects: Record<string, AngularProject>,
   options: FilesOptions,
@@ -44,6 +47,9 @@ export function addFilesToProjects(
   );
 }
 
+/**
+ * Handles the firefox add Files Single workflow.
+ */
 export function addFilesSingle(
   name: string,
   project: AngularProject,
@@ -107,6 +113,9 @@ function getTsConfigPath(project: AngularProject): string {
   return `../${nested}${filename}`;
 }
 
+/**
+ * Handles the firefox add Common Files workflow.
+ */
 export function addCommonFiles(
   projects: Record<string, AngularProject>,
   filesOptions: Omit<FilesOptions, 'applyPath' | 'relativeToWorkspacePath'>,
@@ -120,6 +129,9 @@ export function addCommonFiles(
   return addFilesToProjects(projects, options);
 }
 
+/**
+ * Handles the firefox add Framework Files workflow.
+ */
 export function addFrameworkFiles(
   projects: Record<string, AngularProject>,
   filesOptions: Omit<FilesOptions, 'applyPath' | 'relativeToWorkspacePath'>,
@@ -134,6 +146,9 @@ export function addFrameworkFiles(
   return addFilesToProjects(projects, options);
 }
 
+/**
+ * Returns whether has E2 ETester is true.
+ */
 export function hasE2ETester(
   projects: Record<string, AngularProject>,
 ): boolean {
@@ -142,6 +157,9 @@ export function hasE2ETester(
   });
 }
 
+/**
+ * Handles the firefox get Ng Command Name workflow.
+ */
 export function getNgCommandName(
   projects: Record<string, AngularProject>,
 ): string {

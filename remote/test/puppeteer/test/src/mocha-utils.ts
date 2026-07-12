@@ -189,6 +189,9 @@ function adjustBrowserLaunchTimeout(context: Mocha.Context): {
 }
 
 let browserPromise: Promise<Browser> | null = null;
+/**
+ * Handles the firefox setup Test Browser Hooks workflow.
+ */
 export const setupTestBrowserHooks = (): void => {
   before(async function () {
     const {timeout, protocolTimeout} = adjustBrowserLaunchTimeout(this);

@@ -9,6 +9,9 @@
 
 
 const values = [0, 1, 0, 1];
+/**
+ * Handles the firefox get Descriptor For Create Render Pipeline Validation Test workflow.
+ */
 export function getDescriptorForCreateRenderPipelineValidationTest(
 device,
 options =

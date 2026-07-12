@@ -2,6 +2,9 @@ const { func2 } = ChromeUtils.importESModule("resource://test/non_shared_nest_im
   global: "current",
 });
 
+/**
+ * Handles the firefox func workflow.
+ */
 export function func() {
   return func2();
 }

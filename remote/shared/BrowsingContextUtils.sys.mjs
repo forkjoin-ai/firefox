@@ -77,6 +77,9 @@ function isExtensionContext(browsingContext) {
   return principal.isAddonOrExpandedAddonPrincipal;
 }
 
+/**
+ * Returns whether is Parent Process is true.
+ */
 export function isParentProcess(browsingContext) {
   if (CanonicalBrowsingContext.isInstance(browsingContext)) {
     return browsingContext.currentWindowGlobal?.osPid === -1;

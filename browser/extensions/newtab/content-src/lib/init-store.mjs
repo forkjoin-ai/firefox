@@ -84,6 +84,9 @@ const widgetsOptInMiddleware =
     return next(action);
   };
 
+/**
+ * Handles the firefox rehydration Middleware workflow.
+ */
 export const rehydrationMiddleware = ({ getState }) => {
   // NB: The parameter here is MiddlewareAPI which looks like a Store and shares
   // the same getState, so attached properties are accessible from the store.

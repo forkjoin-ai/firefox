@@ -15,6 +15,9 @@ import {TestServer} from '@pptr/testserver';
 import {isErrorLike} from '../../lib/esm/launch.js';
 import {Cache} from '../../lib/esm/main.js';
 
+/**
+ * Creates the Mocked Readline Interface.
+ */
 export function createMockedReadlineInterface(
   input: string,
 ): readline.Interface {
@@ -50,6 +53,9 @@ interface ServerState {
 
 const state: Partial<ServerState> = {};
 
+/**
+ * Handles the firefox setup Test Server workflow.
+ */
 export function setupTestServer(): ServerState {
   before(async () => {
     state.server = await startServer();
@@ -63,10 +69,16 @@ export function setupTestServer(): ServerState {
   return state as ServerState;
 }
 
+/**
+ * Handles the firefox get Server Url workflow.
+ */
 export function getServerUrl(): string {
   return `http://localhost:${state.server!.port}`;
 }
 
+/**
+ * Handles the firefox clear Cache workflow.
+ */
 export function clearCache(tmpDir: string): void {
   try {
     new Cache(tmpDir).clear();

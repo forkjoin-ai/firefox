@@ -63,6 +63,9 @@ const CHAT_ROLES = [MESSAGE_ROLE.USER, MESSAGE_ROLE.ASSISTANT];
 const RESTORABLE_ROLES = [...CHAT_ROLES, MESSAGE_ROLE.TOOL];
 
 let _savedLoadPromptDescriptor = null;
+/**
+ * Handles the firefox set Load Prompt For Testing workflow.
+ */
 export function _setLoadPromptForTesting(fn) {
   if (fn !== null) {
     _savedLoadPromptDescriptor = Object.getOwnPropertyDescriptor(

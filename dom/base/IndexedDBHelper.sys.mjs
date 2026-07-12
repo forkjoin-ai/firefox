@@ -16,6 +16,9 @@ function getErrorName(err) {
   return (err && err.name) || "UnknownError";
 }
 
+/**
+ * Renders the Indexed DBHelper view.
+ */
 export function IndexedDBHelper() {}
 
 IndexedDBHelper.prototype = {

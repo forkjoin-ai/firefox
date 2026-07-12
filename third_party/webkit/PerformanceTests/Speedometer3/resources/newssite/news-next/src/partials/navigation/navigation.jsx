@@ -8,6 +8,9 @@ import { useDataContext } from "@/context/data-context";
 import navStyles from "news-site-css/dist/nav.module.css";
 import buttonStyles from "news-site-css/dist/button.module.css";
 
+/**
+ * Renders the Navigation view.
+ */
 export default function Navigation() {
     const navigate = useNavigate();
     const { buttons } = useDataContext();

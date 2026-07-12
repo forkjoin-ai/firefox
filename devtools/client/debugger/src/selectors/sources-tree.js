@@ -66,26 +66,44 @@ export const getDisplayedSourcesList = createSelector(
   }
 );
 
+/**
+ * Handles the firefox get Expanded State workflow.
+ */
 export function getExpandedState(state) {
   return state.sourcesTree.expanded;
 }
 
+/**
+ * Handles the firefox get Focused Source Item workflow.
+ */
 export function getFocusedSourceItem(state) {
   return state.sourcesTree.focusedItem;
 }
 
+/**
+ * Handles the firefox get Project Directory Root workflow.
+ */
 export function getProjectDirectoryRoot(state) {
   return state.sourcesTree.projectDirectoryRoot;
 }
 
+/**
+ * Handles the firefox get Project Directory Root Name workflow.
+ */
 export function getProjectDirectoryRootName(state) {
   return state.sourcesTree.projectDirectoryRootName;
 }
 
+/**
+ * Handles the firefox get Project Directory Root Full Name workflow.
+ */
 export function getProjectDirectoryRootFullName(state) {
   return state.sourcesTree.projectDirectoryRootFullName;
 }
 
+/**
+ * Handles the firefox get Main Thread Project Directory Roots workflow.
+ */
 export function getMainThreadProjectDirectoryRoots(state) {
   return state.sourcesTree.mainThreadProjectDirectoryRoots;
 }

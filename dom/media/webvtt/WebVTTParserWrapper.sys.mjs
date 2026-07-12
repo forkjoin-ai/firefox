@@ -4,6 +4,9 @@
 
 import { WebVTT } from "resource://gre/modules/vtt.sys.mjs";
 
+/**
+ * Renders the Web VTTParser Wrapper view.
+ */
 export function WebVTTParserWrapper() {
   // Nothing
 }

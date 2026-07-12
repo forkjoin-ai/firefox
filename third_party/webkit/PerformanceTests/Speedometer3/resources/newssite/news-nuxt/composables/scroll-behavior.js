@@ -1,6 +1,9 @@
 import { nextTick, watch } from "#imports";
 import { useRoute } from "nuxt/app";
 
+/**
+ * Handles the firefox scroll On Navigation workflow.
+ */
 export function scrollOnNavigation() {
     const route = useRoute();
 

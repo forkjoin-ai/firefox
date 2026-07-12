@@ -25,6 +25,9 @@ ChromeUtils.defineESModuleGetters(lazy, {
   UpdateUtils: "resource://gre/modules/UpdateUtils.sys.mjs",
 });
 
+/**
+ * Handles the firefox ns URLFormatter Service workflow.
+ */
 export function nsURLFormatterService() {
   ChromeUtils.defineLazyGetter(this, "ABI", function UFS_ABI() {
     let ABI = "default";

@@ -1,3 +1,6 @@
+/**
+ * Renders the Article Header view.
+ */
 export default function ArticleHeader({ text, headerClass, link }) {
     if (!text)
         return null;

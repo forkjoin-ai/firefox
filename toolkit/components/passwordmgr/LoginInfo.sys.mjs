@@ -8,6 +8,9 @@ ChromeUtils.defineESModuleGetters(lazy, {
   LoginHelper: "resource://gre/modules/LoginHelper.sys.mjs",
 });
 
+/**
+ * Handles the firefox ns Login Info workflow.
+ */
 export function nsLoginInfo() {}
 
 nsLoginInfo.prototype = {

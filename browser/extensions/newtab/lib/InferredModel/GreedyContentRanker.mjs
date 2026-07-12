@@ -5,6 +5,9 @@
 const RANKED_SECTION = "top_stories_section";
 const FEATURE_PREFIX = "s_";
 
+/**
+ * Handles the firefox score Item Inferred workflow.
+ */
 export async function scoreItemInferred(item, interests, weights) {
   item.score = item.item_score;
   if (item.section === RANKED_SECTION) {

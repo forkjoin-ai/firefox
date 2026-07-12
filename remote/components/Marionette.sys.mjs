@@ -325,6 +325,9 @@ if (isRemote) {
 }
 
 // This is used by the XPCOM codepath which expects a constructor
+/**
+ * Renders the Marionette Factory view.
+ */
 export const MarionetteFactory = function () {
   return Marionette;
 };

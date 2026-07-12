@@ -141,6 +141,9 @@ NetworkGeoPositionObject.prototype = {
   QueryInterface: ChromeUtils.generateQI(["nsIDOMGeoPosition"]),
 };
 
+/**
+ * Renders the Network Geolocation Provider view.
+ */
 export function NetworkGeolocationProvider() {
   /*
     The _wifiMonitorTimeout controls how long we wait on receiving an update

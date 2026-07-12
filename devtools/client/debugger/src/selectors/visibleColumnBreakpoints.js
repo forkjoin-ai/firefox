@@ -138,6 +138,9 @@ export const visibleColumnBreakpoints = createSelector(
   getColumnBreakpoints
 );
 
+/**
+ * Handles the firefox get First Breakpoint Position workflow.
+ */
 export function getFirstBreakpointPosition(state, location) {
   const positions = getBreakpointPositionsForSource(state, location.source.id);
   if (!positions) {

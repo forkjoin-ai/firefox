@@ -39,6 +39,9 @@ const SUPPORTED_SELECT_PROPERTIES = [
 // via SelectContentHelper.open.
 var gOpen = false;
 
+/**
+ * Renders the Select Content Helper view.
+ */
 export var SelectContentHelper = function (aElement, aOptions, aActor) {
   this.element = aElement;
   this.initialSelection = aElement[aElement.selectedIndex] || null;

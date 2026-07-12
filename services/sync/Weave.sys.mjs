@@ -147,6 +147,9 @@ WeaveService.prototype = {
   },
 };
 
+/**
+ * Renders the About Weave Log view.
+ */
 export function AboutWeaveLog() {}
 AboutWeaveLog.prototype = {
   classID: Components.ID("{d28f8a0b-95da-48f4-b712-caf37097be41}"),

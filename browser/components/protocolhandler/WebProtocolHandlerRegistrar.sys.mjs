@@ -6,6 +6,9 @@ import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
 
 const STRING_BUNDLE_URI = "chrome://browser/locale/feeds/subscribe.properties";
 
+/**
+ * Renders the Web Protocol Handler Registrar view.
+ */
 export function WebProtocolHandlerRegistrar() {}
 
 const lazy = {};

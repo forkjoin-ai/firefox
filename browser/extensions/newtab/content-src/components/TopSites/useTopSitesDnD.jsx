@@ -7,6 +7,9 @@ import { useCallback, useLayoutEffect, useRef, useState } from "react";
 // Classic TopSites drag-and-drop — pure mechanics over a caller-built list.
 // Movability rules, the persisted action, and telemetry are all injected, so
 // nothing domain- or store-shaped lives in here.
+/**
+ * Provides the use Top Sites Dn D hook.
+ */
 export function useTopSitesDnD({
   baseSites,
   rows,

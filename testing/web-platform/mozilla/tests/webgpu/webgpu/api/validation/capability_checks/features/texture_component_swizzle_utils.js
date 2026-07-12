@@ -30,6 +30,9 @@ export const kSwizzleTests = [
 
 
 // Returns true if swizzle is identity
+/**
+ * Returns whether is Identity Swizzle is true.
+ */
 export function isIdentitySwizzle(swizzle) {
   return swizzle === undefined || swizzle === 'rgba';
 }

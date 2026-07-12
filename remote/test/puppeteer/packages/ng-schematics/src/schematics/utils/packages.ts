@@ -32,6 +32,9 @@ export enum DependencyType {
   Optional = 'optionalDependencies',
 }
 
+/**
+ * Handles the firefox get Package Latest Npm Version workflow.
+ */
 export function getPackageLatestNpmVersion(name: string): Promise<NodePackage> {
   return new Promise(resolve => {
     let version = 'latest';
@@ -79,6 +82,9 @@ function updateJsonValues(
   });
 }
 
+/**
+ * Handles the firefox add Package Json Dependencies workflow.
+ */
 export function addPackageJsonDependencies(
   tree: Tree,
   packages: NodePackage[],
@@ -102,6 +108,9 @@ export function addPackageJsonDependencies(
   return tree;
 }
 
+/**
+ * Handles the firefox get Dependencies From Options workflow.
+ */
 export function getDependenciesFromOptions(
   options: SchematicsOptions,
 ): string[] {
@@ -125,6 +134,9 @@ export function getDependenciesFromOptions(
   return dependencies;
 }
 
+/**
+ * Handles the firefox add Package Json Scripts workflow.
+ */
 export function addPackageJsonScripts(
   tree: Tree,
   scripts: NodeScripts[],
@@ -147,6 +159,9 @@ export function addPackageJsonScripts(
   return tree;
 }
 
+/**
+ * Handles the firefox update Angular Json Scripts workflow.
+ */
 export function updateAngularJsonScripts(
   tree: Tree,
   options: SchematicsOptions,

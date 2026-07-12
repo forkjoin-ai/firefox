@@ -1,3 +1,6 @@
+/**
+ * Handles the firefox router workflow.
+ */
 export function router(onChange) {
     let route = "all";
 

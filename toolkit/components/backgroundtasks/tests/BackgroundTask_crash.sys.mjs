@@ -2,6 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+/**
+ * Handles the firefox run Background Task workflow.
+ */
 export async function runBackgroundTask(commandLine) {
   // This task depends on `CrashTestUtils.sys.mjs` and requires the
   // sibling `testcrasher` library to be in the current working

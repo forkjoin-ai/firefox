@@ -20,4 +20,7 @@ negative:
 $DONOTEVALUATE();
 
 class A {};
+/**
+ * Renders the A view.
+ */
 export default async function A() {}

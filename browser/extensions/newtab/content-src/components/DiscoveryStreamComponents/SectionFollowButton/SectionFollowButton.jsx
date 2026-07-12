@@ -8,6 +8,9 @@ const ADD_ICON = "chrome://global/skin/icons/plus.svg";
 const CHECK_ICON = "chrome://global/skin/icons/check.svg";
 const CLOSE_ICON = "chrome://global/skin/icons/close.svg";
 
+/**
+ * Renders the Section Follow Button view.
+ */
 export function SectionFollowButton({
   following,
   onFollowClick,

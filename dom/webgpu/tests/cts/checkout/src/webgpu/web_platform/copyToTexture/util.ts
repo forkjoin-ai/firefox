@@ -24,6 +24,9 @@ export const kTestColorsOpaque = [
 
 export const kTestColorsAll = [...kTestColorsOpaque, kColors.SemitransparentWhite] as const;
 
+/**
+ * Handles the firefox make Test Colors Texel View workflow.
+ */
 export function makeTestColorsTexelView({
   testColors,
   format,

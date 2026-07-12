@@ -71,6 +71,9 @@ function getPrettyOriginalSourceURL(generatedSource) {
   return getPrettySourceURL(generatedSource.url || generatedSource.id);
 }
 
+/**
+ * Handles the firefox pretty Print Source Text Content workflow.
+ */
 export async function prettyPrintSourceTextContent(
   sourceMapLoader,
   prettyPrintWorker,
@@ -417,6 +420,9 @@ export const prettyPrintSource = memoizeableAction("prettyPrintSource", {
     doPrettyPrintSource(source, isAutoPrettyPrinting, thunkArgs),
 });
 
+/**
+ * Handles the firefox pretty Print And Select Source workflow.
+ */
 export function prettyPrintAndSelectSource(source) {
   return async ({ dispatch }) => {
     const prettySource = await dispatch(prettyPrintSource({ source }));
@@ -439,6 +445,9 @@ export function prettyPrintAndSelectSource(source) {
   };
 }
 
+/**
+ * Handles the firefox remove Pretty Printed Source workflow.
+ */
 export function removePrettyPrintedSource(source) {
   return async thunkArgs => {
     const { getState, dispatch } = thunkArgs;

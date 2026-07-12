@@ -5,6 +5,9 @@
 import { loadSourceText } from "./loadSourceText";
 import { getEditor } from "../../utils/editor/index";
 
+/**
+ * Handles the firefox get Original Function Display Name workflow.
+ */
 export function getOriginalFunctionDisplayName(location) {
   return async ({ dispatch }) => {
     // Make sure the source for the symbols exist.
@@ -14,6 +17,9 @@ export function getOriginalFunctionDisplayName(location) {
   };
 }
 
+/**
+ * Handles the firefox get Function Symbols workflow.
+ */
 export function getFunctionSymbols(location, maxResults) {
   return async ({ dispatch }) => {
     // Make sure the source for the symbols exist.
@@ -23,6 +29,9 @@ export function getFunctionSymbols(location, maxResults) {
   };
 }
 
+/**
+ * Handles the firefox get Class Symbols workflow.
+ */
 export function getClassSymbols(location) {
   return async ({ dispatch }) => {
     // See  comment in getFunctionSymbols

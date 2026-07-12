@@ -13,10 +13,16 @@ function getFilteredTodos(todos, filter) {
     }
 }
 
+/**
+ * Handles the firefox get Visible Todos workflow.
+ */
 export function getVisibleTodos(todos, route) {
     return getFilteredTodos(todos, route);
 }
 
+/**
+ * Handles the firefox get Completed Todos workflow.
+ */
 export function getCompletedTodos(todos) {
     return getFilteredTodos(todos, SHOW_COMPLETED);
 }

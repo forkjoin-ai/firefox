@@ -17,6 +17,9 @@ XPCOMUtils.defineLazyServiceGetter(
 // Usage:
 // removeProfileFiles rootDirPath localDirPath lockTimeout
 //                    arg0        arg1         arg2
+/**
+ * Handles the firefox run Background Task workflow.
+ */
 export async function runBackgroundTask(commandLine) {
   let rootDir = commandLine.resolveFile(commandLine.getArgument(0));
   let localDir = commandLine.resolveFile(commandLine.getArgument(1));

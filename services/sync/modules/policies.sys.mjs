@@ -72,6 +72,9 @@ function getThrottledIntervalPreference(prefName) {
   return Math.max(Svc.PrefBranch.getIntPref(prefName), 60) * 1000;
 }
 
+/**
+ * Renders the Sync Scheduler view.
+ */
 export function SyncScheduler(service) {
   this.service = service;
   this.init();
@@ -818,6 +821,9 @@ SyncScheduler.prototype = {
   },
 };
 
+/**
+ * Renders the Error Handler view.
+ */
 export function ErrorHandler(service) {
   this.service = service;
   this.init();

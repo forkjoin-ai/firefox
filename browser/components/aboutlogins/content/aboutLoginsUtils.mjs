@@ -21,6 +21,9 @@ export function recordTelemetryEvent(event) {
   );
 }
 
+/**
+ * Handles the firefox set Keyboard Access For Non Dialog Elements workflow.
+ */
 export function setKeyboardAccessForNonDialogElements(enableKeyboardAccess) {
   const pageElements = document.querySelectorAll(
     "login-item, login-list, menu-button, login-filter, fxaccounts-button, [tabindex]"
@@ -52,6 +55,9 @@ export function setKeyboardAccessForNonDialogElements(enableKeyboardAccess) {
   });
 }
 
+/**
+ * Handles the firefox prompt For Primary Password workflow.
+ */
 export function promptForPrimaryPassword(messageId, reason) {
   return new Promise(resolve => {
     window.AboutLoginsUtils.promptForPrimaryPassword(

@@ -4,11 +4,17 @@
 
 import assert from "./assert";
 
+/**
+ * Handles the firefox report Exception workflow.
+ */
 export function reportException(who, exception) {
   const msg = `${who} threw an exception: `;
   console.error(msg, exception);
 }
 
+/**
+ * Handles the firefox execute Soon workflow.
+ */
 export function executeSoon(fn) {
   setTimeout(fn, 0);
 }

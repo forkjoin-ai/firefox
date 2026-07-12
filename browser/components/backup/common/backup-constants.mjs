@@ -53,6 +53,9 @@ export const ERRORS = Object.freeze({
   RESOURCE_RECOVERY_FAILED: 17,
 });
 
+/**
+ * Handles the firefox error String workflow.
+ */
 export function errorString(errorCodeToLookup) {
   for (let [errorName, errorCode] of Object.entries(ERRORS)) {
     if (errorCode == errorCodeToLookup) {

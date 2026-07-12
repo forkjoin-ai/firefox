@@ -27,6 +27,9 @@ export function shallowEqual(value, other) {
   return false;
 }
 
+/**
+ * Handles the firefox array Shallow Equal workflow.
+ */
 export function arrayShallowEqual(value, other) {
   // Redo this check in case we are called directly from the selectors.
   if (value === other) {

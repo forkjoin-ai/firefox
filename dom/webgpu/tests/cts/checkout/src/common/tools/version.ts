@@ -1,3 +1,6 @@
+/**
+ * Handles the firefox version workflow.
+ */
 export const version = (() => {
   try {
     /* eslint-disable-next-line n/no-restricted-require */

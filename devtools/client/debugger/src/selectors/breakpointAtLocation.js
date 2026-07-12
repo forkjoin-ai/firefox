@@ -76,6 +76,9 @@ function findClosestBreakpoint(breakpoints, column) {
  * This is useful for finding a breakpoint when the
  * user clicks in the gutter or on a token.
  */
+/**
+ * Handles the firefox get Breakpoint At Location workflow.
+ */
 export function getBreakpointAtLocation(state, location) {
   const selectedSource = getSelectedSource(state);
   if (!selectedSource) {
@@ -86,6 +89,9 @@ export function getBreakpointAtLocation(state, location) {
   return findBreakpointAtLocation(breakpoints, selectedSource, location);
 }
 
+/**
+ * Handles the firefox get Breakpoints At Line workflow.
+ */
 export function getBreakpointsAtLine(state, line) {
   const selectedSource = getSelectedSource(state);
   if (!selectedSource) {
@@ -98,12 +104,18 @@ export function getBreakpointsAtLine(state, line) {
   );
 }
 
+/**
+ * Handles the firefox get Closest Breakpoint workflow.
+ */
 export function getClosestBreakpoint(state, position) {
   const columnBreakpoints = getBreakpointsAtLine(state, position.line);
   const breakpoint = findClosestBreakpoint(columnBreakpoints, position.column);
   return breakpoint;
 }
 
+/**
+ * Handles the firefox get Closest Breakpoint Position workflow.
+ */
 export function getClosestBreakpointPosition(state, position) {
   const selectedSource = getSelectedSource(state);
   if (!selectedSource) {

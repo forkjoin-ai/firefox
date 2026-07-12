@@ -108,6 +108,9 @@ export function onSpellCheck(editableElement, callback) {
   );
 }
 
+/**
+ * Handles the firefox get Dictionary Content Pref workflow.
+ */
 export async function getDictionaryContentPref() {
   let dictionaries = await new Promise(resolve => {
     let value = "";

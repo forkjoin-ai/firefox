@@ -1,5 +1,8 @@
 import { encrypt as eceEncrypt } from "./ece.js"
 
+/**
+ * Handles the firefox encrypt workflow.
+ */
 export async function encrypt(data, p256dhKey, authKey) {
   if (!(data instanceof Uint8Array)) {
     throw new Error("Expecting Uint8Array for `data` parameter");

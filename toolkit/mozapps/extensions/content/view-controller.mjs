@@ -6,6 +6,9 @@ import { isDiscoverEnabled } from "./aboutaddons-utils.mjs";
 import { ScrollOffsets } from "chrome://global/content/ScrollOffsets.mjs";
 
 // Used by external callers to load a specific view into the manager
+/**
+ * Loads the View.
+ */
 export function loadView(viewId) {
   if (!gViewController.readyForLoadView) {
     throw new Error("loadView called before about:addons is initialized");

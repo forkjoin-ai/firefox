@@ -3,6 +3,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 // Used by nsIBrowserUsage
+/**
+ * Handles the firefox get Unique Domains Visited In Past24 Hours workflow.
+ */
 export function getUniqueDomainsVisitedInPast24Hours() {
   // The prompting heuristic for the storage access API looks at 1% of the
   // number of the domains visited in the past 24 hours, with a minimum cap of

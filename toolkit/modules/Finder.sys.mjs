@@ -29,6 +29,9 @@ const kMatchesCountLimitPref = "accessibility.typeaheadfind.matchesCountLimit";
 
 const activeFinderRoots = new WeakSet();
 
+/**
+ * Renders the Finder view.
+ */
 export function Finder(docShell) {
   this._fastFind = Cc["@mozilla.org/typeaheadfind;1"].createInstance(
     Ci.nsITypeAheadFind
@@ -848,6 +851,9 @@ Finder.prototype = {
   ]),
 };
 
+/**
+ * Renders the Get Clipboard Search String view.
+ */
 export function GetClipboardSearchString(aLoadContext) {
   let searchString = "";
   if (
@@ -878,6 +884,9 @@ export function GetClipboardSearchString(aLoadContext) {
   return searchString;
 }
 
+/**
+ * Renders the Set Clipboard Search String view.
+ */
 export function SetClipboardSearchString(aSearchString) {
   if (
     !aSearchString ||

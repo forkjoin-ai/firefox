@@ -11,6 +11,9 @@
 import { createBreakpoint } from "../client/firefox/create";
 import { makeBreakpointId } from "../utils/breakpoint/index";
 
+/**
+ * Handles the firefox initial Breakpoints State workflow.
+ */
 export function initialBreakpointsState(xhrBreakpoints = []) {
   return {
     breakpoints: {},

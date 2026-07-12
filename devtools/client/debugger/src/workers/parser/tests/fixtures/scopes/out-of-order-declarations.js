@@ -1,5 +1,8 @@
 var val;
 
+/**
+ * Handles the firefox root workflow.
+ */
 export default function root() {
   var val;
 

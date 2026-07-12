@@ -15,6 +15,9 @@
 
 
 
+/**
+ * Handles the firefox compile Should Succeed workflow.
+ */
 export function compileShouldSucceed({
   requires_uniformity,
   condition_is_uniform,
@@ -78,6 +81,9 @@ export function compileShouldSucceed({
 
 
 // Expand a loop case spec to its shader code
+/**
+ * Handles the firefox spec To Code workflow.
+ */
 export function specToCode(spec) {
   let matches = spec.match('^(loop|for-unif|for-nonunif|for|while-unif|while-nonunif)-(.*)');
   assert(matches !== null, `invalid spec string: ${spec}`);
@@ -181,6 +187,9 @@ export function specToCode(spec) {
 }
 
 // Creates a Snippet from a loop spec string and a verdict.
+/**
+ * Renders the Loop Case view.
+ */
 export function LoopCase(spec, verdict) {
   return { name: spec, verdict, code: specToCode(spec) };
 }

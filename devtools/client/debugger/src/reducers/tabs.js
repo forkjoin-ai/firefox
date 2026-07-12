@@ -8,6 +8,9 @@
 
 import { prefs } from "../utils/prefs";
 
+/**
+ * Handles the firefox initial Tab State workflow.
+ */
 export function initialTabState({
   urls = [],
   prettyPrintedURLs = new Set(),

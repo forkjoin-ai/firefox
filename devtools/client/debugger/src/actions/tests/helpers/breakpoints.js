@@ -4,6 +4,9 @@
 
 import { createLocation } from "../../../utils/location";
 
+/**
+ * Handles the firefox mock Pending Breakpoint workflow.
+ */
 export function mockPendingBreakpoint(overrides = {}) {
   const { sourceUrl, line, column, condition, disabled, hidden } = overrides;
   return {
@@ -32,6 +35,9 @@ export function mockPendingBreakpoint(overrides = {}) {
   };
 }
 
+/**
+ * Handles the firefox generate Breakpoint workflow.
+ */
 export function generateBreakpoint(filename, line = 5, column = 0) {
   return {
     id: "breakpoint",

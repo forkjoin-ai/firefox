@@ -34,6 +34,9 @@ function binaryLookup(ar, i, comparer) {
   };
 }
 
+/**
+ * Handles the firefox fancy Sort workflow.
+ */
 export function fancySort(input) {
   return input.reduce((ar, i) => {
     const { index } = binaryLookup(ar, i, comparer);

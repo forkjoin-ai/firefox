@@ -1980,6 +1980,9 @@ defineLazyGetter(MultiAPIManager.prototype, "schema", function () {
   return new lazy.SchemaRoot(bases, new Map());
 });
 
+/**
+ * Renders the Locale Data view.
+ */
 export function LocaleData(data) {
   this.defaultLocale = data.defaultLocale;
   this.selectedLocale = data.selectedLocale;

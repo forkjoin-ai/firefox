@@ -7,6 +7,9 @@ import { BrowserTestUtils } from "resource://testing-common/BrowserTestUtils.sys
 
 const { gBrowser } = Services.wm.getMostRecentWindow("navigator:browser");
 
+/**
+ * Handles the firefox request count checking workflow.
+ */
 export async function request_count_checking(testName, got, expected) {
   // stringify to pretty print assert output
   let g = JSON.stringify(got);
@@ -26,6 +29,9 @@ export async function request_count_checking(testName, got, expected) {
   );
 }
 
+/**
+ * Handles the firefox test hint preload workflow.
+ */
 export async function test_hint_preload(
   testName,
   requestFrom,
@@ -51,6 +57,9 @@ export async function test_hint_preload(
 // - urls are in the form [[url1, uuid1], ...]. The uuids are there to make each preload
 //   unique and not available in the cache from other test cases
 // - expectedRequestCount is the sum of all requested objects { normal: count, hinted: count }
+/**
+ * Handles the firefox test hint preload internal workflow.
+ */
 export async function test_hint_preload_internal(
   testName,
   requestFrom,
@@ -101,6 +110,9 @@ export async function test_hint_preload_internal(
 // Client-side, we verify that the image was loaded or not loaded, depending on the scenario
 
 // This verifies preload hints and requests
+/**
+ * Handles the firefox test preload hint and request workflow.
+ */
 export async function test_preload_hint_and_request(input, expected_results) {
   // reset the count
   let headers = new Headers();
@@ -132,6 +144,9 @@ export async function test_preload_hint_and_request(input, expected_results) {
 
 // simple loading of one url and then checking the request count against the
 // passed expected count
+/**
+ * Handles the firefox test preload url workflow.
+ */
 export async function test_preload_url(testName, url, expectedRequestCount) {
   // reset the count
   let headers = new Headers();

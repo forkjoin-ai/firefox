@@ -4,6 +4,9 @@
 
 import { sendStandalonePing } from "resource://gre/modules/TelemetrySend.sys.mjs";
 
+/**
+ * Handles the firefox run Background Task workflow.
+ */
 export async function runBackgroundTask(commandLine) {
   let sends = [];
   for (let i = 0; i < commandLine.length; i += 2) {

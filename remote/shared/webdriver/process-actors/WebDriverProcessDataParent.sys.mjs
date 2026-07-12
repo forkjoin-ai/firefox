@@ -32,6 +32,9 @@ export function registerProcessDataActor() {
   }
 }
 
+/**
+ * Handles the firefox unregister Process Data Actor workflow.
+ */
 export function unregisterProcessDataActor() {
   ChromeUtils.unregisterProcessActor("WebDriverProcessData");
 }

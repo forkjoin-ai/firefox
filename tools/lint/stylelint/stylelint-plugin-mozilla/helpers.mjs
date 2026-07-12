@@ -106,12 +106,21 @@ export const createRawValuesObject = tokenCategoriesArray =>
  */
 
 // checks if a node is a word
+/**
+ * Returns whether is Word is true.
+ */
 export const isWord = node => node.type === "word";
 
 // checks if a node is a function
+/**
+ * Returns whether is Function is true.
+ */
 export const isFunction = node => node.type === "function";
 
 // checks if a node is a url() function
+/**
+ * Returns whether is Url Function is true.
+ */
 export const isUrlFunction = node => isFunction(node) && node.value === "url";
 
 /**

@@ -20,10 +20,16 @@ import { copyToTheClipboard } from "../utils/clipboard";
 import { isFulfilled } from "../utils/async-value";
 import { primaryPaneTabs } from "../constants";
 
+/**
+ * Handles the firefox set Primary Pane Tab workflow.
+ */
 export function setPrimaryPaneTab(tabName) {
   return { type: "SET_PRIMARY_PANE_TAB", tabName };
 }
 
+/**
+ * Handles the firefox close Active Search workflow.
+ */
 export function closeActiveSearch() {
   return {
     type: "TOGGLE_ACTIVE_SEARCH",
@@ -31,6 +37,9 @@ export function closeActiveSearch() {
   };
 }
 
+/**
+ * Handles the firefox set Active Search workflow.
+ */
 export function setActiveSearch(activeSearch) {
   return ({ dispatch, getState }) => {
     const activeSearchState = getActiveSearch(getState());
@@ -61,6 +70,9 @@ export function setActiveSearch(activeSearch) {
   };
 }
 
+/**
+ * Converts input into toggle Framework Grouping.
+ */
 export function toggleFrameworkGrouping(toggleValue) {
   return ({ dispatch }) => {
     dispatch({
@@ -70,6 +82,9 @@ export function toggleFrameworkGrouping(toggleValue) {
   };
 }
 
+/**
+ * Converts input into toggle Inline Preview.
+ */
 export function toggleInlinePreview(toggleValue) {
   return ({ dispatch }) => {
     dispatch({
@@ -79,6 +94,9 @@ export function toggleInlinePreview(toggleValue) {
   };
 }
 
+/**
+ * Converts input into toggle Editor Wrapping.
+ */
 export function toggleEditorWrapping(toggleValue) {
   return ({ dispatch }) => {
     updateEditorLineWrapping(toggleValue);
@@ -90,6 +108,9 @@ export function toggleEditorWrapping(toggleValue) {
   };
 }
 
+/**
+ * Converts input into toggle Source Maps Enabled.
+ */
 export function toggleSourceMapsEnabled(toggleValue) {
   return ({ dispatch }) => {
     dispatch({
@@ -99,6 +120,9 @@ export function toggleSourceMapsEnabled(toggleValue) {
   };
 }
 
+/**
+ * Handles the firefox show Source workflow.
+ */
 export function showSource(sourceId) {
   return ({ dispatch, getState }) => {
     const source = getSource(getState(), sourceId);
@@ -120,6 +144,9 @@ export function showSource(sourceId) {
   };
 }
 
+/**
+ * Converts input into toggle Pane Collapse.
+ */
 export function togglePaneCollapse(position, paneCollapsed) {
   return ({ dispatch, getState }) => {
     const prevPaneCollapse = getPaneCollapse(getState(), position);
@@ -162,6 +189,9 @@ export function highlightLineRange(location) {
   };
 }
 
+/**
+ * Handles the firefox flash Line Range workflow.
+ */
 export function flashLineRange(location) {
   return ({ dispatch }) => {
     dispatch(highlightLineRange(location));
@@ -169,12 +199,18 @@ export function flashLineRange(location) {
   };
 }
 
+/**
+ * Handles the firefox clear Highlight Line Range workflow.
+ */
 export function clearHighlightLineRange() {
   return {
     type: "CLEAR_HIGHLIGHT_LINES",
   };
 }
 
+/**
+ * Handles the firefox open Conditional Panel workflow.
+ */
 export function openConditionalPanel(location, log = false) {
   if (!location) {
     return null;
@@ -187,12 +223,18 @@ export function openConditionalPanel(location, log = false) {
   };
 }
 
+/**
+ * Handles the firefox close Conditional Panel workflow.
+ */
 export function closeConditionalPanel() {
   return {
     type: "CLOSE_CONDITIONAL_PANEL",
   };
 }
 
+/**
+ * Handles the firefox update Viewport workflow.
+ */
 export function updateViewport() {
   const editor = getEditor();
   return {
@@ -205,14 +247,23 @@ export function updateViewport() {
   };
 }
 
+/**
+ * Handles the firefox set Orientation workflow.
+ */
 export function setOrientation(orientation) {
   return { type: "SET_ORIENTATION", orientation };
 }
 
+/**
+ * Handles the firefox set Search Options workflow.
+ */
 export function setSearchOptions(searchKey, searchOptions) {
   return { type: "SET_SEARCH_OPTIONS", searchKey, searchOptions };
 }
 
+/**
+ * Handles the firefox copy To Clipboard workflow.
+ */
 export function copyToClipboard(location) {
   return ({ getState }) => {
     const content = getSourceTextContentForLocation(getState(), location);
@@ -222,10 +273,16 @@ export function copyToClipboard(location) {
   };
 }
 
+/**
+ * Handles the firefox set Hide Or Show Ignored Sources workflow.
+ */
 export function setHideOrShowIgnoredSources(shouldHide) {
   return { type: "HIDE_IGNORED_SOURCES", shouldHide };
 }
 
+/**
+ * Converts input into toggle Source Map Ignore List.
+ */
 export function toggleSourceMapIgnoreList(shouldEnable) {
   return async thunkArgs => {
     const { dispatch, getState } = thunkArgs;
@@ -245,6 +302,9 @@ export function toggleSourceMapIgnoreList(shouldEnable) {
   };
 }
 
+/**
+ * Converts input into toggle Paused Overlay.
+ */
 export function togglePausedOverlay(shouldEnable) {
   return {
     type: "ENABLE_PAUSED_OVERLAY",

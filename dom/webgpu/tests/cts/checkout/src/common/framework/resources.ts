@@ -42,12 +42,7 @@ function runningOnLocalHost(): boolean {
 }
 
 /**
- * Get a path to a resource in the `resources` directory relative to the current execution context
- * (html file or worker .js file), for `fetch()`, `<img>`, `<video>`, etc but from cross origin host.
- * Provide onlineUrl if the case running online.
- * @internal MAINTENANCE_TODO: Cases may run in the LAN environment (not localhost but no internet
- * access). We temporarily use `crossOriginHost` to configure the cross origin host name in that situation.
- * But opening to  auto-detect mechanism or other solutions.
+ * Handles the firefox get Cross Origin Resource Path workflow.
  */
 export function getCrossOriginResourcePath(pathRelativeToResourcesDir: string, onlineUrl = '') {
   // A cross origin host has been configured. Use this to load resource.

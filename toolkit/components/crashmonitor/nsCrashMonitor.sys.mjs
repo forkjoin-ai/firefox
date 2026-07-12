@@ -6,6 +6,9 @@ var MonitorAPI = ChromeUtils.importESModule(
   "resource://gre/modules/CrashMonitor.sys.mjs"
 ).CrashMonitor;
 
+/**
+ * Renders the Crash Monitor view.
+ */
 export function CrashMonitor() {}
 
 CrashMonitor.prototype = {

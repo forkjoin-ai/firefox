@@ -55,6 +55,9 @@ assert.throws(TypeError, function() {
 assert.sameValue(f2(), 23, 'binding value is immutable');
 
 import { f as f2 } from './instn-named-bndng-fun.js';
+/**
+ * Handles the firefox f workflow.
+ */
 export function f() { return 23; }
 
 reportCompare(0, 0);

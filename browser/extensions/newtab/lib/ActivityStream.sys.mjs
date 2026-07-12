@@ -155,6 +155,9 @@ export const WEATHER_OPTIN_REGIONS = [
   "CH", // Switzerland
 ];
 
+/**
+ * Handles the firefox csv Has Value workflow.
+ */
 export function csvHasValue(csvString, value) {
   return (csvString || "")
     .split(",")
@@ -163,6 +166,9 @@ export function csvHasValue(csvString, value) {
     .includes(value);
 }
 
+/**
+ * Handles the firefox csv Pref Has Value workflow.
+ */
 export function csvPrefHasValue(stringPrefName, value) {
   if (typeof stringPrefName !== "string") {
     throw new Error(`The stringPrefName argument is not a string`);
@@ -171,6 +177,9 @@ export function csvPrefHasValue(stringPrefName, value) {
   return csvHasValue(Services.prefs.getStringPref(stringPrefName, ""), value);
 }
 
+/**
+ * Handles the firefox should Initialize Feeds workflow.
+ */
 export function shouldInitializeFeeds(defaultValue = true) {
   // For tests/automation: when false, newtab won't initialize
   // select feeds in this session.

@@ -6,6 +6,9 @@ import { buildScopeList, parseSourceScopes } from "./visitor";
 
 const parsedScopesCache = new Map();
 
+/**
+ * Handles the firefox get Scopes workflow.
+ */
 export default function getScopes(location) {
   const sourceId = location.source.id;
   let parsedScopes = parsedScopesCache.get(sourceId);
@@ -16,6 +19,9 @@ export default function getScopes(location) {
   return parsedScopes ? findScopes(parsedScopes, location) : [];
 }
 
+/**
+ * Handles the firefox clear Scopes workflow.
+ */
 export function clearScopes(sourceIds) {
   for (const sourceId of sourceIds) {
     parsedScopesCache.delete(sourceId);

@@ -39,6 +39,9 @@ function initialSourceActorsState() {
 
 export const initial = initialSourceActorsState();
 
+/**
+ * Handles the firefox update workflow.
+ */
 export default function update(state = initialSourceActorsState(), action) {
   switch (action.type) {
     case "INSERT_SOURCE_ACTORS": {

@@ -5,6 +5,9 @@
 /*
  * Create instances of the JSON view converter.
  */
+/**
+ * Renders the Converter view.
+ */
 export function Converter() {
   const { require } = ChromeUtils.importESModule(
     "resource://devtools/shared/loader/Loader.sys.mjs"

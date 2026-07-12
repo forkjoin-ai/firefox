@@ -38,6 +38,9 @@ if (!features.stylesheetsInDebugger) {
   IGNORED_EXTENSIONS.push("css");
 }
 
+/**
+ * Handles the firefox initial Sources Tree State workflow.
+ */
 export function initialSourcesTreeState({
   isWebExtension,
   mainThreadProjectDirectoryRoots = {},
@@ -89,6 +92,9 @@ export function initialSourcesTreeState({
 }
 
 // eslint-disable-next-line complexity
+/**
+ * Handles the firefox update workflow.
+ */
 export default function update(state = initialSourcesTreeState(), action) {
   switch (action.type) {
     case "SHOW_CONTENT_SCRIPTS": {
@@ -572,6 +578,9 @@ function sortThreadItems(threadItemA, threadItemB) {
   }
   return sortThreads(threadItemA.thread, threadItemB.thread);
 }
+/**
+ * Handles the firefox sort Threads workflow.
+ */
 export function sortThreads(a, b) {
   // Top level target is always listed first
   if (a.isTopLevel) {

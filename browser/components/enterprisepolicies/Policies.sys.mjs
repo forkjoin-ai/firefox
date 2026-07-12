@@ -3563,6 +3563,9 @@ function addAllowDenyPermissions(permissionName, allowList, blockList) {
  *        The callback to run only once.
  */
 // eslint-disable-next-line no-unused-vars
+/**
+ * Handles the firefox run Once workflow.
+ */
 export function runOnce(actionName, callback) {
   let prefName = `browser.policies.runonce.${actionName}`;
   if (Services.prefs.getBoolPref(prefName, false)) {

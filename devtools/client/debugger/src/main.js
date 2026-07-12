@@ -111,6 +111,9 @@ async function loadInitialState(commands) {
   };
 }
 
+/**
+ * Handles the firefox bootstrap workflow.
+ */
 export async function bootstrap({
   commands,
   fluentBundles,
@@ -164,6 +167,9 @@ export async function bootstrap({
   return { store, actions, selectors, client: firefox.clientCommands };
 }
 
+/**
+ * Handles the firefox destroy workflow.
+ */
 export async function destroy() {
   // Instruct redux to start ignoring any further action
   if (gStore) {

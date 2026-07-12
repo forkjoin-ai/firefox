@@ -16,6 +16,9 @@ export type Boundary =
   | 'z-max-wrap'
   | 'z-max-boundary';
 
+/**
+ * Returns whether is Boundary Negative is true.
+ */
 export function isBoundaryNegative(boundary: Boundary) {
   return boundary.endsWith('min-wrap');
 }

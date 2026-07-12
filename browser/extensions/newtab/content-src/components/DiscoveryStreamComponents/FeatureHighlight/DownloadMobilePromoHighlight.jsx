@@ -16,6 +16,9 @@ const PREF_MOBILE_DOWNLOAD_HIGHLIGHT_VARIANT_C =
 
 const FEATURE_ID = "FEATURE_DOWNLOAD_MOBILE_PROMO";
 
+/**
+ * Renders the Download Mobile Promo Highlight view.
+ */
 export function DownloadMobilePromoHighlight({
   position,
   dispatch,

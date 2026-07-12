@@ -197,6 +197,9 @@ export class Popup extends Component {
   }
 }
 
+/**
+ * Handles the firefox add Highlight To Target Siblings workflow.
+ */
 export function addHighlightToTargetSiblings(target, props) {
   // This function searches for related tokens that should also be highlighted when previewed.
   // Here is the process:
@@ -251,6 +254,9 @@ export function addHighlightToTargetSiblings(target, props) {
   }
 }
 
+/**
+ * Handles the firefox remove Highlight For Target Siblings workflow.
+ */
 export function removeHighlightForTargetSiblings(target) {
   // Look at target's previous and next token siblings.
   // If they also have the highlight class 'preview-token',

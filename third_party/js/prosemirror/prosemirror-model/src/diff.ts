@@ -1,5 +1,8 @@
 import {Fragment} from "./fragment"
 
+/**
+ * Handles the firefox find Diff Start workflow.
+ */
 export function findDiffStart(a: Fragment, b: Fragment, pos: number): number | null {
   for (let i = 0;; i++) {
     if (i == a.childCount || i == b.childCount)
@@ -23,6 +26,9 @@ export function findDiffStart(a: Fragment, b: Fragment, pos: number): number | n
   }
 }
 
+/**
+ * Handles the firefox find Diff End workflow.
+ */
 export function findDiffEnd(a: Fragment, b: Fragment, posA: number, posB: number): {a: number, b: number} | null {
   for (let iA = a.childCount, iB = b.childCount;;) {
     if (iA == 0 || iB == 0)

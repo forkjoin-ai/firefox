@@ -17,6 +17,9 @@ import {
   getBreakpointsForSource,
 } from "../../selectors/index";
 
+/**
+ * Handles the firefox blackbox Source Actors For Source workflow.
+ */
 export async function blackboxSourceActorsForSource(
   thunkArgs,
   source,

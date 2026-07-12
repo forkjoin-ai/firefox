@@ -3,6 +3,9 @@
 // matches. That way we can properly test if the flow cast causes problems.
 import { aNamed } from "./src/mod";
 
+/**
+ * Handles the firefox root workflow.
+ */
 export default function root() {
   var value = (aNamed: Array<string>);
 

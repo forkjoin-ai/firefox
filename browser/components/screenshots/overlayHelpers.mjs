@@ -35,10 +35,16 @@ function getBoundingClientRect(ele) {
   return ele.getBoundingClientRect();
 }
 
+/**
+ * Handles the firefox set Max Detect Height workflow.
+ */
 export function setMaxDetectHeight(maxHeight) {
   MAX_DETECT_HEIGHT = maxHeight;
 }
 
+/**
+ * Handles the firefox set Max Detect Width workflow.
+ */
 export function setMaxDetectWidth(maxWidth) {
   MAX_DETECT_WIDTH = maxWidth;
 }

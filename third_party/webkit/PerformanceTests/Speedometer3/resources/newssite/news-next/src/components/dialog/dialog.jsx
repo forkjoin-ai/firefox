@@ -6,6 +6,9 @@ import { useDataContext } from "@/context/data-context";
 
 import styles from "news-site-css/dist/dialog.module.css";
 
+/**
+ * Renders the Dialog view.
+ */
 export default function Dialog({ onClose }) {
     const [reduceMotion, setReduceMotion] = useState(false);
     const { settings } = useDataContext();

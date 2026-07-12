@@ -18,6 +18,9 @@
  *
  */
 
+/**
+ * Renders the Image Object Processor view.
+ */
 export function ImageObjectProcessor(aErrors, aExtractor, aBundle) {
   this.errors = aErrors;
   this.extractor = aExtractor;

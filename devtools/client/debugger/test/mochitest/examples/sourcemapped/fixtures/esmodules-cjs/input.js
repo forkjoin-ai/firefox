@@ -14,6 +14,9 @@ import { original as anAliased3 } from "./src/mod11";
 import optimizedOut from "./src/optimized-out";
 optimizedOut();
 
+/**
+ * Handles the firefox root workflow.
+ */
 export default function root() {
   console.log("pause here", root);
 
@@ -38,4 +41,7 @@ export default function root() {
   } catch (e) {}
 }
 
+/**
+ * Handles the firefox example workflow.
+ */
 export function example(){}

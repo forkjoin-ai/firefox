@@ -8,6 +8,9 @@ import ArticleContent from "./article-content";
 import layoutStyles from "news-site-css/dist/layout.module.css";
 import articleStyles from "news-site-css/dist/article.module.css";
 
+/**
+ * Renders the Article view.
+ */
 export default function Article({ article }) {
     return (
         <article className={classNames(layoutStyles.column, layoutStyles[article.class], articleStyles.article)}>

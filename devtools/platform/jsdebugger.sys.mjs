@@ -19,6 +19,9 @@
 
 const init = Cc["@mozilla.org/jsdebugger;1"].createInstance(Ci.IJSDebugger);
 
+/**
+ * Handles the firefox add Debugger To Global workflow.
+ */
 export function addDebuggerToGlobal(global) {
   init.addClass(global);
   initPromiseDebugging(global);
@@ -26,6 +29,9 @@ export function addDebuggerToGlobal(global) {
 
 // Defines the Debugger in a sandbox global in a separate compartment. This
 // ensures the debugger and debuggee are in different compartments.
+/**
+ * Handles the firefox add Sandboxed Debugger To Global workflow.
+ */
 export function addSandboxedDebuggerToGlobal(global) {
   const sb = Cu.Sandbox(global, { freshCompartment: true });
   addDebuggerToGlobal(sb);

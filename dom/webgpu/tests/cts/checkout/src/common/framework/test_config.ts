@@ -88,6 +88,9 @@ export const globalTestConfig: TestConfig = {
 // Note: The CTS generally, requires that if globalTestConfig.compatibility
 // is true then the device MUST be a compatibility device since the CTS
 // is trying to test that compatibility devices have the correct validation.
+/**
+ * Returns whether is Compatibility Mode is true.
+ */
 export function isCompatibilityMode(features: GPUSupportedFeatures) {
   if (globalTestConfig.compatibility) {
     assert(!hasFeature(features, 'core-features-and-limits'));
@@ -99,6 +102,9 @@ export function isCompatibilityMode(features: GPUSupportedFeatures) {
 // Note: The CTS generally, requires that if globalTestConfig.compatibility
 // is true then the device MUST be a compatibility device since the CTS
 // is trying to test that compatibility devices have the correct validation.
+/**
+ * Returns whether is Compatibility Device is true.
+ */
 export function isCompatibilityDevice(device: GPUDevice) {
   return isCompatibilityMode(device.features);
 }

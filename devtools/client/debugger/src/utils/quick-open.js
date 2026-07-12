@@ -12,6 +12,9 @@ export const MODIFIERS = {
   "?": "shortcuts",
 };
 
+/**
+ * Parses the Quick Open Query.
+ */
 export function parseQuickOpenQuery(query) {
   const startsWithModifier =
     query[0] === "@" ||
@@ -33,6 +36,9 @@ export function parseQuickOpenQuery(query) {
   return "sources";
 }
 
+/**
+ * Parses the Line Column.
+ */
 export function parseLineColumn(query) {
   const [, line, column] = query.split(":");
   const lineNumber = parseInt(line, 10);
@@ -51,6 +57,9 @@ export function parseLineColumn(query) {
   };
 }
 
+/**
+ * Formats the Source For List.
+ */
 export function formatSourceForList(
   source,
   hasTabOpened,
@@ -75,6 +84,9 @@ export function formatSourceForList(
   };
 }
 
+/**
+ * Formats the Symbol.
+ */
 export function formatSymbol(symbol) {
   return {
     id: `${symbol.name}:${symbol.location.start.line}`,
@@ -85,6 +97,9 @@ export function formatSymbol(symbol) {
   };
 }
 
+/**
+ * Formats the Shortcut Results.
+ */
 export function formatShortcutResults() {
   return [
     {

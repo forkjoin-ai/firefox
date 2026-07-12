@@ -14,6 +14,9 @@ import { PlacesUtils } from "resource://gre/modules/PlacesUtils.sys.mjs";
 
 import { Logger } from "resource://tps/logger.sys.mjs";
 
+/**
+ * Renders the Dump Bookmarks view.
+ */
 export async function DumpBookmarks() {
   let [bookmarks] = await PlacesBackups.getBookmarksTree();
   Logger.logInfo(

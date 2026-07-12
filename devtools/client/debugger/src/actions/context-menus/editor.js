@@ -38,6 +38,9 @@ import { toggleBlackBox } from "../../actions/sources/blackbox";
 import { addExpression } from "../../actions/expressions";
 import { evaluateInConsole } from "../../actions/toolbox";
 
+/**
+ * Handles the firefox show Editor Context Menu workflow.
+ */
 export function showEditorContextMenu(event, editor, lineObject, location) {
   return async ({ dispatch, getState }) => {
     const { source } = location;
@@ -74,6 +77,9 @@ export function showEditorContextMenu(event, editor, lineObject, location) {
   };
 }
 
+/**
+ * Handles the firefox show Editor Gutter Context Menu workflow.
+ */
 export function showEditorGutterContextMenu(event, line, location, lineText) {
   return async ({ dispatch, getState }) => {
     const { source } = location;

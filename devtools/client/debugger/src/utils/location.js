@@ -14,6 +14,9 @@ export function comparePosition(a, b) {
   return a && b && a.line == b.line && a.column == b.column;
 }
 
+/**
+ * Creates the Location.
+ */
 export function createLocation({
   source,
   sourceActor = null,
@@ -90,6 +93,9 @@ export function createPendingSelectedLocation(location) {
   };
 }
 
+/**
+ * Handles the firefox sort Selected Locations workflow.
+ */
 export function sortSelectedLocations(locations, selectedSource) {
   return Array.from(locations).sort((locationA, locationB) => {
     const aSelected = getSelectedLocation(locationA, selectedSource);

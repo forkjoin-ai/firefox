@@ -3,6 +3,9 @@
  * file, You can obtain one at <http://mozilla.org/MPL/2.0/>. */
 
 // Check whether location A starts after location B
+/**
+ * Handles the firefox position After workflow.
+ */
 export function positionAfter(a, b) {
   return (
     a.start.line > b.start.line ||
@@ -10,6 +13,9 @@ export function positionAfter(a, b) {
   );
 }
 
+/**
+ * Handles the firefox contains Position workflow.
+ */
 export function containsPosition(a, b) {
   const bColumn = b.column || 0;
   const startsBefore =
@@ -55,6 +61,9 @@ function findClosestofSymbol(declarations, location) {
   }, null);
 }
 
+/**
+ * Handles the firefox find Closest Function workflow.
+ */
 export function findClosestFunction(symbols, location) {
   if (!symbols) {
     return null;

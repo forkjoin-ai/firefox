@@ -41,6 +41,9 @@ function folder(platform: BrowserPlatform): string {
   }
 }
 
+/**
+ * Resolves the Download Url.
+ */
 export function resolveDownloadUrl(
   platform: BrowserPlatform,
   buildId: string,
@@ -49,6 +52,9 @@ export function resolveDownloadUrl(
   return `${baseUrl}/${resolveDownloadPath(platform, buildId).join('/')}`;
 }
 
+/**
+ * Resolves the Download Path.
+ */
 export function resolveDownloadPath(
   platform: BrowserPlatform,
   buildId: string,
@@ -56,6 +62,9 @@ export function resolveDownloadPath(
   return [folder(platform), buildId, `${archive(platform, buildId)}.zip`];
 }
 
+/**
+ * Handles the firefox relative Executable Path workflow.
+ */
 export function relativeExecutablePath(
   platform: BrowserPlatform,
   _buildId: string,
@@ -78,6 +87,9 @@ export function relativeExecutablePath(
       return path.join('chrome-win', 'chrome.exe');
   }
 }
+/**
+ * Resolves the Build Id.
+ */
 export async function resolveBuildId(
   platform: BrowserPlatform,
 ): Promise<string> {
@@ -90,6 +102,9 @@ export async function resolveBuildId(
   );
 }
 
+/**
+ * Handles the firefox compare Versions workflow.
+ */
 export function compareVersions(a: string, b: string): number {
   return Number(a) - Number(b);
 }

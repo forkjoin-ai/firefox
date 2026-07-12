@@ -211,6 +211,9 @@ interface WithFormatAndMethod extends WithFormat {
 }
 
 // This is a helper function used for expanding test parameters for offset alignment, by spec
+/**
+ * Handles the firefox texel Block Alignment Test Expander For Offset workflow.
+ */
 export function texelBlockAlignmentTestExpanderForOffset({ format }: WithFormat) {
   if (isDepthOrStencilTextureFormat(format)) {
     return valuesToTestDivisibilityBy(4);
@@ -220,11 +223,17 @@ export function texelBlockAlignmentTestExpanderForOffset({ format }: WithFormat)
 }
 
 // This is a helper function used for expanding test parameters for texel block alignment tests on rowsPerImage
+/**
+ * Handles the firefox texel Block Alignment Test Expander For Rows Per Image workflow.
+ */
 export function texelBlockAlignmentTestExpanderForRowsPerImage({ format }: WithFormat) {
   return valuesToTestDivisibilityBy(getBlockInfoForTextureFormat(format).blockHeight);
 }
 
 // This is a helper function used for expanding test parameters for texel block alignment tests on origin and size
+/**
+ * Handles the firefox texel Block Alignment Test Expander For Value To Coordinate workflow.
+ */
 export function texelBlockAlignmentTestExpanderForValueToCoordinate({
   format,
   coordinateToTest,
@@ -245,6 +254,9 @@ export function texelBlockAlignmentTestExpanderForValueToCoordinate({
 }
 
 // This is a helper function used for filtering test parameters
+/**
+ * Formats the Copyable With Method.
+ */
 export function formatCopyableWithMethod({ format, method }: WithFormatAndMethod): boolean {
   if (isDepthOrStencilTextureFormat(format)) {
     const supportedAspects: readonly GPUTextureAspect[] = depthStencilFormatCopyableAspects(
@@ -261,6 +273,9 @@ export function formatCopyableWithMethod({ format, method }: WithFormatAndMethod
 }
 
 // This is a helper function used for filtering test parameters
+/**
+ * Handles the firefox get ACopyable Aspect With Method workflow.
+ */
 export function getACopyableAspectWithMethod({
   format,
   method,

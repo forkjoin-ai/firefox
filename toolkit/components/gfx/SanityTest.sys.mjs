@@ -294,6 +294,9 @@ var listener = {
   },
 };
 
+/**
+ * Renders the Sanity Test view.
+ */
 export function SanityTest() {}
 SanityTest.prototype = {
   classID: Components.ID("{f3a8ca4d-4c83-456b-aee2-6a2cbf11e9bd}"),

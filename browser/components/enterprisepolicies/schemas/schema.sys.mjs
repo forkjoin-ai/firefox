@@ -70,6 +70,9 @@ const resolvedSchema = dereference(
 
 export let schema = resolvedSchema;
 
+/**
+ * Handles the firefox modify Schema For Tests workflow.
+ */
 export function modifySchemaForTests(customSchema) {
   if (customSchema) {
     schema = customSchema;

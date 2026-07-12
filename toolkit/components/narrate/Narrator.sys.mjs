@@ -21,6 +21,9 @@ const kTextStylesRules = [
   "word-spacing",
 ];
 
+/**
+ * Renders the Narrator view.
+ */
 export function Narrator(win, languagePromise) {
   this._winRef = Cu.getWeakReference(win);
   this._languagePromise = languagePromise;

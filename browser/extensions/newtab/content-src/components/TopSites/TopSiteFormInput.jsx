@@ -4,6 +4,9 @@
 
 import React, { useState, useEffect, useRef } from "react";
 
+/**
+ * Renders the Top Site Form Input view.
+ */
 export function TopSiteFormInput({
   shouldFocus,
   validationError: validationErrorProp = false,

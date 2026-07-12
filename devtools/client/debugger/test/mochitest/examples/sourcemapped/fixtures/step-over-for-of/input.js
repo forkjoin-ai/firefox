@@ -1,5 +1,8 @@
 const vals = [1, 2];
 
+/**
+ * Handles the firefox root workflow.
+ */
 export default function root() {
   console.log("pause here");
 

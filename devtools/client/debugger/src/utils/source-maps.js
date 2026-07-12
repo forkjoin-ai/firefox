@@ -86,6 +86,9 @@ export async function getOriginalLocation(
   return sourceMapToDebuggerLocation(getState(), originalLocation);
 }
 
+/**
+ * Handles the firefox get Mapped Location workflow.
+ */
 export async function getMappedLocation(location, thunkArgs) {
   if (location.source.isOriginal) {
     const generatedLocation = await getGeneratedLocation(location, thunkArgs);

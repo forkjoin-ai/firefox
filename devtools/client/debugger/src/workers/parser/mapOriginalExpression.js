@@ -31,6 +31,9 @@ function locationKey(start) {
   return `${start.line}:${start.column}`;
 }
 
+/**
+ * Handles the firefox map Original Expression workflow.
+ */
 export default function mapOriginalExpression(expression, ast, mappings) {
   const scopes = buildScopeList(ast, "");
   let shouldUpdate = false;

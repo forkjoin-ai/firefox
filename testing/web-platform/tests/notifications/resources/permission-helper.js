@@ -1,3 +1,6 @@
+/**
+ * Handles the firefox permission Test workflow.
+ */
 export function permissionTest(origin, sender) {
   function ping(message) {
     if (!globalThis.WorkerGlobalScope) {

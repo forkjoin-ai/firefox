@@ -28,6 +28,9 @@ const terminalStyles = {
   clear: '\u001b[0m',
 };
 
+/**
+ * Handles the firefox get Command For Runner workflow.
+ */
 export function getCommandForRunner(runner: TestRunner): [string, ...string[]] {
   switch (runner) {
     case TestRunner.Jasmine:

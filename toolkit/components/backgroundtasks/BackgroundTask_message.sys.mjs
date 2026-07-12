@@ -307,6 +307,9 @@ async function handleCommandLine(commandLine) {
   }
 }
 
+/**
+ * Handles the firefox run Background Task workflow.
+ */
 export async function runBackgroundTask(commandLine) {
   console.error("runBackgroundTask: message");
 

@@ -1,4 +1,7 @@
 
+/**
+ * Handles the firefox root workflow.
+ */
 export default function root() {
   function aFunc(){
     // Since these bindings are on their own linem, the mappings will

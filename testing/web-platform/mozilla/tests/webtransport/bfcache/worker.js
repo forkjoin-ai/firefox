@@ -1,3 +1,6 @@
+/**
+ * Handles the firefox worker function workflow.
+ */
 export async function worker_function() {
 
 let wt = null;

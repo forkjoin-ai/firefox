@@ -1,6 +1,9 @@
 import * as common from "../common";
 import { CryptoEngine } from "./CryptoEngine";
 
+/**
+ * Handles the firefox init Crypto Engine workflow.
+ */
 export function initCryptoEngine() {
   if (typeof globalThis !== "undefined" && "crypto" in globalThis) {
     let engineName = "webcrypto";

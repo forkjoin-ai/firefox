@@ -33,12 +33,18 @@ export function reinterpretF64AsU64(input) {
 }
 
 // Encoding to u32s, instead of BigInt, for serialization
+/**
+ * Handles the firefox reinterpret F64 As U32s workflow.
+ */
 export function reinterpretF64AsU32s(f64) {
   workingDataF64[0] = f64;
   return [workingDataU32[0], workingDataU32[1]];
 }
 
 // De-encoding from u32s, instead of BigInt, for serialization
+/**
+ * Handles the firefox reinterpret U32s As F64 workflow.
+ */
 export function reinterpretU32sAsF64(u32s) {
   workingDataU32[0] = u32s[0];
   workingDataU32[1] = u32s[1];

@@ -32,6 +32,9 @@ import {
 import { selectSpecificLocation } from "../../actions/sources/select";
 import { openConditionalPanel } from "../../actions/ui";
 
+/**
+ * Handles the firefox show Breakpoint Context Menu workflow.
+ */
 export function showBreakpointContextMenu(event, breakpoint, source) {
   return async ({ dispatch, getState }) => {
     const state = getState();

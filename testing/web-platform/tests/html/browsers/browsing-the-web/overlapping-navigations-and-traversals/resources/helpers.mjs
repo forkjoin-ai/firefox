@@ -1,3 +1,6 @@
+/**
+ * Creates the Iframe.
+ */
 export function createIframe(t) {
   return new Promise((resolve, reject) => {
     const iframe = document.createElement("iframe");
@@ -10,22 +13,34 @@ export function createIframe(t) {
   });
 }
 
+/**
+ * Handles the firefox delay workflow.
+ */
 export function delay(t, ms) {
   return new Promise(resolve => t.step_timeout(resolve, ms));
 }
 
+/**
+ * Handles the firefox wait For Load workflow.
+ */
 export function waitForLoad(obj) {
   return new Promise(resolve => {
     obj.addEventListener("load", resolve, { once: true });
   });
 }
 
+/**
+ * Handles the firefox wait For Hashchange workflow.
+ */
 export function waitForHashchange(obj) {
   return new Promise(resolve => {
     obj.addEventListener("hashchange", resolve, { once: true });
   });
 }
 
+/**
+ * Handles the firefox wait For Popstate workflow.
+ */
 export function waitForPopstate(obj) {
   return new Promise(resolve => {
     obj.addEventListener("popstate", resolve, { once: true });
@@ -38,6 +53,9 @@ export function waitForPopstate(obj) {
 // network loads take roughly the same time. Then, you can use this function to
 // wait a small multiple of the duration of a separate iframe load; this should
 // be long enough to catch any problems.
+/**
+ * Handles the firefox wait For Potential Network Loads workflow.
+ */
 export async function waitForPotentialNetworkLoads(t) {
   const before = performance.now();
 

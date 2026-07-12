@@ -5,6 +5,9 @@ import React, { useRef, useEffect, useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { actionTypes as at, actionCreators as ac } from "common/Actions.mjs";
 
+/**
+ * Renders the Report Content view.
+ */
 export const ReportContent = spocs => {
   const dispatch = useDispatch();
   const modal = useRef(null);

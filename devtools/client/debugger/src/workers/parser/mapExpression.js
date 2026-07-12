@@ -7,6 +7,9 @@ import mapOriginalExpression from "./mapOriginalExpression";
 import mapExpressionBindings from "./mapBindings";
 import mapTopLevelAwait from "./mapAwaitExpression";
 
+/**
+ * Handles the firefox map Expression workflow.
+ */
 export default function mapExpression(
   expression,
   mappings,

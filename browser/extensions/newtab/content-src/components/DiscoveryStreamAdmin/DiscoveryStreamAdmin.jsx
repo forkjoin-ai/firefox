@@ -1029,6 +1029,9 @@ export class DiscoveryStreamAdminInner extends React.PureComponent {
   }
 }
 
+/**
+ * Renders the Collapse Toggle view.
+ */
 export function CollapseToggle(props) {
   const { devtoolsCollapsed } = props;
   const label = `${devtoolsCollapsed ? "Expand" : "Collapse"} devtools`;

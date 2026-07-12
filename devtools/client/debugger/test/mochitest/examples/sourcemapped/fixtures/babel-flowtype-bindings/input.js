@@ -5,6 +5,9 @@ type Other = {};
 
 const aConst = "a-const";
 
+/**
+ * Handles the firefox root workflow.
+ */
 export default function root() {
   console.log("pause here", aConst, Four, root);
 }

@@ -8,6 +8,9 @@
  * pippki UI js files.
  */
 
+/**
+ * Handles the firefox set Text workflow.
+ */
 export function setText(doc, id, value) {
   let element = doc.getElementById(id);
   if (!element) {
@@ -19,6 +22,9 @@ export function setText(doc, id, value) {
   element.appendChild(doc.createTextNode(value));
 }
 
+/**
+ * Handles the firefox get Cert Viewer Url workflow.
+ */
 export async function getCertViewerUrl(cert) {
   if (!cert) {
     return "";
@@ -34,6 +40,9 @@ export async function getCertViewerUrl(cert) {
   return `about:certificate?${certsStringURL}`;
 }
 
+/**
+ * Handles the firefox view Cert Helper workflow.
+ */
 export async function viewCertHelper(parent, cert, openingOption = "tab") {
   if (cert) {
     let win = Services.wm.getMostRecentBrowserWindow();
@@ -60,6 +69,9 @@ function getPKCS7Array(certArray) {
   return pkcs7Array;
 }
 
+/**
+ * Handles the firefox get PEMString workflow.
+ */
 export function getPEMString(cert) {
   var derb64 = cert.getBase64DERString();
   // Wrap the Base64 string into lines of 64 characters with CRLF line breaks
@@ -72,6 +84,9 @@ export function getPEMString(cert) {
   );
 }
 
+/**
+ * Handles the firefox alert Prompt Service workflow.
+ */
 export function alertPromptService(window, title, message) {
   // XXX Bug 1425832 - Using Services.prompt here causes tests to report memory
   // leaks.
@@ -108,6 +123,9 @@ function certToFilename(cert) {
   return `${filename}.${DEFAULT_CERT_EXTENSION}`;
 }
 
+/**
+ * Handles the firefox export To File workflow.
+ */
 export async function exportToFile(parent, document, cert) {
   if (!cert) {
     return;
@@ -301,6 +319,9 @@ function getChainForUsage(results, usage) {
 
 // Performs an XMLHttpRequest because the script for the dialog is prevented
 // from doing so by CSP.
+/**
+ * Handles the firefox check Cert Helper workflow.
+ */
 export async function checkCertHelper(uri, grabber) {
   let req = new XMLHttpRequest();
   req.open("GET", uri.prePath);

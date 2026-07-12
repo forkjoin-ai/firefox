@@ -1,3 +1,6 @@
+/**
+ * Handles the firefox compare Deep workflow.
+ */
 export function compareDeep(a: any, b: any) {
   if (a === b) return true
   if (!(a && typeof a == "object") ||

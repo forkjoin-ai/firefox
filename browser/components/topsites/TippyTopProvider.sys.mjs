@@ -9,6 +9,9 @@ const TIPPYTOP_JSON_PATH =
 /*
  * Get a domain from a url optionally stripping subdomains.
  */
+/**
+ * Handles the firefox get Domain workflow.
+ */
 export function getDomain(url, strip = "www.") {
   let domain = URL.parse(url)?.hostname;
   if (!domain) {

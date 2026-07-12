@@ -4,6 +4,9 @@
 
 import { getEditor } from "../../utils/editor/index";
 
+/**
+ * Handles the firefox remove Sources workflow.
+ */
 export function removeSources(
   sources,
   actors,

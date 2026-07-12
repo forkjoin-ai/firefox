@@ -13,7 +13,13 @@ var starAsBindingId;
 export var starAsVarDecl;
 export let starAsLetDecl;
 export const starAsConstDecl = null;
+/**
+ * Handles the firefox star As Func Decl workflow.
+ */
 export function starAsFuncDecl() {}
+/**
+ * Handles the firefox star As Gen Decl workflow.
+ */
 export function* starAsGenDecl() {}
 export class starAsClassDecl {}
 export { starAsBindingId };

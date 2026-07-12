@@ -4,6 +4,9 @@
 
 import * as t from "@babel/types";
 
+/**
+ * Returns whether is Function is true.
+ */
 export function isFunction(node) {
   return (
     t.isFunction(node) ||
@@ -13,6 +16,9 @@ export function isFunction(node) {
   );
 }
 
+/**
+ * Returns whether is Await Expression is true.
+ */
 export function isAwaitExpression(path) {
   const { node, parent } = path;
   return (
@@ -22,6 +28,9 @@ export function isAwaitExpression(path) {
   );
 }
 
+/**
+ * Returns whether is Yield Expression is true.
+ */
 export function isYieldExpression(path) {
   const { node, parent } = path;
   return (
@@ -31,6 +40,9 @@ export function isYieldExpression(path) {
   );
 }
 
+/**
+ * Handles the firefox get Member Expression workflow.
+ */
 export function getMemberExpression(root) {
   function _getMemberExpression(node, expr) {
     if (t.isMemberExpression(node)) {
@@ -53,6 +65,9 @@ export function getMemberExpression(root) {
   return expr.join(".");
 }
 
+/**
+ * Handles the firefox get Variables workflow.
+ */
 export function getVariables(dec) {
   if (!dec.id) {
     return [];
@@ -128,10 +143,16 @@ function addIdentifiers(identifiers, identifiersKeys, items) {
 
 // Top Level checks the number of "body" nodes in the ancestor chain
 // if the node is top-level, then it shoul only have one body.
+/**
+ * Returns whether is Top Level is true.
+ */
 export function isTopLevel(ancestors) {
   return ancestors.filter(ancestor => ancestor.key == "body").length == 1;
 }
 
+/**
+ * Handles the firefox node Location Key workflow.
+ */
 export function nodeLocationKey({ start, end }) {
   return `${start.line}:${start.column}:${end.line}:${end.column}`;
 }

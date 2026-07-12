@@ -16,10 +16,16 @@ const getAutocompleteMatches = createSelector(
   expressions => expressions.autocompleteMatches
 );
 
+/**
+ * Handles the firefox get Expression workflow.
+ */
 export function getExpression(state, input) {
   return getExpressions(state).find(exp => exp.input == input);
 }
 
+/**
+ * Handles the firefox get Autocomplete Matchset workflow.
+ */
 export function getAutocompleteMatchset(state) {
   const input = state.expressions.currentAutocompleteInput;
   if (!input) {

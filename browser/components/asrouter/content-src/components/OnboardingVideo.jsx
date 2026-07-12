@@ -4,6 +4,9 @@
 
 import React from "react";
 
+/**
+ * Renders the Onboarding Video view.
+ */
 export const OnboardingVideo = props => {
   const vidUrl = props.content.video_url;
   const autoplay = props.content.autoPlay;

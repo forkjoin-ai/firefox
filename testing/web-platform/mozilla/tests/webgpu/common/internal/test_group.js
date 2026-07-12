@@ -62,6 +62,9 @@ import { logToWebSocket } from './websocket_logger.js';
 
 
 
+/**
+ * Handles the firefox make Test Group workflow.
+ */
 export function makeTestGroup(fixture) {
   return new TestGroup(fixture);
 }
@@ -78,6 +81,9 @@ export function makeTestGroup(fixture) {
 
 
 
+/**
+ * Handles the firefox make Test Group For Unit Testing workflow.
+ */
 export function makeTestGroupForUnitTesting(
 fixture)
 {

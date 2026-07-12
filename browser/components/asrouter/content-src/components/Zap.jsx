@@ -20,6 +20,9 @@ function calculateZapLength() {
   }
 }
 
+/**
+ * Renders the Zap view.
+ */
 export const Zap = props => {
   useEffect(() => {
     requestAnimationFrame(() => calculateZapLength());

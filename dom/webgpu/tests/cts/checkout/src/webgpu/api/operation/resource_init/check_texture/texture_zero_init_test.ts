@@ -124,6 +124,9 @@ const initializedStateAsStencil = {
   [InitializedState.Canary]: 42,
 };
 
+/**
+ * Handles the firefox get Required Texture Usage workflow.
+ */
 export function getRequiredTextureUsage(
   format: UncompressedTextureFormat,
   sampleCount: number,

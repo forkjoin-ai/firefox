@@ -23,6 +23,9 @@ if (Services.appinfo.processType !== Services.appinfo.PROCESS_TYPE_DEFAULT) {
   throw new Error("LoginManager.sys.mjs should only run in the parent process");
 }
 
+/**
+ * Renders the Login Manager view.
+ */
 export function LoginManager() {
   this.init();
 }

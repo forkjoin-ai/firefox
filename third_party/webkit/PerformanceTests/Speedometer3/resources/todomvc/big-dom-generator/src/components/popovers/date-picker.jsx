@@ -79,6 +79,9 @@ const Calendar = () => {
     );
 };
 
+/**
+ * Renders the Date Picker view.
+ */
 export const DatePicker = () => {
     return (
         <div aria-haspopup="dialog" className="spectrum-DatePicker spectrum-ActionGroup-item" aria-disabled="false" aria-readonly="false" aria-required="false">

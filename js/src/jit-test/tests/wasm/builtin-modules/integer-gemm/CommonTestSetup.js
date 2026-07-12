@@ -21,6 +21,9 @@ const SELECTED_COLUMNS_B_MULTIPLIER = 8;
 `
 
 // Run the test
+/**
+ * Handles the firefox run Test workflow.
+ */
 export function runTest(completeTestAsString) {
   const testEnvironment = newGlobal({newCompartment: true, systemPrincipal: true});
   testEnvironment.evaluate(completeTestAsString);

@@ -8,6 +8,9 @@ const RTL_LOCALES = ["ar", "he", "fa", "ps", "ur"];
 const DEFAULT_LANG = "en";
 const DEFAULT_DIR = "ltr";
 
+/**
+ * Handles the firefox provide Locale workflow.
+ */
 export function provideLocale() {
     const urlParams = new URLSearchParams(window.location.search);
     const langFromUrl = urlParams.get("lang")?.toLowerCase();

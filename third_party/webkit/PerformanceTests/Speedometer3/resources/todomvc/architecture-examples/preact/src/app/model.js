@@ -41,6 +41,9 @@ function nanoid(size = 21) {
 }
 let todos = [];
 
+/**
+ * Renders the Todo Model view.
+ */
 export default function TodoModel(sub) {
     const onChanges = [sub];
 

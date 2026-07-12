@@ -44,69 +44,117 @@ export const getVisibleSelectedFrame = createSelector(
   }
 );
 
+/**
+ * Handles the firefox get Context workflow.
+ */
 export function getContext(state) {
   return state.pause.cx;
 }
 
+/**
+ * Handles the firefox get Thread Context workflow.
+ */
 export function getThreadContext(state) {
   return state.pause.threadcx;
 }
 
+/**
+ * Handles the firefox get Navigate Counter workflow.
+ */
 export function getNavigateCounter(state) {
   return state.pause.threadcx.navigateCounter;
 }
 
+/**
+ * Handles the firefox get Pause Reason workflow.
+ */
 export function getPauseReason(state, thread) {
   return getThreadPauseState(state.pause, thread).why;
 }
 
+/**
+ * Handles the firefox get Should Breakpoints Pane Open On Pause workflow.
+ */
 export function getShouldBreakpointsPaneOpenOnPause(state, thread) {
   return getThreadPauseState(state.pause, thread)
     .shouldBreakpointsPaneOpenOnPause;
 }
 
+/**
+ * Handles the firefox get Pause Command workflow.
+ */
 export function getPauseCommand(state, thread) {
   return getThreadPauseState(state.pause, thread).command;
 }
 
+/**
+ * Returns whether is Stepping is true.
+ */
 export function isStepping(state, thread) {
   return ["stepIn", "stepOver", "stepOut"].includes(
     getPauseCommand(state, thread)
   );
 }
 
+/**
+ * Handles the firefox get Current Thread workflow.
+ */
 export function getCurrentThread(state) {
   return getThreadContext(state).thread;
 }
 
+/**
+ * Handles the firefox get Is Paused workflow.
+ */
 export function getIsPaused(state, thread) {
   return getThreadPauseState(state.pause, thread).isPaused;
 }
 
+/**
+ * Handles the firefox get Is Current Thread Paused workflow.
+ */
 export function getIsCurrentThreadPaused(state) {
   return getIsPaused(state, getCurrentThread(state));
 }
 
+/**
+ * Returns whether is Evaluating Expression is true.
+ */
 export function isEvaluatingExpression(state, thread) {
   return getThreadPauseState(state.pause, thread).command === "expression";
 }
 
+/**
+ * Handles the firefox get Is Waiting On Break workflow.
+ */
 export function getIsWaitingOnBreak(state, thread) {
   return getThreadPauseState(state.pause, thread).isWaitingOnBreak;
 }
 
+/**
+ * Handles the firefox get Should Pause On Debugger Statement workflow.
+ */
 export function getShouldPauseOnDebuggerStatement(state) {
   return state.pause.shouldPauseOnDebuggerStatement;
 }
 
+/**
+ * Handles the firefox get Should Pause On Exceptions workflow.
+ */
 export function getShouldPauseOnExceptions(state) {
   return state.pause.shouldPauseOnExceptions;
 }
 
+/**
+ * Handles the firefox get Should Pause On Caught Exceptions workflow.
+ */
 export function getShouldPauseOnCaughtExceptions(state) {
   return state.pause.shouldPauseOnCaughtExceptions;
 }
 
+/**
+ * Handles the firefox get Frames workflow.
+ */
 export function getFrames(state, thread) {
   const { frames, framesLoading } = getThreadPauseState(state.pause, thread);
   return framesLoading ? null : frames;
@@ -138,6 +186,9 @@ function getGeneratedFrameId(frameId) {
 }
 // This is Environment Scope information from the platform.
 // See https://searchfox.org/mozilla-central/rev/b0e8e4ceb46cb3339cdcb90310fcc161ef4b9e3e/devtools/server/actors/environment.js#42-81
+/**
+ * Handles the firefox get Generated Frame Scope workflow.
+ */
 export function getGeneratedFrameScope(state, frame) {
   if (!frame) {
     return null;
@@ -147,6 +198,9 @@ export function getGeneratedFrameScope(state, frame) {
   ];
 }
 
+/**
+ * Handles the firefox get Original Frame Scope workflow.
+ */
 export function getOriginalFrameScope(state, frame) {
   if (!frame) {
     return null;
@@ -169,10 +223,16 @@ export function getOriginalFrameScope(state, frame) {
 }
 
 // This is only used by tests
+/**
+ * Handles the firefox get Frame Scopes workflow.
+ */
 export function getFrameScopes(state, thread) {
   return getThreadPauseState(state.pause, thread).frameScopes;
 }
 
+/**
+ * Handles the firefox get Selected Frame Bindings workflow.
+ */
 export function getSelectedFrameBindings(state, thread) {
   const scopes = getFrameScopes(state, thread);
   const selectedFrameId = getSelectedFrameId(state, thread);
@@ -204,6 +264,9 @@ export function getSelectedFrameBindings(state, thread) {
   return frameBindings;
 }
 
+/**
+ * Handles the firefox get Selected Scope workflow.
+ */
 export function getSelectedScope(state) {
   const frame = getSelectedFrame(state);
   if (!frame) {
@@ -230,11 +293,17 @@ export function getSelectedScope(state) {
   return scopes;
 }
 
+/**
+ * Handles the firefox get Selected Original Scope workflow.
+ */
 export function getSelectedOriginalScope(state, thread) {
   const frame = getSelectedFrame(state, thread);
   return getOriginalFrameScope(state, frame);
 }
 
+/**
+ * Handles the firefox get Selected Scope Mappings workflow.
+ */
 export function getSelectedScopeMappings(state, thread) {
   const frameId = getSelectedFrameId(state, thread);
   if (!frameId) {
@@ -244,10 +313,16 @@ export function getSelectedScopeMappings(state, thread) {
   return getFrameScopes(state, thread).mappings[frameId];
 }
 
+/**
+ * Handles the firefox get Selected Frame Id workflow.
+ */
 export function getSelectedFrameId(state, thread) {
   return getThreadPauseState(state.pause, thread).selectedFrameId;
 }
 
+/**
+ * Returns whether is Top Frame Selected is true.
+ */
 export function isTopFrameSelected(state, thread) {
   const selectedFrameId = getSelectedFrameId(state, thread);
   // Consider that the top frame is selected when none is specified,
@@ -259,17 +334,26 @@ export function isTopFrameSelected(state, thread) {
   return selectedFrameId == topFrame?.id;
 }
 
+/**
+ * Handles the firefox get Top Frame workflow.
+ */
 export function getTopFrame(state, thread) {
   const frames = getFrames(state, thread);
   return frames?.[0];
 }
 
 // getTopFrame wouldn't return the top frame if the frames are still being fetched
+/**
+ * Handles the firefox get Currently Fetched Top Frame workflow.
+ */
 export function getCurrentlyFetchedTopFrame(state, thread) {
   const { frames } = getThreadPauseState(state.pause, thread);
   return frames?.[0];
 }
 
+/**
+ * Returns whether has Frame is true.
+ */
 export function hasFrame(state, frame) {
   // Don't use getFrames as it returns null when the frames are still loading
   const { frames } = getThreadPauseState(state.pause, frame.thread);
@@ -280,10 +364,16 @@ export function hasFrame(state, frame) {
   return frames.some(f => f.id == frame.id);
 }
 
+/**
+ * Handles the firefox get Skip Pausing workflow.
+ */
 export function getSkipPausing(state) {
   return state.pause.skipPausing;
 }
 
+/**
+ * Returns whether is Map Scopes Enabled is true.
+ */
 export function isMapScopesEnabled(state) {
   return state.pause.mapScopes;
 }
@@ -344,6 +434,9 @@ export function getInlinePreviews(state) {
   ];
 }
 
+/**
+ * Handles the firefox get Last Expanded Scopes workflow.
+ */
 export function getLastExpandedScopes(state, thread) {
   return getThreadPauseState(state.pause, thread).lastExpandedScopes;
 }

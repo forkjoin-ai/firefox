@@ -10,12 +10,18 @@ const CryptoHash = Components.Constructor(
 
 const XPI_WEAK_SIGNATURES = [Ci.nsIAppSignatureInfo.PKCS7_WITH_SHA1];
 
+/**
+ * Returns whether has Strong Signature is true.
+ */
 export function hasStrongSignature(addon) {
   return !!addon.signedTypes?.filter(
     algorithm => !XPI_WEAK_SIGNATURES.includes(algorithm)
   ).length;
 }
 
+/**
+ * Computes the Hash As String.
+ */
 export function computeHashAsString(hashType, input) {
   const data = new Uint8Array(new TextEncoder().encode(input));
   const crypto = CryptoHash(hashType);

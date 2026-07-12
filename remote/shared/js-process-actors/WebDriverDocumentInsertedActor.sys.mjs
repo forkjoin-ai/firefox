@@ -30,6 +30,9 @@ export function registerWebDriverDocumentInsertedActor() {
   registered = true;
 }
 
+/**
+ * Handles the firefox unregister Web Driver Document Inserted Actor workflow.
+ */
 export function unregisterWebDriverDocumentInsertedActor() {
   if (!registered) {
     return;

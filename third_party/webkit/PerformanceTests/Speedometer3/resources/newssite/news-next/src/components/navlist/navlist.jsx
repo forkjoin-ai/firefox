@@ -4,6 +4,9 @@ import NavListItem from "./navlist-item";
 
 import styles from "news-site-css/dist/navbar.module.css";
 
+/**
+ * Renders the Nav List view.
+ */
 export default function NavList({ callback, id }) {
     const { content } = useDataContext();
 

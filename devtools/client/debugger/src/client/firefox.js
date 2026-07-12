@@ -24,6 +24,9 @@ let targetCommand;
 let resourceCommand;
 let prefObserver;
 
+/**
+ * Handles the firefox on Connect workflow.
+ */
 export async function onConnect(_commands, _resourceCommand, _actions, store) {
   actions = _actions;
   commands = _commands;
@@ -154,6 +157,9 @@ async function onToggleContentScripts() {
   }
 }
 
+/**
+ * Handles the firefox on Disconnect workflow.
+ */
 export function onDisconnect() {
   targetCommand.unwatchTargets({
     types: targetCommand.ALL_TYPES,

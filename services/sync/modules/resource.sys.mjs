@@ -25,6 +25,9 @@ import { setTimeout, clearTimeout } from "resource://gre/modules/Timer.sys.mjs";
  *   post(data, callback)
  *   delete(callback)
  */
+/**
+ * Renders the Resource view.
+ */
 export function Resource(uri) {
   this._log = Log.repository.getLogger(this._logName);
   this._log.manageLevelFromPref("services.sync.log.logger.network.resources");

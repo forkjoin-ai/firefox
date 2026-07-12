@@ -11,6 +11,9 @@ const IDLE = "idle";
 const PENDING = "pending";
 const PINNED = "pinned";
 
+/**
+ * Renders the Pinnable Sites List view.
+ */
 export const PinnableSitesList = ({ tile, messageId, handleAction }) => {
   const items = tile?.data;
   const pinButtonLabel = tile?.pinButtonLabel;

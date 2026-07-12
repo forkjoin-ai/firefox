@@ -63,6 +63,9 @@ XPCOMUtils.defineLazyPreferenceGetter(
 );
 
 // A "bridged engine" to our tabs component.
+/**
+ * Renders the Tab Engine view.
+ */
 export function TabEngine(service) {
   BridgedEngine.call(this, "Tabs", service);
 }

@@ -56,4 +56,7 @@ assert.throws(TypeError, function() {
 assert.sameValue(g2().next().value, 23, 'binding value is immutable');
 
 import { g as g2 } from './instn-named-bndng-gen.js';
+/**
+ * Handles the firefox g workflow.
+ */
 export function* g() { return 23; }

@@ -4,6 +4,9 @@ import { useLocation } from "react-router-dom";
 import { Item } from "./item";
 import classnames from "classnames";
 
+/**
+ * Renders the Main view.
+ */
 export function Main({ todos, dispatch }) {
     const { pathname: route } = useLocation();
 

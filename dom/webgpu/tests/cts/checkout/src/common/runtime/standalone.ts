@@ -568,6 +568,9 @@ function prepareParams(params: Record<string, boolean | string | null>): string 
 }
 
 // This is just a cast in one place.
+/**
+ * Handles the firefox options To Record workflow.
+ */
 export function optionsToRecord(options: CTSOptions) {
   return options as unknown as Record<string, boolean | string | null>;
 }

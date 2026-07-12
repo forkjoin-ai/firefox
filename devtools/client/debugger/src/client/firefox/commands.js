@@ -195,6 +195,9 @@ async function removeXHRBreakpoint(path, method) {
   await breakpointsFront.removeXHRBreakpoint(path, method);
 }
 
+/**
+ * Converts input into toggle Java Script Enabled.
+ */
 export function toggleJavaScriptEnabled(enabled) {
   return commands.targetConfigurationCommand.updateConfiguration({
     javascriptEnabled: enabled,

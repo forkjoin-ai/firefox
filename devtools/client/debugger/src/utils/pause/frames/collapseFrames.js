@@ -16,6 +16,9 @@ function collapseLastFrames(frames) {
   return { newFrames, lastGroup };
 }
 
+/**
+ * Handles the firefox collapse Frames workflow.
+ */
 export function collapseFrames(frames) {
   // We collapse groups of one so that user frames
   // are not in a group of one

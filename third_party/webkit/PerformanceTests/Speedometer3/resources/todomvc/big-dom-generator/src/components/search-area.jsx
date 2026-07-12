@@ -1,6 +1,9 @@
 import SearchIcon from "./../assets/Smock_Search_18_N.svg";
 import CrossIcon from "./../assets/CrossSize100.svg";
 
+/**
+ * Renders the Search Area view.
+ */
 export const SearchArea = () => {
     return (
         <form className="spectrum-Search">

@@ -7,6 +7,9 @@ import { getVisibleSelectedFrame } from "./pause";
 
 // Checks if a line is considered in scope
 // We consider all lines in scope, if we do not have lines in scope.
+/**
+ * Returns whether is Line In Scope is true.
+ */
 export function isLineInScope(state, line) {
   const frame = getVisibleSelectedFrame(state);
   if (!frame) {

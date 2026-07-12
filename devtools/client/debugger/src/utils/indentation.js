@@ -2,6 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at <http://mozilla.org/MPL/2.0/>. */
 
+/**
+ * Handles the firefox get Indentation workflow.
+ */
 export function getIndentation(line) {
   if (!line) {
     return 0;
@@ -29,6 +32,9 @@ function getMaxIndentation(lines) {
   return Math.max(...indentations);
 }
 
+/**
+ * Handles the firefox correct Indentation workflow.
+ */
 export function correctIndentation(text) {
   const lines = text.trim().split("\n");
   const indentation = getMaxIndentation(lines);

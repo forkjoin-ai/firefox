@@ -27,6 +27,9 @@ ChromeUtils.defineESModuleGetters(lazy, {
 
 const FORMS_TTL = 3 * 365 * 24 * 60 * 60; // Three years in seconds.
 
+/**
+ * Renders the Form Rec view.
+ */
 export function FormRec(collection, id) {
   CryptoWrapper.call(this, collection, id);
 }
@@ -87,6 +90,9 @@ var FormWrapper = {
   },
 };
 
+/**
+ * Renders the Form Engine view.
+ */
 export function FormEngine(service) {
   SyncEngine.call(this, "Forms", service);
 }

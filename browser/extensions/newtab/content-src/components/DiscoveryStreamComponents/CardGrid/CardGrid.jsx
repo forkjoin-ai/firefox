@@ -25,6 +25,9 @@ const WIDGET_IDS = {
   TOPICS: 1,
 };
 
+/**
+ * Renders the DSSub Header view.
+ */
 export function DSSubHeader({ children }) {
   return (
     <div className="section-top-bar ds-sub-header">
@@ -34,6 +37,9 @@ export function DSSubHeader({ children }) {
 }
 
 // eslint-disable-next-line no-shadow
+/**
+ * Renders the Intersection Observer view.
+ */
 export function IntersectionObserver({
   children,
   windowObj = window,

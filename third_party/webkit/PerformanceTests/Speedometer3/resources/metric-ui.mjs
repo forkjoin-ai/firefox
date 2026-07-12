@@ -2,6 +2,9 @@ import { Metric } from "./metric.mjs";
 
 export const COLORS = Object.freeze(["blue", "blue-light", "green-light", "green", "yellow", "orange", "red", "magenta", "violet", "purple", "blue-dark", "green-dark", "ochre", "rust"]);
 
+/**
+ * Handles the firefox render Metric View workflow.
+ */
 export function renderMetricView(viewParams) {
     let { metrics, width = 500, trackHeight = 20, subMetricMargin = 35, title = "", colors = COLORS } = viewParams;
     // Make sure subMetricMargin is set for use in renderSubMetrics.

@@ -77,6 +77,9 @@ const zoomOnMeta =
   Services.prefs.getIntPref("mousewheel.with_meta.action", 1) == 3;
 const isAppLocaleRTL = Services.locale.isAppLocaleRTL;
 
+/**
+ * Renders the About Reader view.
+ */
 export var AboutReader = function (
   actor,
   articlePromise,

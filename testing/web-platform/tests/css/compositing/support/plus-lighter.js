@@ -1,5 +1,8 @@
 import { clamp01, multiplyAlpha, unmultiplyAlpha } from "./utils.js";
 
+/**
+ * Handles the firefox plus Lighter workflow.
+ */
 export function plusLighter(pixels) {
   if (pixels.length === 1) return pixels[0];
 

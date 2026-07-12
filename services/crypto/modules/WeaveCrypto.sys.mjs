@@ -9,6 +9,9 @@ const AES_CBC_IV_SIZE = 16;
 const OPERATIONS = { ENCRYPT: 0, DECRYPT: 1 };
 const UTF_LABEL = "utf-8";
 
+/**
+ * Renders the Weave Crypto view.
+ */
 export function WeaveCrypto() {
   this.init();
 }

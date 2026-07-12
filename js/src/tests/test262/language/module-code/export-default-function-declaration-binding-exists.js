@@ -21,5 +21,8 @@ negative:
 $DONOTEVALUATE();
 
 class F {}
+/**
+ * Renders the F view.
+ */
 export default function F() {}
 

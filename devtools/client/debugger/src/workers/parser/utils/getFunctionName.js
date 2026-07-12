@@ -7,6 +7,9 @@ import * as t from "@babel/types";
 // Perform ES6's anonymous function name inference for all
 // locations where static analysis is possible.
 // eslint-disable-next-line complexity
+/**
+ * Handles the firefox get Function Name workflow.
+ */
 export default function getFunctionName(node, parent) {
   if (t.isIdentifier(node.id)) {
     return node.id.name;

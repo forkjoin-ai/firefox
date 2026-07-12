@@ -55,6 +55,9 @@ const createStorage = async telemetryFeed => {
   return dbStore.getDbTable("snippets");
 };
 
+/**
+ * Renders the ASRouter Default Config view.
+ */
 export const ASRouterDefaultConfig = () => {
   const router = ASRouter;
   const telemetry = new ASRouterTelemetry();

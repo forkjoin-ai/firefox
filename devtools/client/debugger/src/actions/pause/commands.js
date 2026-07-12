@@ -18,6 +18,9 @@ import { fetchFrames } from "./fetchFrames";
 import { recordEvent } from "../../utils/telemetry";
 import { validateFrame } from "../../utils/context";
 
+/**
+ * Handles the firefox select Thread workflow.
+ */
 export function selectThread(thread) {
   return async ({ dispatch, getState }) => {
     if (getCurrentThread(getState()) === thread) {

@@ -5,6 +5,9 @@
 import { FeatureHighlight } from "./FeatureHighlight";
 import React, { useCallback } from "react";
 
+/**
+ * Renders the Follow Section Button Highlight view.
+ */
 export function FollowSectionButtonHighlight({
   arrowPosition,
   dispatch,

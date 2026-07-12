@@ -46,10 +46,16 @@ export function endTruncateStr(str, size) {
   return str;
 }
 
+/**
+ * Handles the firefox wait For Ms workflow.
+ */
 export function waitForMs(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+/**
+ * Handles the firefox save As Local File workflow.
+ */
 export async function saveAsLocalFile(content, fileName) {
   if (content.type !== "text") {
     return null;

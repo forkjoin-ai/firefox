@@ -8,6 +8,9 @@ import {ApiModel} from '@microsoft/api-extractor-model';
 
 import {MarkdownDocumenter} from './custom_markdown_documenter.js';
 
+/**
+ * Handles the firefox docgen workflow.
+ */
 export function docgen(jsonPath: string, outputDir: string): void {
   const apiModel = new ApiModel();
   apiModel.loadPackage(jsonPath);
@@ -20,6 +23,9 @@ export function docgen(jsonPath: string, outputDir: string): void {
   markdownDocumenter.generateFiles();
 }
 
+/**
+ * Handles the firefox splice Into Section workflow.
+ */
 export function spliceIntoSection(
   sectionName: string,
   content: string,

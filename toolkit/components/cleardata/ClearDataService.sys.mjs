@@ -2497,6 +2497,9 @@ const FLAGS_MAP = [
   },
 ];
 
+/**
+ * Renders the Clear Data Service view.
+ */
 export function ClearDataService() {
   this._initialize();
 }

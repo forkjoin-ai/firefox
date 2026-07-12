@@ -35,6 +35,9 @@ ChromeUtils.defineESModuleGetters(lazy, {
   PlacesUtils: "resource://gre/modules/PlacesUtils.sys.mjs",
 });
 
+/**
+ * Renders the History Rec view.
+ */
 export function HistoryRec(collection, id) {
   CryptoWrapper.call(this, collection, id);
 }
@@ -47,6 +50,9 @@ Object.setPrototypeOf(HistoryRec.prototype, CryptoWrapper.prototype);
 
 Utils.deferGetSet(HistoryRec, "cleartext", ["histUri", "title", "visits"]);
 
+/**
+ * Renders the History Engine view.
+ */
 export function HistoryEngine(service) {
   SyncEngine.call(this, "History", service);
 }

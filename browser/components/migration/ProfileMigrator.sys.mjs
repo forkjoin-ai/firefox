@@ -4,6 +4,9 @@
 
 import { MigrationUtils } from "resource:///modules/MigrationUtils.sys.mjs";
 
+/**
+ * Renders the Profile Migrator view.
+ */
 export function ProfileMigrator() {}
 
 ProfileMigrator.prototype = {

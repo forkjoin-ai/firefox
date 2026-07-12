@@ -6,6 +6,9 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import { MultiStageUtils } from "../lib/multistage-utils.mjs";
 import { Localized } from "./MSLocalized";
 
+/**
+ * Renders the Embedded Backup Restore view.
+ */
 export const EmbeddedBackupRestore = ({ handleAction, skipButton }) => {
   const [recoveryInProgress, setRecoveryInProgress] = useState(false);
   const ref = useRef(null);

@@ -6,6 +6,9 @@ import ArticleText from "./article-text";
 import styles from "news-site-css/dist/article.module.css";
 import layoutStyles from "news-site-css/dist/layout.module.css";
 
+/**
+ * Renders the Article Content view.
+ */
 export default function ArticleContent({ type, content, display }) {
     if (type === "text") {
         return (

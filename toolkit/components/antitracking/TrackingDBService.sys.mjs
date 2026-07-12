@@ -123,6 +123,9 @@ async function removeRecordsSince(db, date) {
   await db.execute(SQL.removeRecordsSince, { date });
 }
 
+/**
+ * Renders the Tracking DBService view.
+ */
 export function TrackingDBService() {
   this._initPromise = this._initialize();
 }

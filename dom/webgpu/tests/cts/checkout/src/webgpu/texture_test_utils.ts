@@ -133,6 +133,9 @@ export function createTextureFromTexelView(
   return createTextureFromTexelViews(t, [texelView], desc);
 }
 
+/**
+ * Creates the Texture From Texel Views Multiple Mipmaps.
+ */
 export function createTextureFromTexelViewsMultipleMipmaps(
   t: GPUTest,
   texelViews: TexelView[],
@@ -141,6 +144,9 @@ export function createTextureFromTexelViewsMultipleMipmaps(
   return createTextureFromTexelViews(t, texelViews, desc);
 }
 
+/**
+ * Handles the firefox expect Texel View Comparison Is Ok In Texture workflow.
+ */
 export function expectTexelViewComparisonIsOkInTexture(
   t: GPUTest,
   src: GPUTexelCopyTextureInfo,
@@ -247,6 +253,9 @@ export function expectSinglePixelComparisonsAreOkInTexture<E extends PixelExpect
   );
 }
 
+/**
+ * Handles the firefox expect Textures To Match By Rendering workflow.
+ */
 export function expectTexturesToMatchByRendering(
   t: GPUTest,
   actualTexture: GPUTexture,
@@ -385,8 +394,7 @@ export function expectTexturesToMatchByRendering(
 }
 
 /**
- * Expect an entire GPUTexture to have a single color at the given mip level (defaults to 0).
- * MAINTENANCE_TODO: Remove this and/or replace it with a helper in TextureTestMixin.
+ * Handles the firefox expect Single Color With Tolerance workflow.
  */
 export function expectSingleColorWithTolerance(
   t: GPUTest,
@@ -438,6 +446,9 @@ export function expectSingleColorWithTolerance(
   );
 }
 
+/**
+ * Handles the firefox copy Whole Texture To New Buffer Simple workflow.
+ */
 export function copyWholeTextureToNewBufferSimple(
   t: GPUTest,
   texture: GPUTexture,
@@ -468,6 +479,9 @@ export function copyWholeTextureToNewBufferSimple(
   );
 }
 
+/**
+ * Handles the firefox copy Whole Texture To New Buffer workflow.
+ */
 export function copyWholeTextureToNewBuffer(
   t: GPUTest,
   { texture, mipLevel }: { texture: GPUTexture; mipLevel: number | undefined },
@@ -497,6 +511,9 @@ export function copyWholeTextureToNewBuffer(
   return buffer;
 }
 
+/**
+ * Handles the firefox update Linear Texture Data Sub Box workflow.
+ */
 export function updateLinearTextureDataSubBox(
   t: GPUTest,
   format: ColorTextureFormat,
@@ -543,6 +560,9 @@ export function getTexelOffsetInBytes(
   );
 }
 
+/**
+ * Handles the firefox iterate Block Rows workflow.
+ */
 export function* iterateBlockRows(
   size: Required<GPUExtent3DDict>,
   format: ColorTextureFormat

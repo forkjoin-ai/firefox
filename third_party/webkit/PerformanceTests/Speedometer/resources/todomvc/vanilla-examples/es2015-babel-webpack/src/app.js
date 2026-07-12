@@ -4,6 +4,9 @@ import './app.css'
 import {$on} from './helpers'
 import {updateTodo} from './todo'
 
+/**
+ * Handles the firefox on Load workflow.
+ */
 export function onLoad() { // eslint-disable-line import/prefer-default-export
   updateTodo()
 }

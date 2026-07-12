@@ -57,6 +57,9 @@ export const formatConsoleMessage = options => {
   return stringifiedArgs.join(" ");
 };
 
+/**
+ * Handles the firefox stringify Arguments workflow.
+ */
 export const stringifyArguments = arg => {
   if (!Object.hasOwn(arg, "value")) {
     return arg.type;

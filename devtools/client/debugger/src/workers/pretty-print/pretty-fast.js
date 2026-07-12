@@ -8,6 +8,9 @@ var acorn = require("acorn");
 var sourceMap = require("source-map");
 const NEWLINE_CODE = 10;
 
+/**
+ * Handles the firefox pretty Fast workflow.
+ */
 export function prettyFast(input, options) {
   return new PrettyFast(options).getPrettifiedCodeAndSourceMap(input);
 }

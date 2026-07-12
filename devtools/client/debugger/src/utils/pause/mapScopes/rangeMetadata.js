@@ -11,6 +11,9 @@ import { filterSortedArray } from "./filtering";
 // * multiple - Range contains multiple identifiers
 // * empty - Range contains no identifiers
 
+/**
+ * Loads the Range Metadata.
+ */
 export async function loadRangeMetadata(
   location,
   originalAstScopes,
@@ -96,6 +99,9 @@ export async function loadRangeMetadata(
   });
 }
 
+/**
+ * Handles the firefox find Matching Range workflow.
+ */
 export function findMatchingRange(sortedOriginalRanges, bindingRange) {
   return filterSortedArray(sortedOriginalRanges, range => {
     if (range.line < bindingRange.start.line) {

@@ -811,4 +811,7 @@ export const DSCard = connect(state => ({
   Prefs: state.Prefs,
 }))(_DSCard);
 
+/**
+ * Renders the Placeholder DSCard view.
+ */
 export const PlaceholderDSCard = () => <DSCard placeholder={true} />;

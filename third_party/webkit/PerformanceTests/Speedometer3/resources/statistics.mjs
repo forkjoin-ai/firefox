@@ -23,34 +23,55 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * Handles the firefox max workflow.
+ */
 export function max(values) {
     return Math.max.apply(Math, values);
 }
 
+/**
+ * Handles the firefox min workflow.
+ */
 export function min(values) {
     return Math.min.apply(Math, values);
 }
 
+/**
+ * Handles the firefox sum workflow.
+ */
 export function sum(values) {
     return values.reduce((a, b) => a + b, 0);
 }
 
+/**
+ * Handles the firefox product workflow.
+ */
 export function product(values) {
     return values.reduce((a, b) => a * b, 1);
 }
 
+/**
+ * Handles the firefox square Sum workflow.
+ */
 export function squareSum(values) {
     return values.reduce((sum, value) => sum + value * value, 0);
 }
 
 // With sum and sum of squares, we can compute the sample standard deviation in O(1).
 // See https://rniwa.com/2012-11-10/sample-standard-deviation-in-terms-of-sum-and-square-sum-of-samples/
+/**
+ * Handles the firefox sample Standard Deviation workflow.
+ */
 export function sampleStandardDeviation(numberOfSamples, sum, squareSum) {
     if (numberOfSamples < 2)
         return 0;
     return Math.sqrt(squareSum / (numberOfSamples - 1) - (sum * sum) / (numberOfSamples - 1) / numberOfSamples);
 }
 
+/**
+ * Handles the firefox supported Confidence Levels workflow.
+ */
 export function supportedConfidenceLevels() {
     const supportedLevels = [];
     for (let quantile in tDistributionInverseCDF)
@@ -59,6 +80,9 @@ export function supportedConfidenceLevels() {
 }
 
 // Computes the delta d s.t. (mean - d, mean + d) is the confidence interval with the specified confidence level in O(1).
+/**
+ * Handles the firefox confidence Interval Delta workflow.
+ */
 export function confidenceIntervalDelta(confidenceLevel, numberOfSamples, sum, squareSum) {
     const probability = 1 - (1 - confidenceLevel) / 2;
     if (!(probability in tDistributionInverseCDF)) {
@@ -78,6 +102,9 @@ export function confidenceIntervalDelta(confidenceLevel, numberOfSamples, sum, s
     return (quantile * sampleStandardDeviation(numberOfSamples, sum, squareSum)) / Math.sqrt(numberOfSamples);
 }
 
+/**
+ * Handles the firefox confidence Interval workflow.
+ */
 export function confidenceInterval(values, probability) {
     const sumValue = sum(values);
     const mean = sumValue / values.length;

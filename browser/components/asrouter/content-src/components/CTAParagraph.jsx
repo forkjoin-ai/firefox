@@ -6,6 +6,9 @@ import React from "react";
 import { Localized, CONFIGURABLE_STYLES } from "./MSLocalized";
 import { MultiStageUtils } from "../lib/multistage-utils.mjs";
 
+/**
+ * Renders the CTAParagraph view.
+ */
 export const CTAParagraph = props => {
   const { content, handleAction } = props;
 

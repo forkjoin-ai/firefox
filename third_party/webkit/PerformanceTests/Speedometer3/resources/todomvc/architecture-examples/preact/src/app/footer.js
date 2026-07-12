@@ -1,6 +1,9 @@
 import cx from "classnames";
 import { h } from "preact";
 
+/**
+ * Renders the Todo Footer view.
+ */
 export default function TodoFooter({ todos, route, onClearCompleted }) {
     const activeTodoCount = todos.filter((todo) => !todo.completed).length;
     const completedTodoCount = todos.length - activeTodoCount;

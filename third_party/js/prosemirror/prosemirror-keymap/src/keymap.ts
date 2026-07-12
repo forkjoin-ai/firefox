@@ -68,6 +68,9 @@ function modifiers(name: string, event: KeyboardEvent, shift = true) {
 /// You can add multiple keymap plugins to an editor. The order in
 /// which they appear determines their precedence (the ones early in
 /// the array get to dispatch first).
+/**
+ * Handles the firefox keymap workflow.
+ */
 export function keymap(bindings: {[key: string]: Command}): Plugin {
   return new Plugin({props: {handleKeyDown: keydownHandler(bindings)}})
 }
@@ -75,6 +78,9 @@ export function keymap(bindings: {[key: string]: Command}): Plugin {
 /// Given a set of bindings (using the same format as
 /// [`keymap`](#keymap.keymap)), return a [keydown
 /// handler](#view.EditorProps.handleKeyDown) that handles them.
+/**
+ * Handles the firefox keydown Handler workflow.
+ */
 export function keydownHandler(bindings: {[key: string]: Command}): (view: EditorView, event: KeyboardEvent) => boolean {
   let map = normalize(bindings)
   return function(view, event) {

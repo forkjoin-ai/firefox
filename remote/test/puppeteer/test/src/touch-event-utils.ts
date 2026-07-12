@@ -15,6 +15,9 @@ export interface TouchEventReport {
   events: ReportedTouchEvent[];
 }
 
+/**
+ * Handles the firefox initialize Touch Event Report workflow.
+ */
 export async function initializeTouchEventReport(
   page: Page,
 ): Promise<TouchEventReport> {

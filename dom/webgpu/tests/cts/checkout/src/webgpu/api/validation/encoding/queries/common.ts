@@ -1,5 +1,8 @@
 import { GPUTest } from '../../../../gpu_test.js';
 
+/**
+ * Creates the Query Set With Type.
+ */
 export function createQuerySetWithType(
   t: GPUTest,
   type: GPUQueryType,
@@ -11,6 +14,9 @@ export function createQuerySetWithType(
   });
 }
 
+/**
+ * Handles the firefox begin Render Pass With Query Set workflow.
+ */
 export function beginRenderPassWithQuerySet(
   t: GPUTest,
   encoder: GPUCommandEncoder,

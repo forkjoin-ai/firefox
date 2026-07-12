@@ -1,4 +1,7 @@
 // creates a 4x4 pattern
+/**
+ * Creates the Pattern Data URL.
+ */
 export default function createPatternDataURL() {
   const patternSize = 4;
   const ctx = document.createElement('canvas').getContext('2d')!;

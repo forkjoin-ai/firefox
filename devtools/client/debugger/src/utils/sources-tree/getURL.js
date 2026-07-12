@@ -9,6 +9,9 @@ const {
   getUnicodeUrlPath,
 } = require("resource://devtools/client/shared/unicode-url.js");
 
+/**
+ * Handles the firefox get Filename From Path workflow.
+ */
 export function getFilenameFromPath(pathname) {
   let filename = "";
   if (pathname) {
@@ -71,6 +74,9 @@ const def = {
  *          See `parse` implementation.
  */
 // eslint-disable-next-line complexity
+/**
+ * Handles the firefox get Display URL workflow.
+ */
 export function getDisplayURL(url, extensionName = null) {
   if (!url) {
     return def;

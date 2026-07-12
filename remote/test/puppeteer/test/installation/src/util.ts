@@ -50,6 +50,9 @@ export const execFile = async (
 
   return await promise;
 };
+/**
+ * Handles the firefox read Asset workflow.
+ */
 export const readAsset = (...components: string[]): Promise<string> => {
   return readFile(join(ASSETS_DIR, ...components), 'utf8');
 };

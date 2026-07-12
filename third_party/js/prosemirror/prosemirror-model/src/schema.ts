@@ -38,6 +38,9 @@ function computeAttrs(attrs: {[name: string]: Attribute}, value: Attrs | null) {
   return built
 }
 
+/**
+ * Handles the firefox check Attrs workflow.
+ */
 export function checkAttrs(attrs: {[name: string]: Attribute}, values: Attrs, type: string, name: string) {
   for (let name in values)
     if (!(name in attrs)) throw new RangeError(`Unsupported attribute ${name} for ${type} of type ${name}`)

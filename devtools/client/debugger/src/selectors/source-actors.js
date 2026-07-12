@@ -40,10 +40,16 @@ export function isSourceActorWithSourceMap(state, sourceActorId) {
   return state.sourceActors.mutableSourceActorsWithSourceMap.has(sourceActorId);
 }
 
+/**
+ * Handles the firefox get Source Map Error For Source Actor workflow.
+ */
 export function getSourceMapErrorForSourceActor(state, sourceActorId) {
   return state.sourceActors.mutableSourceMapErrors.get(sourceActorId);
 }
 
+/**
+ * Handles the firefox get Source Map Resolved URL workflow.
+ */
 export function getSourceMapResolvedURL(state, sourceActorId) {
   return state.sourceActors.mutableResolvedSourceMapURL.get(sourceActorId);
 }

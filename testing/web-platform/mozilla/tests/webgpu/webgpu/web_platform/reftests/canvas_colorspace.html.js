@@ -47,6 +47,9 @@ device,
   device.queue.writeTexture({ texture }, textureData, {}, { width: 4, height: 1 });
 }
 
+/**
+ * Handles the firefox run Color Space Test workflow.
+ */
 export function runColorSpaceTest(format) {
   runRefTest(async (t) => {
 

@@ -94,6 +94,9 @@ class AwaitSingleton {
   }
 }
 
+/**
+ * Renders the ASRouter New Tab Hook view.
+ */
 export const ASRouterNewTabHook = (() => {
   const singleton = new AwaitSingleton();
   const instance = new ASRouterNewTabHookInstance();

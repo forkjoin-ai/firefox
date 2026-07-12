@@ -44,6 +44,9 @@ export const SPOC_TYPE = "SPOC";
 // We have two sources for sponsored topsites: sponsored_position is set by one
 // source, and type is set by another. Use this when we only care whether a link
 // is sponsored by either.
+/**
+ * Returns whether is Sponsored is true.
+ */
 export function isSponsored(link) {
   return link?.sponsored_position || link?.type === SPOC_TYPE;
 }

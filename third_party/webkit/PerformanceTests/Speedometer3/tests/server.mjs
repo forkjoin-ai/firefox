@@ -18,6 +18,9 @@ const MIME_TYPES = {
 const STATIC_PATH = path.join(process.cwd(), "./");
 const toBool = [() => true, () => false];
 
+/**
+ * Handles the firefox serve workflow.
+ */
 export default function serve(port) {
     if (!port)
         throw new Error("Port is required");

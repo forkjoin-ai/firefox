@@ -863,6 +863,9 @@ export const kLimitClasses = Object.fromEntries(
   Object.entries(kLimitInfoCore).map(([k, { class: c }]) => [k, c])
 );
 
+/**
+ * Handles the firefox get Default Limits workflow.
+ */
 export function getDefaultLimits(featureLevel) {
   return kLimitInfos[featureLevel];
 }
@@ -880,6 +883,9 @@ export function getDefaultLimitsForCTS() {
   return getDefaultLimits(globalTestConfig.compatibility ? 'compatibility' : 'core');
 }
 
+/**
+ * Handles the firefox get Default Limits For Device workflow.
+ */
 export function getDefaultLimitsForDevice(device) {
   const featureLevel = hasFeature(device.features, 'core-features-and-limits') ?
   'core' :

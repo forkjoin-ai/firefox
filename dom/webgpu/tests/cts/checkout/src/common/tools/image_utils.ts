@@ -7,11 +7,17 @@ import { screenshot, WindowInfo } from 'screenshot-ftw';
 // eslint-disable-next-line ban/ban
 const waitMS = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+/**
+ * Handles the firefox read Png workflow.
+ */
 export function readPng(filename: string) {
   const data = fs.readFileSync(filename);
   return PNG.sync.read(data);
 }
 
+/**
+ * Handles the firefox write Png workflow.
+ */
 export function writePng(filename: string, width: number, height: number, data: Buffer) {
   const png = new PNG({ colorType: 6, width, height });
   for (let i = 0; i < data.byteLength; ++i) {

@@ -16,6 +16,9 @@ import { prefs } from "../utils/prefs";
 
 // Pause state describing all threads.
 
+/**
+ * Handles the firefox initial Pause State workflow.
+ */
 export function initialPauseState(thread = "UnknownThread") {
   return {
     cx: {
@@ -62,6 +65,9 @@ const createInitialPauseState = () => ({
   shouldBreakpointsPaneOpenOnPause: false,
 });
 
+/**
+ * Handles the firefox get Thread Pause State workflow.
+ */
 export function getThreadPauseState(state, thread) {
   // Thread state is lazily initialized so that we don't have to keep track of
   // the current set of worker threads.

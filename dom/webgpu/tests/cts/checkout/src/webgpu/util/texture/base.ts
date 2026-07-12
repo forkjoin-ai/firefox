@@ -100,9 +100,7 @@ export function physicalMipSizeFromTexture(
 }
 
 /**
- * Compute the "virtual size" of a mip level of a texture (not accounting for texel block rounding).
- *
- * MAINTENANCE_TODO: Change output to Required<GPUExtent3DDict> for consistency.
+ * Handles the firefox virtual Mip Size workflow.
  */
 export function virtualMipSize(
   dimension: GPUTextureDimension,
@@ -201,9 +199,8 @@ export function defaultViewDimensionsForTexture(textureDescriptor: Readonly<GPUT
   );
 }
 
-/** Reifies the optional fields of `GPUTextureDescriptor`.
- * MAINTENANCE_TODO: viewFormats should not be omitted here, but it seems likely that the
- * @webgpu/types definition will have to change before we can include it again.
+/**
+ * Handles the firefox reify Texture Descriptor workflow.
  */
 export function reifyTextureDescriptor(
   desc: Readonly<GPUTextureDescriptor>

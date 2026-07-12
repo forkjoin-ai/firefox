@@ -71,6 +71,9 @@ function generateIndex({ keyCode, max }) {
   return hash % max;
 }
 
+/**
+ * Renders the Placeholder Image view.
+ */
 export function PlaceholderImage({ urlKey, titleKey }) {
   const dataIndex = generateIndex({
     keyCode: urlKey,

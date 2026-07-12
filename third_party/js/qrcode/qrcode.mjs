@@ -1242,6 +1242,9 @@ const qrPolynomial = function(num, shift) {
 // QRRSBlock
 //---------------------------------------------------------------------
 
+/**
+ * Renders the QRRSBlock view.
+ */
 export const QRRSBlock = function() {
 
   const RS_BLOCK_TABLE = [

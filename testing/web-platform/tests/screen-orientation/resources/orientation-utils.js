@@ -27,12 +27,18 @@ export async function attachIframe(options = {}) {
   return iframe;
 }
 
+/**
+ * Handles the firefox get Opposite Orientation workflow.
+ */
 export function getOppositeOrientation() {
   return screen.orientation.type.startsWith("portrait")
     ? "landscape"
     : "portrait";
 }
 
+/**
+ * Handles the firefox make Cleanup workflow.
+ */
 export function makeCleanup(options = {}) {
   const {
     iframe,

@@ -60,6 +60,9 @@ function setEngineEnabled(enabled) {
 }
 
 // A "bridged engine" to our webext-storage component.
+/**
+ * Renders the Extension Storage Engine Bridge view.
+ */
 export function ExtensionStorageEngineBridge(service) {
   lazy.setupLoggerForTarget("webext_storage", "Sync.Engine.Extension-Storage");
   BridgedEngine.call(this, "Extension-Storage", service);

@@ -1,3 +1,6 @@
+/**
+ * Handles the firefox uuid workflow.
+ */
 export function uuid() {
     let uuid = '';
     for (let i = 0; i < 32; i++) {
@@ -10,10 +13,16 @@ export function uuid() {
     return uuid;
 }
 
+/**
+ * Handles the firefox pluralize workflow.
+ */
 export function pluralize(count, word) {
     return count === 1 ? word : word + 's';
 }
 
+/**
+ * Handles the firefox store workflow.
+ */
 export function store(namespace, data) {
     // if (data) return localStorage[namespace] = JSON.stringify(data);
 

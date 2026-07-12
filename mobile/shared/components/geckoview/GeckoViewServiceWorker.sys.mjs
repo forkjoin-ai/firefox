@@ -9,6 +9,9 @@ ChromeUtils.defineESModuleGetters(lazy, {
   GeckoViewUtils: "resource://gre/modules/GeckoViewUtils.sys.mjs",
 });
 
+/**
+ * Handles the firefox open Window workflow.
+ */
 export async function openWindow(uri, aOpenWindowInfo) {
   const info = await lazy.EventDispatcher.instance.sendRequestForResult(
     "GeckoView:ServiceWorkerOpenWindow",

@@ -15,6 +15,9 @@ export type Verdict =
   // permit: always passes uniformity analysis
   | 'permit';
 
+/**
+ * Handles the firefox compile Should Succeed workflow.
+ */
 export function compileShouldSucceed({
   requires_uniformity,
   condition_is_uniform,
@@ -78,6 +81,9 @@ export type Snippet = {
 type LoopKind = 'loop' | 'for' | 'for-unif' | 'for-nonunif' | 'while-unif' | 'while-nonunif';
 
 // Expand a loop case spec to its shader code
+/**
+ * Handles the firefox spec To Code workflow.
+ */
 export function specToCode(spec: string): string {
   let matches = spec.match('^(loop|for-unif|for-nonunif|for|while-unif|while-nonunif)-(.*)');
   assert(matches !== null, `invalid spec string: ${spec}`);
@@ -181,6 +187,9 @@ export function specToCode(spec: string): string {
 }
 
 // Creates a Snippet from a loop spec string and a verdict.
+/**
+ * Renders the Loop Case view.
+ */
 export function LoopCase(spec: string, verdict: Verdict): Snippet {
   return { name: spec, verdict, code: specToCode(spec) };
 }

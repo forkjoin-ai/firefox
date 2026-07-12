@@ -1,3 +1,6 @@
+/**
+ * Handles the firefox root workflow.
+ */
 export default function root() {
   const one = 1;
 

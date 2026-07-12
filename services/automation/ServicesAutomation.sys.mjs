@@ -365,10 +365,16 @@ export var Sync = {
   },
 };
 
+/**
+ * Handles the firefox init Config workflow.
+ */
 export function initConfig(autoconfig) {
   Services.prefs.setStringPref(AUTOCONFIG_PREF, autoconfig);
 }
 
+/**
+ * Handles the firefox trigger Sync workflow.
+ */
 export async function triggerSync(username, password, autoconfig) {
   initConfig(autoconfig);
   await Authentication.signIn(username, password);

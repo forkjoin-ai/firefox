@@ -5,6 +5,9 @@
 import React from "react";
 import { MultiStageUtils } from "../lib/multistage-utils.mjs";
 
+/**
+ * Renders the Hero Image view.
+ */
 export const HeroImage = props => {
   const { height, url, alt } = props;
 

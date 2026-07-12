@@ -2,6 +2,9 @@ import classNames from "classnames";
 
 import styles from "news-site-css/dist/message.module.css";
 
+/**
+ * Renders the Message view.
+ */
 export function Message({ message, onClose }) {
     if (!message)
         return null;

@@ -2,6 +2,9 @@ import { useCallback, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import classnames from "classnames";
 
+/**
+ * Renders the Footer view.
+ */
 export function Footer({ todos, dispatch }) {
     const { pathname: route } = useLocation();
 

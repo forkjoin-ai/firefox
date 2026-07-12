@@ -35,6 +35,9 @@ const PopoverShell = ({ entry, content, handleDismiss, handleBlock }) => {
   );
 };
 
+/**
+ * Renders the OMCHighlight Slot view.
+ */
 export const OMCHighlightSlot = ({ slot, dispatch }) => {
   const { messageData } = useSelector(state => state.Messages);
   const content = messageData?.content;

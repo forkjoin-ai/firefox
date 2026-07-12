@@ -29,6 +29,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
 // `-26T`, `1983`, `40px`, `75px`, `bush`, `jack`, `mind`, `very`, and `wolf`
 let urlAlphabet = "useandom-26T198340PX75pxJACKVERYMINDBUSHWOLF_GQZbfghjklqvwyzrict";
 
+/**
+ * Handles the firefox nanoid workflow.
+ */
 export function nanoid(size = 21) {
     let id = "";
     // A compact alternative for `for (var i = 0; i < step; i++)`.

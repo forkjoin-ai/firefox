@@ -6,6 +6,9 @@ import {
 } from '../../capability_info.js';
 import { ResourceState, GPUTest } from '../../gpu_test.js';
 
+/**
+ * Creates the Texture With State.
+ */
 export function createTextureWithState(
   t: GPUTest,
   state: ResourceState,
@@ -266,6 +269,9 @@ export function getDeviceMismatchedRenderTexture(t: GPUTest, sampleCount: number
   });
 }
 
+/**
+ * Handles the firefox get Device Mismatched Binding Resource workflow.
+ */
 export function getDeviceMismatchedBindingResource(
   t: GPUTest,
   bindingType: ValidBindableResource

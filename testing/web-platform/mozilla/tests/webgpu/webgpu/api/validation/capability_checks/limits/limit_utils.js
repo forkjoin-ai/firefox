@@ -33,6 +33,9 @@ export const kBindingCombinations = [
 
 
 
+/**
+ * Handles the firefox get Pipeline Type For Binding Combination workflow.
+ */
 export function getPipelineTypeForBindingCombination(bindingCombination) {
   switch (bindingCombination) {
     case 'vertex':
@@ -46,6 +49,9 @@ export function getPipelineTypeForBindingCombination(bindingCombination) {
   }
 }
 
+/**
+ * Handles the firefox get Stage Visibility For Binding Combination workflow.
+ */
 export function getStageVisibilityForBindingCombination(bindingCombination) {
   switch (bindingCombination) {
     case 'vertex':
@@ -104,6 +110,9 @@ id)
   ).join('\n        ');
 }
 
+/**
+ * Handles the firefox get Per Stage WGSLFor Binding Combination Impl workflow.
+ */
 export function getPerStageWGSLForBindingCombinationImpl(
 bindingCombination,
 order,
@@ -194,6 +203,9 @@ extraWGSL = '')
   }
 }
 
+/**
+ * Handles the firefox get Per Stage WGSLFor Binding Combination workflow.
+ */
 export function getPerStageWGSLForBindingCombination(
 bindingCombination,
 order,
@@ -217,6 +229,9 @@ extraWGSL = '')
   );
 }
 
+/**
+ * Handles the firefox get Per Stage WGSLFor Binding Combination Storage Textures workflow.
+ */
 export function getPerStageWGSLForBindingCombinationStorageTextures(
 bindingCombination,
 order,
@@ -247,6 +262,9 @@ export const kLimitModes = ['defaultLimit', 'adapterLimit'];
 export const kMaximumTestValues = ['atLimit', 'overLimit'];
 
 
+/**
+ * Handles the firefox get Maximum Test Value workflow.
+ */
 export function getMaximumTestValue(limit, testValue) {
   switch (testValue) {
     case 'atLimit':
@@ -268,6 +286,9 @@ export const kMaximumLimitValueTests = [
 
 
 
+/**
+ * Handles the firefox get Limit Value workflow.
+ */
 export function getLimitValue(
 defaultLimit,
 maximumLimit,
@@ -297,6 +318,9 @@ export const kMinimumLimitValueTests = [
 
 
 
+/**
+ * Handles the firefox get Default Limit For Adapter workflow.
+ */
 export function getDefaultLimitForAdapter(adapter, limit) {
   const limitInfo = getDefaultLimitsForCTS();
   return limitInfo[limit].default;

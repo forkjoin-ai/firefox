@@ -307,6 +307,9 @@ function compileMapping(paths) {
   };
 }
 
+/**
+ * Resolves the URI.
+ */
 export function resolveURI(id, mapping) {
   // Do not resolve if already a resource URI
   if (isAbsoluteURI(id)) {
@@ -320,6 +323,9 @@ export function resolveURI(id, mapping) {
 // in the context of the given `loader`. Each module gets own limited copy
 // of `require` that is allowed to load only a modules that are associated
 // with it during link time.
+/**
+ * Renders the Require view.
+ */
 export function Require(loader, requirer) {
   const { modules, mapping, mappingCache, requireHook } = loader;
 
@@ -472,6 +478,9 @@ export function Require(loader, requirer) {
 
 // Makes module object that is made available to CommonJS modules when they
 // are evaluated, along with `exports` and `require`.
+/**
+ * Renders the Module view.
+ */
 export function Module(id, uri) {
   return Object.create(null, {
     id: { enumerable: true, value: id },
@@ -487,6 +496,9 @@ export function Module(id, uri) {
 
 // Takes `loader`, and unload `reason` string and notifies all observers that
 // they should cleanup after them-self.
+/**
+ * Handles the firefox unload workflow.
+ */
 export function unload(loader, reason) {
   // subject is a unique object created per loader instance.
   // This allows any code to cleanup on loader unload regardless of how
@@ -513,6 +525,9 @@ export function unload(loader, reason) {
 // - `requireHook`: Optional function used to replace native require function
 //   from loader. This function receive the module path as first argument,
 //   and native require method as second argument.
+/**
+ * Renders the Loader view.
+ */
 export function Loader(options) {
   let { paths, globals } = options;
   if (!globals) {

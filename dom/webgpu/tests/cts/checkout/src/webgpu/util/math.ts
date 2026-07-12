@@ -26,6 +26,9 @@ export const kMaxSafeMultipleOf8 = Number.MAX_SAFE_INTEGER - 7;
 
 /** Round `n` up to the next multiple of `alignment` (inclusive). */
 // MAINTENANCE_TODO: Rename to `roundUp`
+/**
+ * Handles the firefox align workflow.
+ */
 export function align(n: number, alignment: number): number {
   assert(Number.isInteger(n) && n >= 0, 'n must be a non-negative integer');
   assert(Number.isInteger(alignment) && alignment > 0, 'alignment must be a positive integer');
@@ -2200,6 +2203,9 @@ export function sparseMatrixF64Range(cols: number, rows: number): ROArrayArrayAr
  * m x p result.
  */
 // A is m x n. B is n x p. product is m x p.
+/**
+ * Handles the firefox multiply Matrices workflow.
+ */
 export function multiplyMatrices(
   A: Array<Array<number>>,
   B: Array<Array<number>>

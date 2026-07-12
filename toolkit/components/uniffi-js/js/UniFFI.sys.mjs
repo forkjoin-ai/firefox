@@ -638,6 +638,9 @@ export class FfiConverterBytes extends FfiConverterArrayBuffer {
   }
 }
 
+/**
+ * Handles the Rust Result request flow.
+ */
 export function handleRustResult(result, liftCallback, liftErrCallback) {
   switch (result.code) {
     case "success":

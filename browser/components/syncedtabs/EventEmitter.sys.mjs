@@ -3,6 +3,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 // Simple event emitter abstraction for storage objects to use.
+/**
+ * Renders the Event Emitter view.
+ */
 export function EventEmitter() {
   this._events = new Map();
 }

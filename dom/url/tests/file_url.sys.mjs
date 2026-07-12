@@ -1,3 +1,6 @@
+/**
+ * Handles the firefox check From ESM workflow.
+ */
 export function checkFromESM(ok, is) {
   var url = new URL("https://www.example.com");
   is(url.href, "https://www.example.com/", "ESM should have URL");

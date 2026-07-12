@@ -33,10 +33,16 @@ XPCOMUtils.defineLazyPreferenceGetter(
 
 let gSound = null;
 
+/**
+ * Handles the firefox reset Sound workflow.
+ */
 export function resetSound() {
   gSound = null;
 }
 
+/**
+ * Handles the firefox init Sound workflow.
+ */
 export function initSound() {
   if (!gSound && lazy.isSoundEnabled) {
     try {
@@ -46,6 +52,9 @@ export function initSound() {
   }
 }
 
+/**
+ * Handles the firefox play Sound workflow.
+ */
 export function playSound(event) {
   if (!lazy.isSoundEnabled) {
     return;

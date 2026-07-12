@@ -192,6 +192,9 @@ copySize,
   return { buffer, bytesPerRow, rowsPerImage };
 }
 
+/**
+ * Handles the firefox find Failed Pixels workflow.
+ */
 export function findFailedPixels(
 format,
 subrectOrigin,

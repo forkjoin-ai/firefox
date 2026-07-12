@@ -29,6 +29,9 @@ import {
 } from "../../actions/breakpoints/index";
 import { openConditionalPanel } from "../../actions/ui";
 
+/**
+ * Handles the firefox show Editor Edit Breakpoint Context Menu workflow.
+ */
 export function showEditorEditBreakpointContextMenu(event, breakpoint) {
   return async ({ dispatch, getState }) => {
     const state = getState();
@@ -82,6 +85,9 @@ export function showEditorEditBreakpointContextMenu(event, breakpoint) {
   };
 }
 
+/**
+ * Handles the firefox show Editor Create Breakpoint Context Menu workflow.
+ */
 export function showEditorCreateBreakpointContextMenu(
   event,
   location,
@@ -94,6 +100,9 @@ export function showEditorCreateBreakpointContextMenu(
   };
 }
 
+/**
+ * Creates the Breakpoint Items.
+ */
 export function createBreakpointItems(location, lineText, dispatch) {
   const items = [
     addBreakpointItem(location, dispatch),

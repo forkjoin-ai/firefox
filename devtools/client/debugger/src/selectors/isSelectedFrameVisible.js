@@ -17,6 +17,9 @@ function getGeneratedId(source) {
  * Checks to if the selected frame's source is currently
  * selected.
  */
+/**
+ * Returns whether is Selected Frame Visible is true.
+ */
 export function isSelectedFrameVisible(state) {
   const selectedLocation = getSelectedLocation(state);
   const selectedFrame = getSelectedFrame(state);

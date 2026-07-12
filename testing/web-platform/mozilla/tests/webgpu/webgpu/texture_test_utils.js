@@ -133,6 +133,9 @@ desc)
   return createTextureFromTexelViews(t, [texelView], desc);
 }
 
+/**
+ * Creates the Texture From Texel Views Multiple Mipmaps.
+ */
 export function createTextureFromTexelViewsMultipleMipmaps(
 t,
 texelViews,
@@ -141,6 +144,9 @@ desc)
   return createTextureFromTexelViews(t, texelViews, desc);
 }
 
+/**
+ * Handles the firefox expect Texel View Comparison Is Ok In Texture workflow.
+ */
 export function expectTexelViewComparisonIsOkInTexture(
 t,
 src,
@@ -157,6 +163,9 @@ comparisonOptions = {
   );
 }
 
+/**
+ * Handles the firefox expect Single Pixel Comparisons Are Ok In Texture workflow.
+ */
 export function expectSinglePixelComparisonsAreOkInTexture(
 t,
 src,
@@ -247,6 +256,9 @@ comparisonOptions = {
   );
 }
 
+/**
+ * Handles the firefox expect Textures To Match By Rendering workflow.
+ */
 export function expectTexturesToMatchByRendering(
 t,
 actualTexture,
@@ -385,8 +397,7 @@ size)
 }
 
 /**
- * Expect an entire GPUTexture to have a single color at the given mip level (defaults to 0).
- * MAINTENANCE_TODO: Remove this and/or replace it with a helper in TextureTestMixin.
+ * Handles the firefox expect Single Color With Tolerance workflow.
  */
 export function expectSingleColorWithTolerance(
 t,
@@ -438,6 +449,9 @@ format,
   );
 }
 
+/**
+ * Handles the firefox copy Whole Texture To New Buffer Simple workflow.
+ */
 export function copyWholeTextureToNewBufferSimple(
 t,
 texture,
@@ -468,6 +482,9 @@ mipLevel)
   );
 }
 
+/**
+ * Handles the firefox copy Whole Texture To New Buffer workflow.
+ */
 export function copyWholeTextureToNewBuffer(
 t,
 { texture, mipLevel },
@@ -497,6 +514,9 @@ resultDataLayout)
   return buffer;
 }
 
+/**
+ * Handles the firefox update Linear Texture Data Sub Box workflow.
+ */
 export function updateLinearTextureDataSubBox(
 t,
 format,
@@ -543,6 +563,9 @@ origin = { x: 0, y: 0, z: 0 })
 
 }
 
+/**
+ * Handles the firefox iterate Block Rows workflow.
+ */
 export function* iterateBlockRows(
 size,
 format)

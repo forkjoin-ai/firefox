@@ -431,6 +431,9 @@ export class AboutWelcomeParent extends JSWindowActorParent {
   }
 }
 
+/**
+ * Handles the firefox reset Nimbus Ready Promise For Testing workflow.
+ */
 export function resetNimbusReadyPromiseForTesting() {
   nimbusReadyPromise = null;
 }

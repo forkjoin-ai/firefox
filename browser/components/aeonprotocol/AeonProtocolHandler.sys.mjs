@@ -298,6 +298,9 @@ function createWallBackedChannel(uri, loadInfo) {
   return channel;
 }
 
+/**
+ * Renders the Aeon Protocol Handler view.
+ */
 export function AeonProtocolHandler() {}
 
 AeonProtocolHandler.prototype = {

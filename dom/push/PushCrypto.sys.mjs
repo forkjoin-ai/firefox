@@ -139,6 +139,9 @@ function getCryptoParamsFromPayload(payload) {
 
 // Extracts the sender public key, salt, and record size from the `Crypto-Key`
 // and `Encryption` headers for the aesgcm scheme.
+/**
+ * Handles the firefox get Crypto Params From Headers workflow.
+ */
 export function getCryptoParamsFromHeaders(headers) {
   if (!headers) {
     return null;

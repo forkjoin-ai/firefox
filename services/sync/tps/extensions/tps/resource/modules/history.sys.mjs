@@ -13,6 +13,9 @@ import { PlacesSyncUtils } from "resource://gre/modules/PlacesSyncUtils.sys.mjs"
 
 import { Logger } from "resource://tps/logger.sys.mjs";
 
+/**
+ * Renders the Dump History view.
+ */
 export var DumpHistory = async function TPS_History__DumpHistory() {
   let query = PlacesUtils.history.getNewQuery();
   let options = PlacesUtils.history.getNewQueryOptions();

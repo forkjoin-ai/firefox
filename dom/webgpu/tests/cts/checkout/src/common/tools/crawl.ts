@@ -45,6 +45,9 @@ async function crawlFilesRecursively(dir: string): Promise<string[]> {
   );
 }
 
+/**
+ * Handles the firefox crawl workflow.
+ */
 export async function crawl(
   suiteDir: string,
   opts: {
@@ -198,6 +201,9 @@ export async function crawl(
   return entries;
 }
 
+/**
+ * Handles the firefox make Listing workflow.
+ */
 export function makeListing(filename: string): Promise<TestSuiteListing> {
   // Don't validate. This path is only used for the dev server and running tests with Node.
   // Validation is done for listing generation and presubmit.

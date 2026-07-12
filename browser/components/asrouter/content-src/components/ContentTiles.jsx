@@ -53,6 +53,9 @@ const CONTAINER_STYLES = [
   "gap",
 ];
 
+/**
+ * Renders the Content Tiles view.
+ */
 export const ContentTiles = props => {
   const { content } = props;
   const [expandedTileIndex, setExpandedTileIndex] = useState(null);

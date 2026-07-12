@@ -23,6 +23,9 @@ function folder(platform: BrowserPlatform): string {
   }
 }
 
+/**
+ * Resolves the Download Url.
+ */
 export function resolveDownloadUrl(
   platform: BrowserPlatform,
   buildId: string,
@@ -31,6 +34,9 @@ export function resolveDownloadUrl(
   return `${baseUrl}/${resolveDownloadPath(platform, buildId).join('/')}`;
 }
 
+/**
+ * Resolves the Download Path.
+ */
 export function resolveDownloadPath(
   platform: BrowserPlatform,
   buildId: string,
@@ -42,6 +48,9 @@ export function resolveDownloadPath(
   ];
 }
 
+/**
+ * Handles the firefox relative Executable Path workflow.
+ */
 export function relativeExecutablePath(
   platform: BrowserPlatform,
   _buildId: string,

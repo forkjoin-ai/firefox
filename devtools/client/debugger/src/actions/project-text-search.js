@@ -21,6 +21,9 @@ import { matchesGlobPatterns } from "../utils/source";
 import { loadSourceText } from "./sources/loadSourceText";
 import { searchKeys } from "../constants";
 
+/**
+ * Handles the firefox search Sources workflow.
+ */
 export function searchSources(query, onUpdatedResults, signal) {
   return async ({ dispatch, getState, searchWorker }) => {
     dispatch({
@@ -96,6 +99,9 @@ export function searchSources(query, onUpdatedResults, signal) {
   };
 }
 
+/**
+ * Handles the firefox search Source workflow.
+ */
 export async function searchSource(
   source,
   sourceActor,

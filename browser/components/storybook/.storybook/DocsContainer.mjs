@@ -64,6 +64,9 @@ function applyDocsDomTheme(dark) {
 }
 
 /* -------- container -------- */
+/**
+ * Renders the Docs Container view.
+ */
 export default function DocsContainer(props) {
   // initial selection from URL; "system" follows OS via mql below
   const [selected, setSelected] = useState(getSelectedFromUrl()); // 'light' | 'dark' | 'system'

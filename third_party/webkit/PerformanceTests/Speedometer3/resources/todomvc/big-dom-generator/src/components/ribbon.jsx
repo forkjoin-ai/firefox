@@ -18,6 +18,9 @@ const Divider = () => {
     return <div className="ribbon-divider spectrum-Divider spectrum-Divider--sizeS spectrum-Divider--vertical" />;
 };
 
+/**
+ * Renders the Ribbon view.
+ */
 export const Ribbon = () => {
     return (
         <div className="ribbon">

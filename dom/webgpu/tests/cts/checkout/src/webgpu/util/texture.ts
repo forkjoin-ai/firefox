@@ -761,6 +761,9 @@ export function createTextureFromTexelViews(
   return texture;
 }
 
+/**
+ * Handles the firefox copy Texel Views To Texture workflow.
+ */
 export function copyTexelViewsToTexture(
   t: GPUTestBase,
   texture: GPUTexture,

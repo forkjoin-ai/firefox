@@ -35,6 +35,9 @@ export * from "./breakpointPositions";
 export * from "./modify";
 export * from "./syncBreakpoint";
 
+/**
+ * Handles the firefox add Hidden Breakpoint workflow.
+ */
 export function addHiddenBreakpoint(location) {
   return ({ dispatch }) => {
     return dispatch(addBreakpoint(location, { hidden: true }));
@@ -113,6 +116,9 @@ export function toggleBreakpoints(shouldDisableBreakpoints, breakpoints) {
   };
 }
 
+/**
+ * Converts input into toggle Breakpoints At Line.
+ */
 export function toggleBreakpointsAtLine(shouldDisableBreakpoints, line) {
   return async ({ dispatch, getState }) => {
     const breakpoints = getBreakpointsAtLine(getState(), line);
@@ -206,6 +212,9 @@ export function updateBreakpointsForNewPrettyPrintedSource(source) {
   };
 }
 
+/**
+ * Converts input into toggle Breakpoint At Line.
+ */
 export function toggleBreakpointAtLine(line) {
   return async ({ dispatch, getState }) => {
     const state = getState();
@@ -234,6 +243,9 @@ export function toggleBreakpointAtLine(line) {
   };
 }
 
+/**
+ * Handles the firefox add Breakpoint At Line workflow.
+ */
 export function addBreakpointAtLine(line, shouldLog = false, disabled = false) {
   return async ({ dispatch, getState }) => {
     const state = getState();
@@ -260,6 +272,9 @@ export function addBreakpointAtLine(line, shouldLog = false, disabled = false) {
   };
 }
 
+/**
+ * Handles the firefox remove Breakpoints At Line workflow.
+ */
 export function removeBreakpointsAtLine(source, line) {
   return ({ dispatch, getState }) => {
     const breakpointsAtLine = getBreakpointsForSource(getState(), source, line);
@@ -267,6 +282,9 @@ export function removeBreakpointsAtLine(source, line) {
   };
 }
 
+/**
+ * Handles the firefox disable Breakpoints At Line workflow.
+ */
 export function disableBreakpointsAtLine(source, line) {
   return ({ dispatch, getState }) => {
     const breakpointsAtLine = getBreakpointsForSource(getState(), source, line);
@@ -274,6 +292,9 @@ export function disableBreakpointsAtLine(source, line) {
   };
 }
 
+/**
+ * Handles the firefox enable Breakpoints At Line workflow.
+ */
 export function enableBreakpointsAtLine(source, line) {
   return ({ dispatch, getState }) => {
     const breakpointsAtLine = getBreakpointsForSource(getState(), source, line);
@@ -281,6 +302,9 @@ export function enableBreakpointsAtLine(source, line) {
   };
 }
 
+/**
+ * Converts input into toggle Disabled Breakpoint.
+ */
 export function toggleDisabledBreakpoint(breakpoint) {
   return ({ dispatch }) => {
     if (!breakpoint.disabled) {
@@ -290,6 +314,9 @@ export function toggleDisabledBreakpoint(breakpoint) {
   };
 }
 
+/**
+ * Handles the firefox enable XHRBreakpoint workflow.
+ */
 export function enableXHRBreakpoint(index, bp) {
   return ({ dispatch, getState, client }) => {
     const xhrBreakpoints = getXHRBreakpoints(getState());
@@ -308,6 +335,9 @@ export function enableXHRBreakpoint(index, bp) {
   };
 }
 
+/**
+ * Handles the firefox disable XHRBreakpoint workflow.
+ */
 export function disableXHRBreakpoint(index, bp) {
   return ({ dispatch, getState, client }) => {
     const xhrBreakpoints = getXHRBreakpoints(getState());
@@ -326,6 +356,9 @@ export function disableXHRBreakpoint(index, bp) {
   };
 }
 
+/**
+ * Handles the firefox update XHRBreakpoint workflow.
+ */
 export function updateXHRBreakpoint(index, path, method) {
   return ({ dispatch, getState, client }) => {
     const xhrBreakpoints = getXHRBreakpoints(getState());
@@ -349,6 +382,9 @@ export function updateXHRBreakpoint(index, path, method) {
     });
   };
 }
+/**
+ * Converts input into toggle Pause On Any.
+ */
 export function togglePauseOnAny() {
   return ({ dispatch, getState }) => {
     const xhrBreakpoints = getXHRBreakpoints(getState());
@@ -366,6 +402,9 @@ export function togglePauseOnAny() {
   };
 }
 
+/**
+ * Handles the firefox set XHRBreakpoint workflow.
+ */
 export function setXHRBreakpoint(path, method) {
   return ({ dispatch, client }) => {
     const breakpoint = createXHRBreakpoint(path, method);
@@ -378,6 +417,9 @@ export function setXHRBreakpoint(path, method) {
   };
 }
 
+/**
+ * Handles the firefox remove All XHRBreakpoints workflow.
+ */
 export function removeAllXHRBreakpoints() {
   return async ({ dispatch, getState, client }) => {
     const xhrBreakpoints = getXHRBreakpoints(getState());
@@ -392,6 +434,9 @@ export function removeAllXHRBreakpoints() {
   };
 }
 
+/**
+ * Handles the firefox remove XHRBreakpoint workflow.
+ */
 export function removeXHRBreakpoint(index) {
   return ({ dispatch, getState, client }) => {
     const xhrBreakpoints = getXHRBreakpoints(getState());

@@ -6,6 +6,9 @@ import {isEquivalentPosition, domIndex, isOnEdge, selectionCollapsed} from "./do
 import {EditorView} from "./index"
 import {NodeViewDesc} from "./viewdesc"
 
+/**
+ * Handles the firefox selection From DOM workflow.
+ */
 export function selectionFromDOM(view: EditorView, origin: string | null = null) {
   let domSel = view.domSelectionRange(), doc = view.state.doc
   if (!domSel.focusNode) return null
@@ -52,6 +55,9 @@ function editorOwnsSelection(view: EditorView) {
     hasSelection(view) && document.activeElement && document.activeElement.contains(view.dom)
 }
 
+/**
+ * Handles the firefox selection To DOM workflow.
+ */
 export function selectionToDOM(view: EditorView, force = false) {
   let sel = view.state.selection
   syncNodeSelection(view, sel)
@@ -163,6 +169,9 @@ function selectCursorWrapper(view: EditorView) {
   }
 }
 
+/**
+ * Handles the firefox sync Node Selection workflow.
+ */
 export function syncNodeSelection(view: EditorView, sel: Selection) {
   if (sel instanceof NodeSelection) {
     let desc = view.docView.descAt(sel.from)
@@ -185,16 +194,25 @@ function clearNodeSelection(view: EditorView) {
   }
 }
 
+/**
+ * Handles the firefox selection Between workflow.
+ */
 export function selectionBetween(view: EditorView, $anchor: ResolvedPos, $head: ResolvedPos, bias?: number) {
   return view.someProp("createSelectionBetween", f => f(view, $anchor, $head))
     || TextSelection.between($anchor, $head, bias)
 }
 
+/**
+ * Returns whether has Focus And Selection is true.
+ */
 export function hasFocusAndSelection(view: EditorView) {
   if (view.editable && !view.hasFocus()) return false
   return hasSelection(view)
 }
 
+/**
+ * Returns whether has Selection is true.
+ */
 export function hasSelection(view: EditorView) {
   let sel = view.domSelectionRange()
   if (!sel.anchorNode) return false
@@ -209,6 +227,9 @@ export function hasSelection(view: EditorView) {
   }
 }
 
+/**
+ * Handles the firefox anchor In Right Place workflow.
+ */
 export function anchorInRightPlace(view: EditorView) {
   let anchorDOM = view.docView.domFromPos(view.state.selection.anchor, 0)
   let domSel = view.domSelectionRange()

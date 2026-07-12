@@ -7,12 +7,18 @@ import { sortSelectedLocations } from "../location";
 export * from "./breakpointPositions";
 
 // The ID for a Breakpoint is derived from its location in its Source.
+/**
+ * Handles the firefox make Breakpoint Id workflow.
+ */
 export function makeBreakpointId(location) {
   const { source, line, column } = location;
   const columnString = column || "";
   return `${source.id}:${line}:${columnString}`;
 }
 
+/**
+ * Handles the firefox make Breakpoint Server Location Id workflow.
+ */
 export function makeBreakpointServerLocationId(breakpointServerLocation) {
   const { sourceUrl, sourceId, line, column } = breakpointServerLocation;
   const sourceUrlOrId = sourceUrl || sourceId;
@@ -48,6 +54,9 @@ export function makeBreakpointServerLocation(state, location) {
   return breakpointLocation;
 }
 
+/**
+ * Creates the XHRBreakpoint.
+ */
 export function createXHRBreakpoint(path, method, overrides = {}) {
   const properties = {
     path,
@@ -60,12 +69,18 @@ export function createXHRBreakpoint(path, method, overrides = {}) {
   return { ...properties, ...overrides };
 }
 
+/**
+ * Handles the firefox get Selected Text workflow.
+ */
 export function getSelectedText(breakpoint, selectedSource) {
   return !!selectedSource && !selectedSource.isOriginal
     ? breakpoint.text
     : breakpoint.originalText;
 }
 
+/**
+ * Handles the firefox sort Selected Breakpoints workflow.
+ */
 export function sortSelectedBreakpoints(breakpoints, selectedSource) {
   return sortSelectedLocations(breakpoints, selectedSource);
 }

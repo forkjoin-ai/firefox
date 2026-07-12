@@ -11,6 +11,9 @@ import { ImpressionsSection } from "./ImpressionsSection";
 
 // Convert a UTF-8 string to a string in which only one byte of each
 // 16-bit unit is occupied. This is necessary to comply with `btoa` API constraints.
+/**
+ * Converts input into Binary.
+ */
 export function toBinary(string) {
   const codeUnits = new Uint16Array(string.length);
   for (let i = 0; i < codeUnits.length; i++) {
@@ -1434,12 +1437,18 @@ export class ASRouterAdminInner extends React.PureComponent {
   }
 }
 
+/**
+ * Renders the ASRouter Admin view.
+ */
 export const ASRouterAdmin = props => (
   <SimpleHashRouter>
     <ASRouterAdminInner {...props} />
   </SimpleHashRouter>
 );
 
+/**
+ * Handles the firefox render ASRouter Admin workflow.
+ */
 export function renderASRouterAdmin() {
   ReactDOM.render(<ASRouterAdmin />, document.getElementById("root"));
 }

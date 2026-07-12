@@ -8,6 +8,9 @@ import { SafeAnchor } from "../SafeAnchor/SafeAnchor";
 import { ImpressionStats } from "../../DiscoveryStreamImpressionStats/ImpressionStats";
 import { connect } from "react-redux";
 
+/**
+ * Handles the firefox Topics Widget workflow.
+ */
 export function _TopicsWidget(props) {
   const { id, source, position, DiscoveryStream, dispatch } = props;
 

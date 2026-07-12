@@ -1,5 +1,8 @@
 // Returns the stack trace of an Error, but without the extra boilerplate at the bottom
 // (e.g. RunCaseSpecific, processTicksAndRejections, etc.), for logging.
+/**
+ * Handles the firefox extract Important Stack Trace workflow.
+ */
 export function extractImportantStackTrace(e: Error): string {
   let stack = e.stack;
   if (!stack) {

@@ -14,6 +14,9 @@ import {
 // EnsureNSSInitializedChromeOrContent from the IO thread would deadlock with
 // DoRequestSynchronously. In a real browser session NSS is always initialized
 // during startup; this is only needed for xpcshell.
+/**
+ * Handles the firefox ensure NSSInitialized workflow.
+ */
 export function ensureNSSInitialized() {
   let psm = Cc["@mozilla.org/psm;1"];
   if (psm) {

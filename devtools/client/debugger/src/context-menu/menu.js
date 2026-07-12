@@ -5,6 +5,9 @@
 const Menu = require("resource://devtools/client/framework/menu.js");
 const MenuItem = require("resource://devtools/client/framework/menu-item.js");
 
+/**
+ * Handles the firefox show Menu workflow.
+ */
 export function showMenu(evt, items) {
   if (items.length === 0) {
     return;
@@ -33,6 +36,9 @@ function createSubMenu(subItems) {
   return null;
 }
 
+/**
+ * Builds the Menu.
+ */
 export function buildMenu(items) {
   return items
     .map(itm => {

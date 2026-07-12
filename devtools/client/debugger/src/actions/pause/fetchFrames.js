@@ -4,6 +4,9 @@
 
 import { getIsPaused } from "../../selectors/index";
 
+/**
+ * Fetches the Frames.
+ */
 export function fetchFrames(thread) {
   return async function ({ dispatch, client, getState }) {
     let frames;

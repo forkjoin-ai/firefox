@@ -2,6 +2,9 @@ import classNames from "classnames";
 import toastStyles from "news-site-css/dist/toast.module.css";
 import buttonStyles from "news-site-css/dist/button.module.css";
 
+/**
+ * Renders the Toast view.
+ */
 export default function Toast({ onClose, notification, onAccept, onReject }) {
     const { title, description, actions } = notification;
     return (

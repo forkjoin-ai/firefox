@@ -6,6 +6,9 @@
 
 
 
+/**
+ * Handles the firefox run Ref Test workflow.
+ */
 export function runRefTest(fn) {
   void (async () => {
     assert(

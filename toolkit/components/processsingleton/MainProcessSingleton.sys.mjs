@@ -2,6 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+/**
+ * Renders the Main Process Singleton view.
+ */
 export function MainProcessSingleton() {}
 MainProcessSingleton.prototype = {
   classID: Components.ID("{0636a680-45cb-11e4-916c-0800200c9a66}"),

@@ -8,6 +8,9 @@ import {SchematicsException, type Tree} from '@angular-devkit/schematics';
 
 import type {AngularJson, AngularProject} from './types.js';
 
+/**
+ * Handles the firefox get Json File As Object workflow.
+ */
 export function getJsonFileAsObject(
   tree: Tree,
   path: string,
@@ -21,14 +24,23 @@ export function getJsonFileAsObject(
   }
 }
 
+/**
+ * Handles the firefox get Object As Json workflow.
+ */
 export function getObjectAsJson(object: Record<string, unknown>): string {
   return JSON.stringify(object, null, 2);
 }
 
+/**
+ * Handles the firefox get Angular Config workflow.
+ */
 export function getAngularConfig(tree: Tree): AngularJson {
   return getJsonFileAsObject(tree, './angular.json') as unknown as AngularJson;
 }
 
+/**
+ * Handles the firefox get Application Projects workflow.
+ */
 export function getApplicationProjects(
   tree: Tree,
 ): Record<string, AngularProject> {

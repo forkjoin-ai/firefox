@@ -177,6 +177,9 @@ function wrapExpressionFromAst(ast) {
   return generate(newAst).code;
 }
 
+/**
+ * Handles the firefox map Top Level Await workflow.
+ */
 export default function mapTopLevelAwait(expression, ast) {
   if (!ast) {
     // If there's no ast this means the expression is malformed. And if the

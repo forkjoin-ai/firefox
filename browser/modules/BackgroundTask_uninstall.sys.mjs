@@ -11,6 +11,9 @@
 
 import { AppConstants } from "resource://gre/modules/AppConstants.sys.mjs";
 
+/**
+ * Handles the firefox run Background Task workflow.
+ */
 export async function runBackgroundTask() {
   console.log("Running BackgroundTask_uninstall.");
 

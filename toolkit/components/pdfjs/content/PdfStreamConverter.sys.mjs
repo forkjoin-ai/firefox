@@ -950,6 +950,9 @@ class RequestListener {
   }
 }
 
+/**
+ * Renders the Pdf Stream Converter view.
+ */
 export function PdfStreamConverter() {}
 
 PdfStreamConverter.prototype = {

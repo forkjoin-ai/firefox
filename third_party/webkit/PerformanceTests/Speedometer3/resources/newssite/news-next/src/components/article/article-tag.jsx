@@ -7,6 +7,9 @@ import FireIcon from "@/assets/fire-icon";
 
 import styles from "news-site-css/dist/article.module.css";
 
+/**
+ * Renders the Article Tag view.
+ */
 export default function ArticleTag({ tag }) {
     if (!tag)
         return null;

@@ -10,6 +10,9 @@
 
 import { prefs } from "../utils/prefs";
 
+/**
+ * Handles the firefox initial Expression State workflow.
+ */
 export const initialExpressionState = () => ({
   expressions: restoreExpressions(),
   autocompleteMatches: {},

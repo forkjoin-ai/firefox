@@ -16,6 +16,9 @@ class RequestError extends Error {
   }
 }
 
+/**
+ * Handles the firefox set Storage Prefs workflow.
+ */
 export async function setStoragePrefs(optionalPrefsToSet) {
   const prefsToSet = [
     // Not needed right now, but might be needed in future.
@@ -33,6 +36,9 @@ export async function setStoragePrefs(optionalPrefsToSet) {
   await SpecialPowers.pushPrefEnv({ set: prefsToSet });
 }
 
+/**
+ * Handles the firefox get Cached Usage For Origin workflow.
+ */
 export async function getCachedUsageForOrigin(principal) {
   const request = SpecialPowers.Services.qms.getCachedUsageForPrincipal(
     principal,
@@ -52,6 +58,9 @@ export async function getCachedUsageForOrigin(principal) {
   return request.result;
 }
 
+/**
+ * Handles the firefox clear Storages For Origin workflow.
+ */
 export async function clearStoragesForOrigin(principal) {
   const request =
     SpecialPowers.Services.qms.clearStoragesForPrincipal(principal);

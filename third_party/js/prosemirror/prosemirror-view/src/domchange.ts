@@ -78,6 +78,9 @@ function ruleFromNode(dom: DOMNode): Omit<TagParseRule, "tag"> | null {
 
 const isInline = /^(a|abbr|acronym|b|bd[io]|big|br|button|cite|code|data(list)?|del|dfn|em|i|img|ins|kbd|label|map|mark|meter|output|q|ruby|s|samp|small|span|strong|su[bp]|time|u|tt|var)$/i
 
+/**
+ * Handles the firefox read DOMChange workflow.
+ */
 export function readDOMChange(view: EditorView, from: number, to: number, typeOver: boolean, addedNodes: readonly DOMNode[]) {
   let compositionID = view.input.compositionPendingChanges || (view.composing ? view.input.compositionID : 0)
   view.input.compositionPendingChanges = 0

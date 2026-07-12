@@ -7,6 +7,9 @@ import { MultiStageUtils } from "../lib/multistage-utils.mjs";
 import { Localized } from "./MSLocalized";
 import { InstallButton } from "./InstallButton";
 
+/**
+ * Renders the Addons Picker view.
+ */
 export const AddonsPicker = props => {
   const { content, installedAddons, layout, handleAction } = props;
 

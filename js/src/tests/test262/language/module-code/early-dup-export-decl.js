@@ -15,5 +15,8 @@ features: [generators]
 
 $DONOTEVALUATE();
 
+/**
+ * Handles the firefox f workflow.
+ */
 export function f() {}
 export function *f() {}

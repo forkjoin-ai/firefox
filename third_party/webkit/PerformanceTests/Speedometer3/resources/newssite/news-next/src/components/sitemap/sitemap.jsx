@@ -7,6 +7,9 @@ import { HashLink } from "react-router-hash-link";
 
 import styles from "news-site-css/dist/sitemap.module.css";
 
+/**
+ * Renders the Sitemap view.
+ */
 export default function Sitemap() {
     const { content } = useDataContext();
 

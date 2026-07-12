@@ -4,10 +4,16 @@
 
 import { makeBreakpointId } from "../utils/breakpoint/index";
 
+/**
+ * Handles the firefox get In Scope Lines workflow.
+ */
 export function getInScopeLines(state, location) {
   return state.ast.mutableInScopeLines.get(makeBreakpointId(location))?.lines;
 }
 
+/**
+ * Returns whether has In Scope Lines is true.
+ */
 export function hasInScopeLines(state, location) {
   return !!getInScopeLines(state, location);
 }

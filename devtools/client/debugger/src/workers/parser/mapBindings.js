@@ -74,6 +74,9 @@ function globalizeAssignment(node, bindings) {
   );
 }
 
+/**
+ * Handles the firefox map Expression Bindings workflow.
+ */
 export default function mapExpressionBindings(expression, ast, bindings = []) {
   let isMapped = false;
   let shouldUpdate = true;

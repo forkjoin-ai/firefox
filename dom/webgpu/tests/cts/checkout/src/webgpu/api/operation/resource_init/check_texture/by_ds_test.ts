@@ -192,8 +192,14 @@ const checkContents: (type: 'depth' | 'stencil', ...args: Parameters<CheckConten
   }
 };
 
+/**
+ * Handles the firefox check Contents By Depth Test workflow.
+ */
 export const checkContentsByDepthTest = (...args: Parameters<CheckContents>) =>
   checkContents('depth', ...args);
 
+/**
+ * Handles the firefox check Contents By Stencil Test workflow.
+ */
 export const checkContentsByStencilTest = (...args: Parameters<CheckContents>) =>
   checkContents('stencil', ...args);

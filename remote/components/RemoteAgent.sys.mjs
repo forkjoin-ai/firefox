@@ -554,6 +554,9 @@ if (isRemote) {
 }
 
 // This is used by the XPCOM codepath which expects a constructor
+/**
+ * Renders the Remote Agent Factory view.
+ */
 export var RemoteAgentFactory = function () {
   return RemoteAgent;
 };

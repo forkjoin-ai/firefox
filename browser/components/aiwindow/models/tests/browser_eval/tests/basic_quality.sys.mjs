@@ -29,6 +29,9 @@ const TEST_CASES = [
   ],
 ];
 
+/**
+ * Handles the firefox run Chat Eval For Model workflow.
+ */
 export async function runChatEvalForModel(
   model,
   { Assert, SpecialPowers, setupEvaluation, collectChatResponse, renderPrompt }

@@ -42,6 +42,9 @@ export class InputState {
   hideSelectionGuard: (() => void) | null = null
 }
 
+/**
+ * Handles the firefox init Input workflow.
+ */
 export function initInput(view: EditorView) {
   for (let event in handlers) {
     let handler = handlers[event]
@@ -64,6 +67,9 @@ function setSelectionOrigin(view: EditorView, origin: string) {
   view.input.lastSelectionTime = Date.now()
 }
 
+/**
+ * Handles the firefox destroy Input workflow.
+ */
 export function destroyInput(view: EditorView) {
   view.domObserver.stop()
   for (let type in view.input.eventHandlers)
@@ -72,6 +78,9 @@ export function destroyInput(view: EditorView) {
   clearTimeout(view.input.lastIOSEnterFallbackTimeout)
 }
 
+/**
+ * Handles the firefox ensure Listeners workflow.
+ */
 export function ensureListeners(view: EditorView) {
   view.someProp("handleDOMEvents", currentHandlers => {
     for (let type in currentHandlers) if (!view.input.eventHandlers[type])
@@ -96,6 +105,9 @@ function eventBelongsToView(view: EditorView, event: Event) {
   return true
 }
 
+/**
+ * Handles the firefox dispatch Event workflow.
+ */
 export function dispatchEvent(view: EditorView, event: Event) {
   if (!runCustomHandler(view, event) && handlers[event.type] &&
       (view.editable || !(event.type in editHandlers)))
@@ -515,6 +527,9 @@ function scheduleComposeEnd(view: EditorView, delay: number) {
   if (delay > -1) view.input.composingTimeout = setTimeout(() => endComposition(view), delay)
 }
 
+/**
+ * Handles the firefox clear Composition workflow.
+ */
 export function clearComposition(view: EditorView) {
   if (view.composing) {
     view.input.composing = false
@@ -523,6 +538,9 @@ export function clearComposition(view: EditorView) {
   while (view.input.compositionNodes.length > 0) view.input.compositionNodes.pop()!.markParentsDirty()
 }
 
+/**
+ * Handles the firefox find Composition Node workflow.
+ */
 export function findCompositionNode(view: EditorView) {
   let sel = view.domSelectionRange()
   if (!sel.focusNode) return null
@@ -549,6 +567,9 @@ function timestampFromCustomEvent() {
 }
 
 /// @internal
+/**
+ * Handles the firefox end Composition workflow.
+ */
 export function endComposition(view: EditorView, restarting = false) {
   if (browser.android && view.domObserver.flushingSoon >= 0) return
   view.domObserver.forceFlush()
@@ -629,6 +650,9 @@ function capturePaste(view: EditorView, event: ClipboardEvent) {
   }, 50)
 }
 
+/**
+ * Handles the firefox do Paste workflow.
+ */
 export function doPaste(view: EditorView, text: string, html: string | null, preferPlain: boolean, event: ClipboardEvent) {
   let slice = parseFromClipboard(view, text, html, preferPlain, view.state.selection.$from)
   if (view.someProp("handlePaste", f => f(view, event, slice || Slice.empty))) return true

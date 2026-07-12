@@ -204,6 +204,9 @@ export var Subprocess = {
 Object.assign(Subprocess, SubprocessConstants);
 Object.freeze(Subprocess);
 
+/**
+ * Handles the firefox get Subprocess Impl For Test workflow.
+ */
 export function getSubprocessImplForTest() {
   return lazy.SubprocessImpl;
 }

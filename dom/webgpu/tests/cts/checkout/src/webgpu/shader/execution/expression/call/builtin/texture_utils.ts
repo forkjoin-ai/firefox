@@ -1082,6 +1082,9 @@ const kTextureTypeInfo = {
   },
 } as const;
 
+/**
+ * Handles the firefox get Texture Format Type Info workflow.
+ */
 export function getTextureFormatTypeInfo(
   format: GPUTextureFormat,
   aspect: GPUTextureAspect = 'all'
@@ -1383,14 +1386,26 @@ export interface TextureCall<T extends Dimensionality> extends TextureCallArgs<T
   componentType?: 'i' | 'u';
 }
 
+/**
+ * Returns whether is Builtin Comparison is true.
+ */
 export const isBuiltinComparison = (builtin: TextureBuiltin) =>
   builtin === 'textureGatherCompare' ||
   builtin === 'textureSampleCompare' ||
   builtin === 'textureSampleCompareLevel';
+/**
+ * Returns whether is Builtin Gather is true.
+ */
 export const isBuiltinGather = (builtin: TextureBuiltin | undefined) =>
   builtin === 'textureGather' || builtin === 'textureGatherCompare';
+/**
+ * Handles the firefox builtin Needs Sampler workflow.
+ */
 export const builtinNeedsSampler = (builtin: TextureBuiltin) =>
   builtin.startsWith('textureSample') || builtin.startsWith('textureGather');
+/**
+ * Handles the firefox builtin Needs Derivatives workflow.
+ */
 export const builtinNeedsDerivatives = (builtin: TextureBuiltin) =>
   builtin === 'textureSample' ||
   builtin === 'textureSampleBias' ||
@@ -1566,6 +1581,9 @@ function swizzleComponentToTexelComponent(
   }
 }
 
+/**
+ * Handles the firefox swizzle Texel workflow.
+ */
 export function swizzleTexel(
   src: PerTexelComponent<number>,
   swizzle: GPUTextureComponentSwizzle | undefined
@@ -4331,14 +4349,23 @@ type GenerateTextureBuiltinInputsImplArgs = FilterFirstElement<
   Parameters<typeof generateTextureBuiltinInputsImpl>
 >;
 
+/**
+ * Handles the firefox generate Texture Builtin Inputs1 D workflow.
+ */
 export function generateTextureBuiltinInputs1D(...args: GenerateTextureBuiltinInputsImplArgs) {
   return generateTextureBuiltinInputsImpl<vec1>((x: number) => [x], ...args);
 }
 
+/**
+ * Handles the firefox generate Texture Builtin Inputs2 D workflow.
+ */
 export function generateTextureBuiltinInputs2D(...args: GenerateTextureBuiltinInputsImplArgs) {
   return generateTextureBuiltinInputsImpl<vec2>((x: number, y: number) => [x, y], ...args);
 }
 
+/**
+ * Handles the firefox generate Texture Builtin Inputs3 D workflow.
+ */
 export function generateTextureBuiltinInputs3D(...args: GenerateTextureBuiltinInputsImplArgs) {
   return generateTextureBuiltinInputsImpl<vec3>(
     (x: number, y: number, z: number) => [x, y, z],

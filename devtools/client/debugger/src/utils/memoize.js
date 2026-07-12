@@ -48,6 +48,9 @@ function setValue(keys, store, value) {
 }
 
 // memoize with n arguments
+/**
+ * Handles the firefox memoize workflow.
+ */
 export default function memoize(func) {
   const store = new WeakMap();
 

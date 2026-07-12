@@ -79,6 +79,9 @@ function isEmptyObject(obj) {
   return true;
 }
 
+/**
+ * Renders the Enterprise Policies Manager view.
+ */
 export function EnterprisePoliciesManager() {
   Services.obs.addObserver(this, "profile-after-change", true);
   Services.obs.addObserver(this, "final-ui-startup", true);

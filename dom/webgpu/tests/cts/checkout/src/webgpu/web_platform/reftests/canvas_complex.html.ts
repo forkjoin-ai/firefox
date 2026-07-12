@@ -16,6 +16,9 @@ type WriteCanvasMethod =
   | 'ComputeWorkgroup1x1TextureStore'
   | 'ComputeWorkgroup16x16TextureStore';
 
+/**
+ * Handles the firefox run workflow.
+ */
 export function run(
   format: ColorTextureFormat,
   targets: { cvs: HTMLCanvasElement; writeCanvasMethod: WriteCanvasMethod }[]

@@ -13,7 +13,13 @@ var localBindingId;
 export var localVarDecl;
 export let localLetDecl;
 export const localConstDecl = null;
+/**
+ * Handles the firefox local Func Decl workflow.
+ */
 export function localFuncDecl() {}
+/**
+ * Handles the firefox local Gen Decl workflow.
+ */
 export function* localGenDecl() {}
 export class localClassDecl {}
 export { localBindingId };

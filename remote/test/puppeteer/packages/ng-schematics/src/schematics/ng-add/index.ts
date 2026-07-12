@@ -36,6 +36,9 @@ const DEFAULT_PORT = 4200;
 
 // You don't have to export the function as default. You can also have more than one rule
 // factory per file.
+/**
+ * Handles the firefox ng Add workflow.
+ */
 export function ngAdd(options: SchematicsOptions): Rule {
   return (tree: Tree, context: SchematicContext) => {
     return chain([

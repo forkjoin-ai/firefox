@@ -503,6 +503,9 @@ export function registerCommandsActor(sessionId) {
   webDriverSessionId = sessionId;
 }
 
+/**
+ * Handles the firefox unregister Commands Actor workflow.
+ */
 export function unregisterCommandsActor() {
   webDriverSessionId = null;
 

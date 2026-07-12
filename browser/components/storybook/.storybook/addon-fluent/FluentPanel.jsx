@@ -11,6 +11,9 @@ import { FLUENT_CHANGED, FLUENT_SET_STRINGS } from "./constants.mjs";
 // eslint-disable-next-line import/no-unassigned-import
 import "./fluent-panel.css";
 
+/**
+ * Renders the Fluent Panel view.
+ */
 export const FluentPanel = ({ active }) => {
   const [fileName, setFileName] = useState(null);
   const [strings, setStrings] = useState([]);

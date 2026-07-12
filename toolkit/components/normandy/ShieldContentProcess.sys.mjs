@@ -12,6 +12,9 @@
 
 import { AboutPages } from "resource://normandy-content/AboutPages.sys.mjs";
 
+/**
+ * Renders the About Studies view.
+ */
 export function AboutStudies() {
   return AboutPages.aboutStudies;
 }

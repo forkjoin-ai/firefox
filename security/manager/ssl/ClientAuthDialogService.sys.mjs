@@ -6,6 +6,9 @@
 // open a dialog asking the user to select a client authentication certificate.
 // Ideally the dialog will be tab-modal to the tab corresponding to the load
 // that resulted in the request for the client authentication certificate.
+/**
+ * Renders the Client Auth Dialog Service view.
+ */
 export function ClientAuthDialogService() {}
 
 const lazy = {};

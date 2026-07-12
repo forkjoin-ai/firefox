@@ -17,6 +17,9 @@ const wintypes = {
   WORD: ctypes.uint16_t,
 };
 
+/**
+ * Renders the OSCrypto view.
+ */
 export function OSCrypto() {
   this._structs = {};
   this._functions = new Map();

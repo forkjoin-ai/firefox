@@ -1,5 +1,8 @@
 var val = "outer-value";
 
+/**
+ * Handles the firefox root workflow.
+ */
 export default function root() {
   var val = "middle-value";
   var fn = function outerFn(outer){};

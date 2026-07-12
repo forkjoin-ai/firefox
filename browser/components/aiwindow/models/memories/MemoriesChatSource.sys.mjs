@@ -132,6 +132,9 @@ export function computeFreshnessScore(
   return Math.max(0, Math.min(1, raw));
 }
 
+/**
+ * Handles the firefox set Block List Manager For Testing workflow.
+ */
 export function _setBlockListManagerForTesting(mgr) {
   _mgr = mgr;
 }

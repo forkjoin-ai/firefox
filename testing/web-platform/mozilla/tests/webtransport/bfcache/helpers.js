@@ -1,3 +1,6 @@
+/**
+ * Handles the firefox run Web Transport Bfcache Test workflow.
+ */
 export function runWebTransportBfcacheTest(params, description) {
   runBfcacheTest(
     {

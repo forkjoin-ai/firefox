@@ -3,6 +3,9 @@
 
 export const obj = {};
 
+/**
+ * Handles the firefox do Import workflow.
+ */
 export async function doImport() {
   // This file is loaded as resource://test/data/base_uri_module.mjs
   // Relative/absolute paths should be resolved based on the URI, instead of

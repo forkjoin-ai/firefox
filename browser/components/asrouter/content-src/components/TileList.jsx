@@ -6,6 +6,9 @@ import React from "react";
 import { MultiStageUtils } from "../lib/multistage-utils.mjs";
 import { Localized } from "./MSLocalized";
 
+/**
+ * Renders the Tile List view.
+ */
 export const TileList = props => {
   const { content } = props;
 

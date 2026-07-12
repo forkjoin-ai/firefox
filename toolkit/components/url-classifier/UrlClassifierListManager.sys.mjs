@@ -886,6 +886,9 @@ function Init() {
   initialized = true;
 }
 
+/**
+ * Renders the Registration Data view.
+ */
 export function RegistrationData() {
   Init();
   return new PROT_ListManager();

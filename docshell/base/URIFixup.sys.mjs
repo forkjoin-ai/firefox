@@ -244,6 +244,9 @@ ChromeUtils.defineLazyGetter(lazy, "knownSuffixes", () => {
   return suffixes;
 });
 
+/**
+ * Renders the URIFixup view.
+ */
 export function URIFixup() {}
 
 URIFixup.prototype = {
@@ -644,6 +647,9 @@ URIFixup.prototype = {
   QueryInterface: ChromeUtils.generateQI(["nsIURIFixup"]),
 };
 
+/**
+ * Renders the URIFixup Info view.
+ */
 export function URIFixupInfo(originalInput = "") {
   this._originalInput = originalInput;
 }

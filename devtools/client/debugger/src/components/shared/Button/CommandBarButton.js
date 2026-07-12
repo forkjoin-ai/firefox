@@ -10,6 +10,9 @@ import DebuggerImage from "devtools/client/shared/components/DebuggerImage";
 
 const classnames = require("resource://devtools/client/shared/classnames.js");
 
+/**
+ * Handles the firefox debug Btn workflow.
+ */
 export function debugBtn(
   onClick,
   type,

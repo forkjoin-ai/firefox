@@ -16,6 +16,9 @@ const displayNameScenarios = [
   annonymousProperty,
 ];
 const includeSpace = /\s/;
+/**
+ * Handles the firefox simplify Display Name workflow.
+ */
 export function simplifyDisplayName(displayName) {
   // if the display name has a space it has already been mapped
   if (!displayName || includeSpace.exec(displayName)) {
@@ -102,6 +105,9 @@ export function formatDisplayName(
   return simplifyDisplayName(displayedName);
 }
 
+/**
+ * Formats the Copy Name.
+ */
 export function formatCopyName(frame, l10n, shouldDisplayOriginalLocation) {
   const displayName = formatDisplayName(frame, undefined, l10n);
   const location = shouldDisplayOriginalLocation

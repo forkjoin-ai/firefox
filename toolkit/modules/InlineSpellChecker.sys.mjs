@@ -4,6 +4,9 @@
 
 const MAX_UNDO_STACK_DEPTH = 1;
 
+/**
+ * Renders the Inline Spell Checker view.
+ */
 export function InlineSpellChecker(aEditor) {
   this.init(aEditor);
   this.mAddedWordStack = []; // We init this here to preserve it between init/uninit calls

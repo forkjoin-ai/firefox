@@ -147,6 +147,9 @@ function smartshortcutsEnabled(prefValues) {
 // helper for lowering precision of numbers, save space in telemetry
 // longest string i can come up with out of this function:
 //               -0.000009999 which is 12 characters
+/**
+ * Handles the firefox round Num workflow.
+ */
 export const roundNum = (x, sig = 4, eps = 1e-6) => {
   if (typeof x !== "number" || !isFinite(x)) {
     return x;
@@ -257,6 +260,9 @@ export async function fetchShortcutLastClickPositions(
   return guidList.map(g => (posByGuid.has(g) ? posByGuid.get(g) : null));
 }
 
+/**
+ * Handles the firefox get Open Tab URLs From Session Live workflow.
+ */
 export async function getOpenTabURLsFromSessionLive() {
   // Ensure SessionStore is ready (important at early startup)
   if (lazy.SessionStore.promiseInitialized) {
@@ -279,6 +285,9 @@ export async function getOpenTabURLsFromSessionLive() {
   return urls;
 }
 
+/**
+ * Handles the firefox get Open Tabs With Places From Session Live workflow.
+ */
 export async function getOpenTabsWithPlacesFromSessionLive() {
   const urls = await getOpenTabURLsFromSessionLive();
   const out = [];

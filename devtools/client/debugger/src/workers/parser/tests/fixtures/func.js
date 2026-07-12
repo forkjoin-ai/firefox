@@ -2,6 +2,9 @@ function square(n) {
   return n * n;
 }
 
+/**
+ * Handles the firefox ex Foo workflow.
+ */
 export function exFoo() {
   return "yay";
 }
@@ -10,6 +13,9 @@ async function slowFoo() {
   return "meh";
 }
 
+/**
+ * Handles the firefox ex Slow Foo workflow.
+ */
 export async function exSlowFoo() {
   return "yay in a bit";
 }
@@ -34,6 +40,9 @@ const obj = {
   }
 };
 
+/**
+ * Handles the firefox root workflow.
+ */
 export default function root() {
 }
 

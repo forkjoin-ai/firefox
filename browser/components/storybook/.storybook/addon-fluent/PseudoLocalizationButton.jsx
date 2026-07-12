@@ -18,6 +18,9 @@ import {
 import { TOOL_ID, STRATEGY_DEFAULT, PSEUDO_STRATEGIES } from "./constants.mjs";
 
 // React component for a button + tooltip that gets added to the Storybook toolbar.
+/**
+ * Renders the Pseudo Localization Button view.
+ */
 export const PseudoLocalizationButton = () => {
   const [{ pseudoStrategy = STRATEGY_DEFAULT }, updateGlobals] = useGlobals();
 

@@ -27,6 +27,9 @@ function isWhitespace(query) {
   return !query.match(/\S/);
 }
 
+/**
+ * Handles the firefox get Match Index workflow.
+ */
 export function getMatchIndex(count, currentIndex, rev) {
   if (!rev) {
     if (currentIndex == count - 1) {
@@ -88,6 +91,9 @@ function doSearch(
   return editor.getPositionFromSearchCursor(cursor);
 }
 
+/**
+ * Handles the firefox search Source For Highlight workflow.
+ */
 export function searchSourceForHighlight(
   ctx,
   rev,

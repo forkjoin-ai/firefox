@@ -3,6 +3,9 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 /* global noSuchMethodExistsYo1, noSuchMethodExistsYo2, noSuchMethodExistsYo3 */
 
+/**
+ * Renders the Test Interface JS view.
+ */
 export function TestInterfaceJS() {}
 
 TestInterfaceJS.prototype = {

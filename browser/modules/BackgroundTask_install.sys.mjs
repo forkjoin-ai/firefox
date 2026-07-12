@@ -14,6 +14,9 @@
 // it.
 export const backgroundTaskTimeoutSec = 30;
 
+/**
+ * Handles the firefox run Background Task workflow.
+ */
 export async function runBackgroundTask() {
   console.log("Running BackgroundTask_install.");
 

@@ -4,6 +4,9 @@
 
 // Simple controller wrapper that binds a controller and runs cleanup function
 // https://lit.dev/docs/composition/controllers/
+/**
+ * Handles the firefox with Simple Controller workflow.
+ */
 export const withSimpleController = (host, functionToBind, ...args) =>
   class {
     constructor() {

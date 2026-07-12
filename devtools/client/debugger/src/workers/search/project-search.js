@@ -6,6 +6,9 @@
 
 import getMatches from "./get-matches";
 
+/**
+ * Handles the firefox find Source Matches workflow.
+ */
 export function findSourceMatches(content, queryText, options) {
   if (queryText == "") {
     return [];

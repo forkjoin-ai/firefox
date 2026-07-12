@@ -23,14 +23,23 @@ import {
   getSourceTextContentForSource,
 } from "./sources-content";
 
+/**
+ * Returns whether has Source is true.
+ */
 export function hasSource(state, id) {
   return state.sources.mutableSources.has(id);
 }
 
+/**
+ * Handles the firefox get Source workflow.
+ */
 export function getSource(state, id) {
   return state.sources.mutableSources.get(id);
 }
 
+/**
+ * Handles the firefox get Source From Id workflow.
+ */
 export function getSourceFromId(state, id) {
   const source = getSource(state, id);
   if (!source) {
@@ -40,6 +49,9 @@ export function getSourceFromId(state, id) {
   return source;
 }
 
+/**
+ * Handles the firefox get Source By Actor Id workflow.
+ */
 export function getSourceByActorId(state, actorId) {
   if (!hasSourceActor(state, actorId)) {
     return null;
@@ -52,12 +64,18 @@ function getSourcesByURL(state, url) {
   return state.sources.mutableSourcesPerUrl.get(url) || [];
 }
 
+/**
+ * Handles the firefox get Source By URL workflow.
+ */
 export function getSourceByURL(state, url) {
   const foundSources = getSourcesByURL(state, url);
   return foundSources[0];
 }
 
 // This is used by tabs selectors
+/**
+ * Handles the firefox get Specific Source By URL workflow.
+ */
 export function getSpecificSourceByURL(state, url, isOriginal) {
   const foundSources = getSourcesByURL(state, url);
   return foundSources.find(source => source.isOriginal == isOriginal);
@@ -67,14 +85,23 @@ function getOriginalSourceByURL(state, url) {
   return getSpecificSourceByURL(state, url, true);
 }
 
+/**
+ * Handles the firefox get Generated Source By URL workflow.
+ */
 export function getGeneratedSourceByURL(state, url) {
   return getSpecificSourceByURL(state, url, false);
 }
 
+/**
+ * Handles the firefox get Pending Selected Location workflow.
+ */
 export function getPendingSelectedLocation(state) {
   return state.sources.pendingSelectedLocation;
 }
 
+/**
+ * Handles the firefox get Pretty Source workflow.
+ */
 export function getPrettySource(state, id) {
   if (!id) {
     return null;
@@ -89,15 +116,24 @@ export function getPrettySource(state, id) {
 }
 
 // This is only used by Project Search and tests.
+/**
+ * Handles the firefox get Source List workflow.
+ */
 export function getSourceList(state) {
   return [...state.sources.mutableSources.values()];
 }
 
 // This is only used by tests and create.js
+/**
+ * Handles the firefox get Source Count workflow.
+ */
 export function getSourceCount(state) {
   return state.sources.mutableSources.size;
 }
 
+/**
+ * Handles the firefox get Selected Location workflow.
+ */
 export function getSelectedLocation(state) {
   return state.sources.selectedLocation;
 }
@@ -176,19 +212,31 @@ export const getSelectedSource = createSelector(
 );
 
 // This is used by tests and pause reducers
+/**
+ * Handles the firefox get Selected Source Id workflow.
+ */
 export function getSelectedSourceId(state) {
   const source = getSelectedSource(state);
   return source?.id;
 }
 
+/**
+ * Handles the firefox get Should Select Original Location workflow.
+ */
 export function getShouldSelectOriginalLocation(state) {
   return state.sources.shouldSelectOriginalLocation;
 }
 
+/**
+ * Handles the firefox get Should Highlight Selected Location workflow.
+ */
 export function getShouldHighlightSelectedLocation(state) {
   return state.sources.shouldHighlightSelectedLocation;
 }
 
+/**
+ * Handles the firefox get Should Scroll To Selected Location workflow.
+ */
 export function getShouldScrollToSelectedLocation(state) {
   return state.sources.shouldScrollToSelectedLocation;
 }
@@ -237,11 +285,17 @@ export function getSourceActorsForSource(state, id) {
   return state.sources.mutableSourceActors.get(id) || [];
 }
 
+/**
+ * Returns whether is Source With Map is true.
+ */
 export function isSourceWithMap(state, id) {
   const actors = getSourceActorsForSource(state, id);
   return actors.some(actor => isSourceActorWithSourceMap(state, actor.id));
 }
 
+/**
+ * Handles the firefox can Pretty Print Source workflow.
+ */
 export function canPrettyPrintSource(state, source, sourceActor) {
   if (
     !source ||
@@ -262,6 +316,9 @@ export function canPrettyPrintSource(state, source, sourceActor) {
   return true;
 }
 
+/**
+ * Handles the firefox get Pretty Print Message workflow.
+ */
 export function getPrettyPrintMessage(state, location) {
   const source = location.source;
   if (!source) {
@@ -296,26 +353,41 @@ export function getPrettyPrintMessage(state, location) {
   return L10N.getStr("sourceTabs.prettyPrint");
 }
 
+/**
+ * Handles the firefox get Breakpoint Positions For Source workflow.
+ */
 export function getBreakpointPositionsForSource(state, sourceId) {
   return state.sources.mutableBreakpointPositions.get(sourceId);
 }
 
 // This is only used by one test
+/**
+ * Returns whether has Breakpoint Positions is true.
+ */
 export function hasBreakpointPositions(state, sourceId) {
   return !!getBreakpointPositionsForSource(state, sourceId);
 }
 
+/**
+ * Handles the firefox get Breakpoint Positions For Line workflow.
+ */
 export function getBreakpointPositionsForLine(state, sourceId, line) {
   const positions = getBreakpointPositionsForSource(state, sourceId);
   return positions?.[line];
 }
 
+/**
+ * Handles the firefox get Breakpoint Positions For Location workflow.
+ */
 export function getBreakpointPositionsForLocation(state, location) {
   const sourceId = location.source.id;
   const positions = getBreakpointPositionsForSource(state, sourceId);
   return findPosition(positions, location);
 }
 
+/**
+ * Handles the firefox get Breakable Lines workflow.
+ */
 export function getBreakableLines(state, sourceId) {
   if (!sourceId) {
     return null;
@@ -355,6 +427,9 @@ export const getSelectedBreakableLines = createSelector(
   breakableLines => new Set(breakableLines || [])
 );
 
+/**
+ * Returns whether is Source Overridden is true.
+ */
 export function isSourceOverridden(toolboxState, source) {
   if (!source || !source.url) {
     return false;
@@ -418,6 +493,9 @@ export function getSourcesToRemoveForThread(state, threadActorID) {
   };
 }
 
+/**
+ * Returns whether is Style Sheet Disabled is true.
+ */
 export function isStyleSheetDisabled(state, source) {
   // Pretty printed source are disabling their unique related minimized source.
   if (source.isPrettyPrinted) {

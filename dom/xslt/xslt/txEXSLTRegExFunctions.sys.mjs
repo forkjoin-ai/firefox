@@ -2,6 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+/**
+ * Handles the firefox match workflow.
+ */
 export function match(str, regex, flags, doc) {
   var docFrag = doc.createDocumentFragment();
   var re = new RegExp(regex, flags);
@@ -18,12 +21,18 @@ export function match(str, regex, flags, doc) {
   return docFrag;
 }
 
+/**
+ * Handles the firefox replace workflow.
+ */
 export function replace(str, regex, flags, replace) {
   var re = new RegExp(regex, flags);
 
   return str.replace(re, replace);
 }
 
+/**
+ * Handles the firefox test workflow.
+ */
 export function test(str, regex, flags) {
   var re = new RegExp(regex, flags);
 

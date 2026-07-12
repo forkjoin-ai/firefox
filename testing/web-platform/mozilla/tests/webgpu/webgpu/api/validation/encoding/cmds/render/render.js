@@ -6,6 +6,9 @@ export const kRenderEncodeTypeParams = kUnitCaseParamsBuilder.combine(
   kRenderEncodeTypes
 );
 
+/**
+ * Builds the Buffer Offset And Size OOBTest Params.
+ */
 export function buildBufferOffsetAndSizeOOBTestParams(minAlignment, bufferSize) {
   return kRenderEncodeTypeParams.combineWithParams([
   // Explicit size

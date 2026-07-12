@@ -10,6 +10,9 @@ import { selectSource } from "./sources/index";
 
 import { getSelectedLocation, getOpenedSources } from "../selectors/index";
 
+/**
+ * Handles the firefox add Tab workflow.
+ */
 export function addTab(source) {
   return {
     type: "ADD_TAB",
@@ -17,6 +20,9 @@ export function addTab(source) {
   };
 }
 
+/**
+ * Handles the firefox move Tab workflow.
+ */
 export function moveTab(url, tabIndex) {
   return {
     type: "MOVE_TAB",
@@ -25,6 +31,9 @@ export function moveTab(url, tabIndex) {
   };
 }
 
+/**
+ * Handles the firefox move Tab By Source Id workflow.
+ */
 export function moveTabBySourceId(sourceId, tabIndex) {
   return {
     type: "MOVE_TAB_BY_SOURCE_ID",
@@ -33,12 +42,18 @@ export function moveTabBySourceId(sourceId, tabIndex) {
   };
 }
 
+/**
+ * Handles the firefox close Tab For Source workflow.
+ */
 export function closeTabForSource(source) {
   return ({ dispatch }) => {
     dispatch(closeTabsForSources([source]));
   };
 }
 
+/**
+ * Handles the firefox close Tabs For Sources workflow.
+ */
 export function closeTabsForSources(sources) {
   return ({ dispatch, getState }) => {
     if (!sources.length) {

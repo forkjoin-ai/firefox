@@ -13,6 +13,9 @@ import {
   getSelectedSourceTextContent,
 } from "../../selectors/index";
 
+/**
+ * Handles the firefox show Outline Context Menu workflow.
+ */
 export function showOutlineContextMenu(event, func, symbols) {
   return async ({ dispatch, getState }) => {
     const state = getState();

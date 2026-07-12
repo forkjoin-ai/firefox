@@ -65,6 +65,9 @@ export const ActionChecklistItem = ({
   );
 };
 
+/**
+ * Renders the Action Checklist Progress Bar view.
+ */
 export const ActionChecklistProgressBar = ({ progress }) => {
   return (
     <div className="action-checklist-progress-bar">
@@ -80,6 +83,9 @@ export const ActionChecklistProgressBar = ({ progress }) => {
   );
 };
 
+/**
+ * Renders the Action Checklist view.
+ */
 export const ActionChecklist = ({ content, message_id }) => {
   const tiles = content.tiles.data;
   const [progressValue, setProgressValue] = useState(0);

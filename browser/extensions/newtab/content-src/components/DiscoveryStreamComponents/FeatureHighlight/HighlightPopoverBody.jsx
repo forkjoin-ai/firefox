@@ -7,6 +7,9 @@ import { HighlightText } from "./HighlightText";
 import { HighlightImage } from "./HighlightImage";
 import { resolveText, resolveImage } from "./OMCHighlightRegistry.mjs";
 
+/**
+ * Renders the Highlight Popover Body view.
+ */
 export const HighlightPopoverBody = ({ body, content }) => {
   const image = resolveImage({ content, defaults: body?.image });
   const title = resolveText({

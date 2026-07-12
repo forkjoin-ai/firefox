@@ -12,6 +12,9 @@ const COLLECTION_NAME = "tracking-protection-lists";
 // SafeBrowsing protocol parameters.
 export const SBRS_UPDATE_MINIMUM_DELAY = 21600; // Minimum delay before polling again in seconds
 
+/**
+ * Renders the Url Classifier Remote Settings Service view.
+ */
 export function UrlClassifierRemoteSettingsService() {}
 UrlClassifierRemoteSettingsService.prototype = {
   classID: Components.ID("{1980624c-c50b-4b46-a91c-dfaba7792706}"),

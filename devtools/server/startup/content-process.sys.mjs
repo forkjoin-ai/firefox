@@ -11,6 +11,9 @@
  * The actual server startup itself is in this JSM so that code can be cached.
  */
 
+/**
+ * Handles the firefox init Content Process Target workflow.
+ */
 export function initContentProcessTarget(msg) {
   const mm = msg.target;
   const prefix = msg.data.prefix;

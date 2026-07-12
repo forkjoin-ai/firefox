@@ -21,6 +21,9 @@ const {
 const COMMON_DIALOG = "chrome://global/content/commonDialog.xhtml";
 const SELECT_DIALOG = "chrome://global/content/selectDialog.xhtml";
 
+/**
+ * Renders the Prompter view.
+ */
 export function Prompter() {}
 
 /**
@@ -1747,6 +1750,9 @@ XPCOMUtils.defineLazyPreferenceGetter(
   MODAL_TYPE_WINDOW
 );
 
+/**
+ * Renders the Auth Prompt Adapter Factory view.
+ */
 export function AuthPromptAdapterFactory() {}
 AuthPromptAdapterFactory.prototype = {
   classID: Components.ID("{6e134924-6c3a-4d86-81ac-69432dd971dc}"),

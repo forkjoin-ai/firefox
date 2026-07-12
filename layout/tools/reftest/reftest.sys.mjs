@@ -146,6 +146,9 @@ function ReleaseCanvas(canvas) {
   }
 }
 
+/**
+ * Renders the On Ref Test Load view.
+ */
 export function OnRefTestLoad(win) {
   g.crashDumpDir = Services.dirsvc.get("ProfD", Ci.nsIFile);
   g.crashDumpDir.append("minidumps");
@@ -634,6 +637,9 @@ function StartTests() {
   }
 }
 
+/**
+ * Renders the On Ref Test Unload view.
+ */
 export function OnRefTestUnload() {}
 
 function AddURIUseCount(uri) {

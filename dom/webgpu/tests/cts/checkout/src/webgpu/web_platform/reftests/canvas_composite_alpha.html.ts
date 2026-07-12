@@ -4,6 +4,9 @@ import { runRefTest } from './gpu_ref_test.js';
 
 type WriteCanvasMethod = 'draw' | 'copy';
 
+/**
+ * Handles the firefox run workflow.
+ */
 export function run(
   format: GPUTextureFormat,
   alphaMode: GPUCanvasAlphaMode,

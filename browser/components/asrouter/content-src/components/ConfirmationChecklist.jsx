@@ -4,6 +4,9 @@ import { MultiStageUtils } from "../lib/multistage-utils.mjs";
 import { Localized } from "./MSLocalized";
 import { LinkParagraph } from "./LinkParagraph";
 
+/**
+ * Renders the Confirmation Checklist view.
+ */
 export const ConfirmationChecklist = props => {
   const { content, handleAction } = props;
 

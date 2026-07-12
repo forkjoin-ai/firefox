@@ -115,6 +115,9 @@ function validateParams(params) {
   return header;
 }
 
+/**
+ * Handles the firefox encrypt workflow.
+ */
 export async function encrypt(data, params) {
   const header = validateParams(params);
 

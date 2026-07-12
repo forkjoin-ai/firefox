@@ -27,6 +27,9 @@ const MILLISECONDS_IN_DAY = 24 * 60 * 60 * 1000;
 
 // Converts Date to days since UNIX epoch.
 // The implementation does not account for leap seconds.
+/**
+ * Handles the firefox date To Days workflow.
+ */
 export function dateToDays(date) {
   return Math.floor(date.getTime() / MILLISECONDS_IN_DAY);
 }
@@ -1694,6 +1697,9 @@ ChromeUtils.defineLazyGetter(CrashManager, "Singleton", function () {
   return gCrashManager;
 });
 
+/**
+ * Handles the firefox get Crash Manager workflow.
+ */
 export function getCrashManager() {
   return CrashManager.Singleton;
 }

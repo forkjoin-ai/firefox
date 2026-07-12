@@ -192,8 +192,14 @@ subresourceRange) =>
   }
 };
 
+/**
+ * Handles the firefox check Contents By Depth Test workflow.
+ */
 export const checkContentsByDepthTest = (...args) =>
 checkContents('depth', ...args);
 
+/**
+ * Handles the firefox check Contents By Stencil Test workflow.
+ */
 export const checkContentsByStencilTest = (...args) =>
 checkContents('stencil', ...args);

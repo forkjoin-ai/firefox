@@ -137,6 +137,9 @@ export function install(
 export function install(
   options: InstallOptions & {unpack: false},
 ): Promise<string>;
+/**
+ * Handles the firefox install workflow.
+ */
 export async function install(
   options: InstallOptions,
 ): Promise<InstalledBrowser | string> {

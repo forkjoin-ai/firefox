@@ -1,5 +1,8 @@
 import { isEven } from "isEven.js"
 
+/**
+ * Returns whether is Odd is true.
+ */
 export function isOdd(x) {
     if (x < 0)
         throw "negative";

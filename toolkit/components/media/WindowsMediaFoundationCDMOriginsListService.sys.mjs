@@ -53,6 +53,9 @@ OriginStatusEntry.prototype.QueryInterface = ChromeUtils.generateQI([
   "nsIOriginStatusEntry",
 ]);
 
+/**
+ * Renders the Windows Media Foundation CDMOrigins List Service view.
+ */
 export function WindowsMediaFoundationCDMOriginsListService() {
   log("Created service");
   Services.obs.addObserver(this, "xpcom-shutdown");

@@ -196,6 +196,9 @@ export class CaseCache {
 
 }
 
+/**
+ * Handles the firefox make Case Cache workflow.
+ */
 export function makeCaseCache(name, builders) {
   return new CaseCache(name, builders);
 }

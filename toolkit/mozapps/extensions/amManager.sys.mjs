@@ -33,6 +33,9 @@ const MSG_ADDON_EVENT = "WebAPIAddonEvent";
 
 var AddonManager, AddonManagerPrivate;
 
+/**
+ * Handles the firefox am Manager workflow.
+ */
 export function amManager() {
   ({ AddonManager, AddonManagerPrivate } = ChromeUtils.importESModule(
     "resource://gre/modules/AddonManager.sys.mjs"
@@ -196,6 +199,9 @@ amManager.prototype = {
 const BLOCKLIST_SYS_MJS = "resource://gre/modules/Blocklist.sys.mjs";
 ChromeUtils.defineESModuleGetters(lazy, { Blocklist: BLOCKLIST_SYS_MJS });
 
+/**
+ * Renders the Blocklist Service view.
+ */
 export function BlocklistService() {
   this.wrappedJSObject = this;
 }

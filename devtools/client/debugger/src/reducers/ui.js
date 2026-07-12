@@ -13,6 +13,9 @@
 import { prefs, features } from "../utils/prefs";
 import { searchKeys } from "../constants";
 
+/**
+ * Handles the firefox initial UIState workflow.
+ */
 export const initialUIState = () => ({
   selectedPrimaryPaneTab: "sources",
   activeSearch: null,

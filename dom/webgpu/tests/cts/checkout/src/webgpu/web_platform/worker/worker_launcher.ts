@@ -5,6 +5,9 @@ export type TestResult = {
   error: String | undefined;
 };
 
+/**
+ * Handles the firefox launch Dedicated Worker workflow.
+ */
 export async function launchDedicatedWorker() {
   if (typeof Worker === 'undefined') {
     throw new SkipTestCase(`Worker undefined in context ${globalThis.constructor.name}`);
@@ -22,6 +25,9 @@ export async function launchDedicatedWorker() {
   return await promise;
 }
 
+/**
+ * Handles the firefox launch Shared Worker workflow.
+ */
 export async function launchSharedWorker() {
   if (typeof SharedWorker === 'undefined') {
     throw new SkipTestCase(`SharedWorker undefined in context ${globalThis.constructor.name}`);
@@ -43,6 +49,9 @@ export async function launchSharedWorker() {
   return await promise;
 }
 
+/**
+ * Handles the firefox launch Service Worker workflow.
+ */
 export async function launchServiceWorker() {
   if (typeof navigator === 'undefined' || typeof navigator.serviceWorker === 'undefined') {
     throw new SkipTestCase(

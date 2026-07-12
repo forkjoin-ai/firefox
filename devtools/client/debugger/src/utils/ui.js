@@ -7,12 +7,18 @@
  * because it is more reliable than either checking a focus state or
  * the visibleState or hidden property.
  */
+/**
+ * Returns whether is Visible is true.
+ */
 export function isVisible() {
   const el = document.querySelector("#mount");
   return !!(el && el.getBoundingClientRect().width > 0);
 }
 
 /* Gets the line numbers width in the code editor
+ */
+/**
+ * Handles the firefox get Line Number Width workflow.
  */
 export function getLineNumberWidth(editor) {
   const { gutters } = editor.display;

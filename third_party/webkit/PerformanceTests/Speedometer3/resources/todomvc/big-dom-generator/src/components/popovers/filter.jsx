@@ -41,6 +41,9 @@ const TagGroup = () => {
     );
 };
 
+/**
+ * Renders the Filter Pop Over view.
+ */
 export const FilterPopOver = ({ className }) => {
     const popOverClassName = classnames("filter-pop-over", className);
     return (

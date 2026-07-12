@@ -91,6 +91,9 @@ export function getErrorCount() {
   return ERROR_REGISTRY.size;
 }
 
+/**
+ * Handles the firefox test Only Clear Registry workflow.
+ */
 export function _testOnlyClearRegistry() {
   if (!Cu.isInAutomation) {
     return;

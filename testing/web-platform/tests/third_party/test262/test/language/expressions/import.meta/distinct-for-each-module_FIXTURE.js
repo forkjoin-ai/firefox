@@ -3,6 +3,9 @@
 
 export var meta = import.meta;
 
+/**
+ * Handles the firefox get Meta workflow.
+ */
 export function getMeta() {
     return import.meta;
 }

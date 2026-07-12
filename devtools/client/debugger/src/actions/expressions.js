@@ -48,6 +48,9 @@ export function addExpression(input) {
   };
 }
 
+/**
+ * Handles the firefox autocomplete workflow.
+ */
 export function autocomplete(input, cursor) {
   return async ({ dispatch, getState, client }) => {
     if (!input) {
@@ -61,10 +64,16 @@ export function autocomplete(input, cursor) {
   };
 }
 
+/**
+ * Handles the firefox clear Autocomplete workflow.
+ */
 export function clearAutocomplete() {
   return { type: "CLEAR_AUTOCOMPLETE" };
 }
 
+/**
+ * Handles the firefox update Expression workflow.
+ */
 export function updateExpression(input, expression) {
   return async ({ dispatch }) => {
     if (!input) {
@@ -93,6 +102,9 @@ export function deleteExpression(expression) {
   };
 }
 
+/**
+ * Handles the firefox evaluate Expressions For Current Context workflow.
+ */
 export function evaluateExpressionsForCurrentContext() {
   return async ({ getState, dispatch }) => {
     const selectedFrame = getSelectedFrame(getState());

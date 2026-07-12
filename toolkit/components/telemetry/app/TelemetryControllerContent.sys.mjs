@@ -79,6 +79,9 @@ var Impl = {
 };
 
 // Used by service registration, which requires a callable function.
+/**
+ * Handles the firefox get Telemetry Controller workflow.
+ */
 export function getTelemetryController() {
   return TelemetryController;
 }

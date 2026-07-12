@@ -18,6 +18,9 @@ function uuid() {
     return uuid;
 }
 
+/**
+ * Converts input into todos.
+ */
 export default function todos(state = initialState, action) {
     switch (action.type) {
         case ADD_TODO:

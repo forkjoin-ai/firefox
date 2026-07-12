@@ -24,6 +24,9 @@ function getDirectoryService() {
   return Cc["@mozilla.org/file/directory_service;1"].getService(nsIProperties);
 }
 
+/**
+ * Handles the firefox ns Default CLH workflow.
+ */
 export function nsDefaultCLH() {}
 nsDefaultCLH.prototype = {
   classID: Components.ID("{6ebc941a-f2ff-4d56-b3b6-f7d0b9d73344}"),

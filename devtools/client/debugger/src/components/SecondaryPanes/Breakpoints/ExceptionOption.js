@@ -8,6 +8,9 @@ import {
 } from "devtools/client/shared/vendor/react-dom-factories";
 import PropTypes from "devtools/client/shared/vendor/react-prop-types";
 
+/**
+ * Renders the Exception Option view.
+ */
 export default function ExceptionOption({
   className,
   isChecked = false,

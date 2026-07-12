@@ -78,6 +78,9 @@ export function comparePaths(a: readonly string[], b: readonly string[]): Orderi
   }
 }
 
+/**
+ * Handles the firefox compare Public Params Paths workflow.
+ */
 export function comparePublicParamsPaths(a: TestParams, b: TestParams): Ordering {
   const aKeys = Object.keys(a).filter(k => paramKeyIsPublic(k));
   const commonKeys = new Set(aKeys.filter(k => k in b));

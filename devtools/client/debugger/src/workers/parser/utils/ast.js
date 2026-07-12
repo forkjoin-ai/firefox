@@ -63,6 +63,9 @@ const sourceOptions = {
   },
 };
 
+/**
+ * Parses the parse.
+ */
 export function parse(text, opts) {
   let ast = {};
   if (!text) {
@@ -114,6 +117,9 @@ function parseVueScript(code) {
   return ast;
 }
 
+/**
+ * Parses the Console Script.
+ */
 export function parseConsoleScript(text) {
   try {
     return _parse(text, {
@@ -137,10 +143,16 @@ export function parseConsoleScript(text) {
   }
 }
 
+/**
+ * Parses the Script.
+ */
 export function parseScript(text, opts) {
   return _parse(text, opts);
 }
 
+/**
+ * Handles the firefox get Ast workflow.
+ */
 export function getAst(sourceId) {
   if (ASTs.has(sourceId)) {
     return ASTs.get(sourceId);
@@ -188,12 +200,18 @@ export function getAst(sourceId) {
   return ast;
 }
 
+/**
+ * Handles the firefox clear ASTs workflow.
+ */
 export function clearASTs(sourceIds) {
   for (const sourceId of sourceIds) {
     ASTs.delete(sourceId);
   }
 }
 
+/**
+ * Handles the firefox replace Node workflow.
+ */
 export function replaceNode(ancestors, node) {
   const parent = ancestors[ancestors.length - 1];
 

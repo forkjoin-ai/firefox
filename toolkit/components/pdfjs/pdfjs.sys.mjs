@@ -20,6 +20,9 @@ ChromeUtils.defineESModuleGetters(lazy, {
 });
 
 // Register/unregister a constructor as a factory.
+/**
+ * Renders the Stream Converter Factory view.
+ */
 export function StreamConverterFactory() {
   if (!Services.prefs.getBoolPref("pdfjs.disabled", false)) {
     return new lazy.PdfStreamConverter();

@@ -12,6 +12,9 @@ function canCut(node: Node, start: number, end: number) {
 /// Try to find a target depth to which the content in the given range
 /// can be lifted. Will not go across
 /// [isolating](#model.NodeSpec.isolating) parent nodes.
+/**
+ * Handles the firefox lift Target workflow.
+ */
 export function liftTarget(range: NodeRange): number | null {
   let parent = range.parent
   let content = parent.content.cutByIndex(range.startIndex, range.endIndex)
@@ -27,6 +30,9 @@ export function liftTarget(range: NodeRange): number | null {
   return null
 }
 
+/**
+ * Handles the firefox lift workflow.
+ */
 export function lift(tr: Transform, range: NodeRange, target: number) {
   let {$from, $to, depth} = range
 
@@ -63,6 +69,9 @@ export function lift(tr: Transform, range: NodeRange, target: number) {
 /// could be found. When `innerRange` is given, that range's content is
 /// used as the content to fit into the wrapping, instead of the
 /// content of `range`.
+/**
+ * Handles the firefox find Wrapping workflow.
+ */
 export function findWrapping(
   range: NodeRange,
   nodeType: NodeType,
@@ -99,6 +108,9 @@ function findWrappingInside(range: NodeRange, type: NodeType) {
   return inside
 }
 
+/**
+ * Handles the firefox wrap workflow.
+ */
 export function wrap(tr: Transform, range: NodeRange, wrappers: readonly {type: NodeType, attrs?: Attrs | null}[]) {
   let content = Fragment.empty
   for (let i = wrappers.length - 1; i >= 0; i--) {
@@ -114,6 +126,9 @@ export function wrap(tr: Transform, range: NodeRange, wrappers: readonly {type: 
   tr.step(new ReplaceAroundStep(start, end, start, end, new Slice(content, 0, 0), wrappers.length, true))
 }
 
+/**
+ * Handles the firefox set Block Type workflow.
+ */
 export function setBlockType(tr: Transform, from: number, to: number,
                              type: NodeType, attrs: Attrs | null | ((oldNode: Node) => Attrs)) {
   if (!type.isTextblock) throw new RangeError("Type given to setBlockType should be a textblock")
@@ -169,6 +184,9 @@ function canChangeType(doc: Node, pos: number, type: NodeType) {
 
 /// Change the type, attributes, and/or marks of the node at `pos`.
 /// When `type` isn't given, the existing node type is preserved,
+/**
+ * Handles the firefox set Node Markup workflow.
+ */
 export function setNodeMarkup(tr: Transform, pos: number, type: NodeType | undefined | null,
                               attrs: Attrs | null, marks: readonly Mark[] | undefined) {
   let node = tr.doc.nodeAt(pos)
@@ -186,6 +204,9 @@ export function setNodeMarkup(tr: Transform, pos: number, type: NodeType | undef
 }
 
 /// Check whether splitting at the given position is allowed.
+/**
+ * Handles the firefox can Split workflow.
+ */
 export function canSplit(doc: Node, pos: number, depth = 1,
                          typesAfter?: (null | {type: NodeType, attrs?: Attrs | null})[]): boolean {
   let $pos = doc.resolve(pos), base = $pos.depth - depth
@@ -210,6 +231,9 @@ export function canSplit(doc: Node, pos: number, depth = 1,
   return $pos.node(base).canReplaceWith(index, index, baseType ? baseType.type : $pos.node(base + 1).type)
 }
 
+/**
+ * Handles the firefox split workflow.
+ */
 export function split(tr: Transform, pos: number, depth = 1, typesAfter?: (null | {type: NodeType, attrs?: Attrs | null})[]) {
   let $pos = tr.doc.resolve(pos), before = Fragment.empty, after = Fragment.empty
   for (let d = $pos.depth, e = $pos.depth - depth, i = depth - 1; d > e; d--, i--) {
@@ -222,6 +246,9 @@ export function split(tr: Transform, pos: number, depth = 1, typesAfter?: (null 
 
 /// Test whether the blocks before and after a given position can be
 /// joined.
+/**
+ * Handles the firefox can Join workflow.
+ */
 export function canJoin(doc: Node, pos: number): boolean {
   let $pos = doc.resolve(pos), index = $pos.index()
   return joinable($pos.nodeBefore, $pos.nodeAfter) &&
@@ -249,6 +276,9 @@ function joinable(a: Node | null, b: Node | null) {
 /// Find an ancestor of the given position that can be joined to the
 /// block before (or after if `dir` is positive). Returns the joinable
 /// point, if any.
+/**
+ * Handles the firefox join Point workflow.
+ */
 export function joinPoint(doc: Node, pos: number, dir = -1) {
   let $pos = doc.resolve(pos)
   for (let d = $pos.depth;; d--) {
@@ -271,6 +301,9 @@ export function joinPoint(doc: Node, pos: number, dir = -1) {
   }
 }
 
+/**
+ * Handles the firefox join workflow.
+ */
 export function join(tr: Transform, pos: number, depth: number) {
   let convertNewlines = null
   let {linebreakReplacement} = tr.doc.type.schema
@@ -302,6 +335,9 @@ export function join(tr: Transform, pos: number, depth: number) {
 /// near `pos`, by searching up the node hierarchy when `pos` itself
 /// isn't a valid place but is at the start or end of a node. Return
 /// null if no position was found.
+/**
+ * Handles the firefox insert Point workflow.
+ */
 export function insertPoint(doc: Node, pos: number, nodeType: NodeType): number | null {
   let $pos = doc.resolve(pos)
   if ($pos.parent.canReplaceWith($pos.index(), $pos.index(), nodeType)) return pos
@@ -325,6 +361,9 @@ export function insertPoint(doc: Node, pos: number, nodeType: NodeType): number 
 /// slice can be inserted. Will look at parent nodes' nearest boundary
 /// and try there, even if the original position wasn't directly at the
 /// start or end of that node. Returns null when no position was found.
+/**
+ * Handles the firefox drop Point workflow.
+ */
 export function dropPoint(doc: Node, pos: number, slice: Slice): number | null {
   let $pos = doc.resolve(pos)
   if (!slice.content.size) return pos

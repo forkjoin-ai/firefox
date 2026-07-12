@@ -437,6 +437,9 @@ const getMicrosoftCryptographicExtensions = (x509, criticalExtensions) => {
   return msCrypto;
 };
 
+/**
+ * Parses the parse.
+ */
 export const parse = async certificate => {
   // certificate could be an array of BER or an array of buffers
   const supportedExtensions = [
@@ -1263,6 +1266,9 @@ const hashify = rawHash => {
   return rawHash.join(":").toUpperCase();
 };
 
+/**
+ * Handles the firefox pem To DER workflow.
+ */
 export const pemToDER = pem => {
   return stringToArrayBuffer(atob(pem));
 };

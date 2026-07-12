@@ -10,6 +10,9 @@ const INDENT_COUNT_THRESHOLD = 5;
 const CHARACTER_LIMIT = 250;
 const _minifiedCache = new Map();
 
+/**
+ * Returns whether is Minified is true.
+ */
 export function isMinified(source, sourceTextContent) {
   if (_minifiedCache.has(source.id)) {
     return _minifiedCache.get(source.id);

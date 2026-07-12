@@ -96,6 +96,9 @@ const kNotificationAction = Object.freeze({
 //   optional file extensions to register can be specified as additional
 //   argument pairs: the first element is the file extension, the second element
 //   is the root of a ProgID, which will be suffixed with `-$AUMI`.
+/**
+ * Handles the firefox run Background Task workflow.
+ */
 export async function runBackgroundTask(commandLine) {
   Services.fog.initializeFOG(
     undefined,
@@ -206,6 +209,9 @@ const kSecondsPerDay = 24 /*hours*/ * 60 /*minutes*/ * 60; /*seconds*/
 
 const kTaskExpirationSeconds = 90 /*days*/ * kSecondsPerDay;
 
+/**
+ * Handles the firefox do Task workflow.
+ */
 export async function doTask(defaultAgent, force) {
   let secondsSinceAppRan;
   try {

@@ -4,6 +4,9 @@
 
 import React from "react";
 
+/**
+ * Renders the A11y Link Button view.
+ */
 export function A11yLinkButton(props) {
   // function for merging classes, if necessary
   let className = "a11y-link-button";

@@ -4,6 +4,9 @@
 
 import { logNameTable } from "./logNameTable.mjs";
 
+/**
+ * Handles the firefox normalize To Kebab Case workflow.
+ */
 export const normalizeToKebabCase = string => {
   let kebabString = string
     // Turn all dots into dashes
@@ -22,11 +25,17 @@ export const normalizeToKebabCase = string => {
   return kebabString;
 };
 
+/**
+ * Handles the firefox b64 To PEM workflow.
+ */
 export const b64ToPEM = string => {
   let wrapped = string.match(/.{1,64}/g).join("\r\n");
   return `-----BEGIN CERTIFICATE-----\r\n${wrapped}\r\n-----END CERTIFICATE-----\r\n`;
 };
 
+/**
+ * Handles the firefox get Log Name workflow.
+ */
 export const getLogName = hexLogId => {
   let base64LogId = btoa(
     hexLogId
@@ -39,6 +48,9 @@ export const getLogName = hexLogId => {
   return logNameTable[base64LogId];
 };
 
+/**
+ * Handles the firefox hex To Ipv6 Repr workflow.
+ */
 export const hexToIpv6Repr = ipAddressHex => {
   let chunks = ipAddressHex
     .match(/.{4}/g)

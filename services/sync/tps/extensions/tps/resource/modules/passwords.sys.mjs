@@ -15,6 +15,9 @@ var nsLoginInfo = new Components.Constructor(
   "init"
 );
 
+/**
+ * Renders the Dump Passwords view.
+ */
 export var DumpPasswords = async function TPS__Passwords__DumpPasswords() {
   let logins = await Services.logins.getAllLogins();
   Logger.logInfo("\ndumping password list\n", true);

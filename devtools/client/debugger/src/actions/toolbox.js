@@ -12,36 +12,54 @@ export function openLink(url) {
   };
 }
 
+/**
+ * Handles the firefox open Source Map workflow.
+ */
 export function openSourceMap(url, line, column) {
   return async function ({ panel }) {
     return panel.toolbox.viewSource(url, line, column);
   };
 }
 
+/**
+ * Handles the firefox evaluate In Console workflow.
+ */
 export function evaluateInConsole(inputString) {
   return async ({ panel }) => {
     return panel.openConsoleAndEvaluate(inputString);
   };
 }
 
+/**
+ * Handles the firefox open Element In Inspector Command workflow.
+ */
 export function openElementInInspectorCommand(grip) {
   return async ({ panel }) => {
     return panel.openElementInInspector(grip);
   };
 }
 
+/**
+ * Handles the firefox open Inspector workflow.
+ */
 export function openInspector() {
   return async ({ panel }) => {
     return panel.openInspector();
   };
 }
 
+/**
+ * Handles the firefox highlight Dom Element workflow.
+ */
 export function highlightDomElement(grip) {
   return async ({ panel }) => {
     return panel.highlightDomElement(grip);
   };
 }
 
+/**
+ * Handles the firefox un Highlight Dom Element workflow.
+ */
 export function unHighlightDomElement(grip) {
   return async ({ panel }) => {
     return panel.unHighlightDomElement(grip);

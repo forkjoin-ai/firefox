@@ -12,6 +12,9 @@ features: [generators]
 
 var count = 0;
 
+/**
+ * Handles the firefox g workflow.
+ */
 export default function* g() {} if (true) { count += 1; }
 
 assert.sameValue(count, 1);

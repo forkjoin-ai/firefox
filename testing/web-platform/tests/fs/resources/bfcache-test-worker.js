@@ -4,6 +4,9 @@ import {tryToCreateLock} from './bfcache-test-helpers.js';
 
 let openSAH;
 
+/**
+ * Creates the SAH.
+ */
 export async function createSAH(mode, fileName) {
   if (openSAH) {
     throw new Error('Already have an open access handle.');
@@ -13,6 +16,9 @@ export async function createSAH(mode, fileName) {
   return openSAH !== undefined;
 }
 
+/**
+ * Handles the firefox release SAH workflow.
+ */
 export async function releaseSAH() {
   if (!openSAH) {
     throw new Error('No open access handle.');
@@ -21,6 +27,9 @@ export async function releaseSAH() {
   openSAH = undefined;
 }
 
+/**
+ * Creates the And Release SAH.
+ */
 export async function createAndReleaseSAH(mode, fileName) {
   const sahLock = await tryToCreateLock(
       fileName, fileHandle => fileHandle.createSyncAccessHandle({mode}));

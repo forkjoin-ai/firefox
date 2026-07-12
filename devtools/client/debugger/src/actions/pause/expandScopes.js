@@ -4,6 +4,9 @@
 
 import { getScopeItemPath } from "../../utils/pause/scopes";
 
+/**
+ * Handles the firefox set Expanded Scope workflow.
+ */
 export function setExpandedScope(selectedFrame, item, expanded) {
   return function ({ dispatch }) {
     return dispatch({

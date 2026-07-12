@@ -1,3 +1,6 @@
+/**
+ * Handles the firefox check From ESM workflow.
+ */
 export function checkFromESM(ok, is, finish) {
   let worker = new ChromeWorker("esm_url_worker.js");
   worker.onmessage = function (event) {

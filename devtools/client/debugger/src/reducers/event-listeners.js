@@ -4,6 +4,9 @@
 
 import { prefs } from "../utils/prefs";
 
+/**
+ * Handles the firefox initial Event Listener State workflow.
+ */
 export function initialEventListenerState() {
   return {
     // `categories` are shared by both breakpoint and tracer EventListeners panel

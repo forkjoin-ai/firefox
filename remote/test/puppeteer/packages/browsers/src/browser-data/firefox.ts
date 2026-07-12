@@ -71,6 +71,9 @@ function parseBuildId(buildId: string): [FirefoxChannel, string] {
   return [FirefoxChannel.NIGHTLY, buildId];
 }
 
+/**
+ * Resolves the Download Url.
+ */
 export function resolveDownloadUrl(
   platform: BrowserPlatform,
   buildId: string,
@@ -94,6 +97,9 @@ export function resolveDownloadUrl(
   return `${baseUrl}/${resolveDownloadPath(platform, buildId).join('/')}`;
 }
 
+/**
+ * Resolves the Download Path.
+ */
 export function resolveDownloadPath(
   platform: BrowserPlatform,
   buildId: string,
@@ -115,6 +121,9 @@ export function resolveDownloadPath(
   }
 }
 
+/**
+ * Handles the firefox relative Executable Path workflow.
+ */
 export function relativeExecutablePath(
   platform: BrowserPlatform,
   buildId: string,
@@ -166,14 +175,23 @@ export enum FirefoxChannel {
 
 let baseVersionUrl = 'https://product-details.mozilla.org/1.0';
 
+/**
+ * Handles the firefox change Base Version Url For Testing workflow.
+ */
 export function changeBaseVersionUrlForTesting(url: string): void {
   baseVersionUrl = url;
 }
 
+/**
+ * Handles the firefox reset Base Version Url For Testing workflow.
+ */
 export function resetBaseVersionUrlForTesting(): void {
   baseVersionUrl = 'https://product-details.mozilla.org/1.0';
 }
 
+/**
+ * Resolves the Build Id.
+ */
 export async function resolveBuildId(
   channel: FirefoxChannel = FirefoxChannel.NIGHTLY,
 ): Promise<string> {
@@ -194,6 +212,9 @@ export async function resolveBuildId(
   return channel + '_' + version;
 }
 
+/**
+ * Creates the Profile.
+ */
 export async function createProfile(options: ProfileOptions): Promise<void> {
   if (!fs.existsSync(options.path)) {
     await fs.promises.mkdir(options.path, {
@@ -463,6 +484,9 @@ async function syncPreferences(options: ProfileOptions): Promise<void> {
   }
 }
 
+/**
+ * Handles the firefox compare Versions workflow.
+ */
 export function compareVersions(a: string, b: string): number {
   // TODO: this is a not very reliable check.
   return parseInt(a.replace('.', ''), 16) - parseInt(b.replace('.', ''), 16);

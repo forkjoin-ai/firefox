@@ -17,6 +17,9 @@ import { srgbToDisplayP3 } from '../util/color_space_conversion.js';
 // MAINTENANCE_TODO: Uses raw floats as expectation in external_texture related cases has some diffs.
 // Remove this conversion utils and uses raw float data as expectation in external_textrue
 // related cases when resolve this.
+/**
+ * Handles the firefox convert To Unorm8 workflow.
+ */
 export function convertToUnorm8(expectation) {
   const rgba8Unorm = new Uint8ClampedArray(4);
   rgba8Unorm[0] = Math.round(expectation.R * 255.0);
@@ -442,12 +445,7 @@ export function waitForNextTask(callback) {
 }
 
 /**
- * Fire a `callback` when the video reaches a new frame.
- * Returns a promise which resolves after `callback` (which may be async) completes.
- *
- * MAINTENANCE_TODO: Find a way to implement this for browsers without requestVideoFrameCallback as
- * well, similar to the timeWatcher path in startPlayingAndWaitForVideo. If that path is proven to
- * work well, we can consider getting rid of the requestVideoFrameCallback path.
+ * Handles the firefox wait For Next Frame workflow.
  */
 export function waitForNextFrame(
 video,
@@ -466,6 +464,9 @@ callback)
   return promise;
 }
 
+/**
+ * Handles the firefox get Video Frame From Video Element workflow.
+ */
 export async function getVideoFrameFromVideoElement(
 test,
 video)

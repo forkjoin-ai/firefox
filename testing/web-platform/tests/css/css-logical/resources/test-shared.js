@@ -90,12 +90,18 @@ if (CSS.supports("-webkit-writing-mode", "horizontal-bt")) {
   )
 }
 
+/**
+ * Handles the firefox test CSSValues workflow.
+ */
 export function testCSSValues(testName, style, expectedValues) {
   for (const [property, value] of expectedValues) {
     assert_equals(style.getPropertyValue(property), value, `${testName}, ${property}`);
   }
 }
 
+/**
+ * Handles the firefox test Computed Values workflow.
+ */
 export function testComputedValues(testName, rules, expectedValues) {
   sheet.textContent = rules;
   const cs = getComputedStyle(testElement);
@@ -103,6 +109,9 @@ export function testComputedValues(testName, rules, expectedValues) {
   sheet.textContent = "";
 }
 
+/**
+ * Handles the firefox make Declaration workflow.
+ */
 export function makeDeclaration(object = {}, replacement = "*") {
   let decl = "";
   for (const [property, value] of Object.entries(object)) {

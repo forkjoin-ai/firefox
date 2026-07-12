@@ -24,12 +24,18 @@ export const LOGGING_PREF = "browser.tabs.firefox-view.logLevel";
 
 export const MAX_TABS_FOR_RECENT_BROWSING = 5;
 
+/**
+ * Formats the URIFor Display.
+ */
 export function formatURIForDisplay(uriString) {
   return lazy.BrowserUtils.formatURIStringForDisplay(uriString, {
     showFilenameForLocalURIs: true,
   });
 }
 
+/**
+ * Handles the firefox convert Timestamp workflow.
+ */
 export function convertTimestamp(
   timestamp,
   fluentStrings,
@@ -52,6 +58,9 @@ export function convertTimestamp(
   return formattedTime;
 }
 
+/**
+ * Creates the Favicon Element.
+ */
 export function createFaviconElement(image, targetURI = "") {
   let favicon = document.createElement("div");
   favicon.style.backgroundImage = `url('${getImageUrl(image, targetURI)}')`;
@@ -59,6 +68,9 @@ export function createFaviconElement(image, targetURI = "") {
   return favicon;
 }
 
+/**
+ * Handles the firefox get Image Url workflow.
+ */
 export function getImageUrl(icon, targetURI) {
   return icon ? lazy.PlacesUIUtils.getImageURL(icon) : `page-icon:${targetURI}`;
 }
@@ -82,6 +94,9 @@ export function getLogger(loggerName) {
   return loggersByName.get(loggerName);
 }
 
+/**
+ * Handles the firefox escape Html Entities workflow.
+ */
 export function escapeHtmlEntities(text) {
   return (text || "")
     .replace(/&/g, "&amp;")
@@ -91,6 +106,9 @@ export function escapeHtmlEntities(text) {
     .replace(/'/g, "&#39;");
 }
 
+/**
+ * Handles the firefox navigate To Link workflow.
+ */
 export function navigateToLink(
   e,
   url = e.originalTarget.url,

@@ -13,6 +13,9 @@ import {
 // Action is order-based and direction-agnostic: onMoveLeft always swaps with
 // the previous item in the order array. The Fluent strings handle the visual
 // flip for RTL locales by translating "Left" as "Right" (and vice versa).
+/**
+ * Builds the Move Props.
+ */
 export function buildMoveProps(id, order, enabledMap, dispatch) {
   const visible = order.filter(w => enabledMap?.[w]);
   const idx = visible.indexOf(id);
@@ -39,6 +42,9 @@ export function buildMoveProps(id, order, enabledMap, dispatch) {
 // by the panel-list custom element, so React's synthetic onClick doesn't
 // reach them. Listen at the panel-list root and walk composedPath() to
 // find the clicked item by its data-move-dir attribute.
+/**
+ * Renders the Move Submenu view.
+ */
 export function MoveSubmenu({ widgetId, widgetEnabledMap }) {
   const prefs = useSelector(state => state.Prefs.values);
   const dispatch = useDispatch();

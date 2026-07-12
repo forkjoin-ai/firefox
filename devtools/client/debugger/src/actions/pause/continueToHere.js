@@ -15,6 +15,9 @@ import { setSkipPausing } from "./skipPausing";
 
 import { resume } from "./commands";
 
+/**
+ * Handles the firefox continue To Here workflow.
+ */
 export function continueToHere(location) {
   return async function ({ dispatch, getState }) {
     const { line, column } = location;

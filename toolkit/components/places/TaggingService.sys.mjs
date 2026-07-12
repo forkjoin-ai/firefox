@@ -537,6 +537,9 @@ class TagSearch {
 }
 
 // Implements nsIAutoCompleteSearch
+/**
+ * Renders the Tag Auto Complete Search view.
+ */
 export function TagAutoCompleteSearch() {}
 
 TagAutoCompleteSearch.prototype = {

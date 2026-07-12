@@ -65,6 +65,9 @@ DevToolsServer.createRootActor = function () {
 // that, we handle a Map of the different connections, keyed by forwarding prefix.
 const connections = new Map();
 
+/**
+ * Handles the Dev Tools Packet request flow.
+ */
 export async function handleDevToolsPacket(packet) {
   switch (packet.type) {
     case "connect": {

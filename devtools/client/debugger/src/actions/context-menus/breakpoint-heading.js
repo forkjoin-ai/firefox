@@ -12,6 +12,9 @@ import {
   removeBreakpointsInSource,
 } from "../../actions/breakpoints/index";
 
+/**
+ * Handles the firefox show Breakpoint Heading Context Menu workflow.
+ */
 export function showBreakpointHeadingContextMenu(event, source) {
   return async ({ dispatch, getState }) => {
     const state = getState();

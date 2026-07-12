@@ -91,6 +91,9 @@ export class Address extends FormAutofillBase {
   }
 }
 
+/**
+ * Renders the Dump Addresses view.
+ */
 export async function DumpAddresses() {
   await DumpStorage("addresses");
 }
@@ -124,6 +127,9 @@ export class CreditCard extends FormAutofillBase {
   }
 }
 
+/**
+ * Renders the Dump Credit Cards view.
+ */
 export async function DumpCreditCards() {
   await DumpStorage("creditCards");
 }

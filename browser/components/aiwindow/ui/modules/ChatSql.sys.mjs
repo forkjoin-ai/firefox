@@ -270,12 +270,18 @@ export function getConversationMessagesSql(amount) {
   `;
 }
 
+/**
+ * Handles the firefox get Delete Messages By Ids Sql workflow.
+ */
 export function getDeleteMessagesByIdsSql(amount) {
   return `
     DELETE FROM message WHERE message.message_id IN(${new Array(amount).fill("?").join(",")})
   `;
 }
 
+/**
+ * Handles the firefox get Delete Empty Conversations Sql workflow.
+ */
 export function getDeleteEmptyConversationsSql(amount) {
   return `
     DELETE FROM conversation

@@ -19,6 +19,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   await buildChain(certInfo);
 });
 
+/**
+ * Handles the firefox update Selected Item workflow.
+ */
 export const updateSelectedItem = (() => {
   let state;
   return selectedItem => {
@@ -74,6 +77,9 @@ const getElementByPathOrFalse = (obj, pathString) => {
   return result ? result : false;
 };
 
+/**
+ * Handles the firefox adjust Cert Information workflow.
+ */
 export const adjustCertInformation = cert => {
   let certItems = [];
   let tabName = cert?.subject?.cn || cert?.ext?.san?.altNames?.[0]?.[1] || "";

@@ -530,6 +530,9 @@ FxAccountsWebChannel.prototype = {
   },
 };
 
+/**
+ * Renders the Fx Accounts Web Channel Helpers view.
+ */
 export function FxAccountsWebChannelHelpers(options) {
   options = options || {};
 
@@ -1375,6 +1378,9 @@ var singleton;
 // (eg, it uses the observer service to tell interested parties of interesting
 // things) and allowing multiple channels would cause such notifications to be
 // sent multiple times.
+/**
+ * Renders the Ensure Fx Accounts Web Channel view.
+ */
 export var EnsureFxAccountsWebChannel = () => {
   let contentUri = Services.urlFormatter.formatURLPref(
     "identity.fxaccounts.remote.root"

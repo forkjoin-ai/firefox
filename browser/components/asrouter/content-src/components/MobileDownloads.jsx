@@ -6,6 +6,9 @@ import React from "react";
 import { Localized } from "./MSLocalized";
 import { MultiStageUtils } from "../lib/multistage-utils.mjs";
 
+/**
+ * Renders the Marketplace Buttons view.
+ */
 export const MarketplaceButtons = props => {
   return (
     <ul className="mobile-download-buttons">
@@ -31,6 +34,9 @@ export const MarketplaceButtons = props => {
   );
 };
 
+/**
+ * Renders the Mobile Downloads view.
+ */
 export const MobileDownloads = props => {
   const { QR_code: QRCode } = props.data;
   const showEmailLink =

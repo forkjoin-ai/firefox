@@ -5,6 +5,9 @@
 import React, { useState, useEffect } from "react";
 import { Localized } from "./MSLocalized";
 
+/**
+ * Renders the Loader view.
+ */
 export const Loader = () => {
   return (
     <button className="primary">
@@ -15,6 +18,9 @@ export const Loader = () => {
   );
 };
 
+/**
+ * Renders the Install Button view.
+ */
 export const InstallButton = props => {
   // determine if the addon is already installed so the state is
   // consistent on refresh or navigation

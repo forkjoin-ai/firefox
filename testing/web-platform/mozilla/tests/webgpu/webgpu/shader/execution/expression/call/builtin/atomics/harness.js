@@ -25,6 +25,9 @@ export const kMapId = {
   }
 };
 
+/**
+ * Handles the firefox typed Array Ctor workflow.
+ */
 export function typedArrayCtor(
 scalarType)
 {
@@ -36,6 +39,9 @@ scalarType)
   }
 }
 
+/**
+ * Handles the firefox run Storage Variable Test workflow.
+ */
 export function runStorageVariableTest({
   t,
   workgroupSize, // Workgroup X-size
@@ -111,6 +117,9 @@ export function runStorageVariableTest({
   t.expectGPUBufferValuesEqual(outputBuffer, expected);
 }
 
+/**
+ * Handles the firefox run Workgroup Variable Test workflow.
+ */
 export function runWorkgroupVariableTest({
   t,
   workgroupSize, // Workgroup X-size

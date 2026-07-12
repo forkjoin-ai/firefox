@@ -542,6 +542,9 @@ Progress.readResponse = readResponse;
 Progress.readResponseToWriter = readResponseToWriter;
 Progress.fetchUrl = fetchUrl;
 
+/**
+ * Handles the firefox get Inference Process Info workflow.
+ */
 export async function getInferenceProcessInfo() {
   // for now we only have a single inference process.
   let info = await ChromeUtils.requestProcInfo();
@@ -1123,6 +1126,9 @@ function baseRecordData(modelAddonWrapper) {
   };
 }
 
+/**
+ * Handles the firefox record Remove Confirmation Telemetry workflow.
+ */
 export function recordRemoveConfirmationTelemetry(modelAddonWrapper, confirm) {
   Glean.modelManagement.removeConfirmation.record({
     ...baseRecordData(modelAddonWrapper),
@@ -1130,6 +1136,9 @@ export function recordRemoveConfirmationTelemetry(modelAddonWrapper, confirm) {
   });
 }
 
+/**
+ * Handles the firefox record List Item Manage Telemetry workflow.
+ */
 export function recordListItemManageTelemetry(modelAddonWrapper) {
   Glean.modelManagement.listItemManage.record({
     ...baseRecordData(modelAddonWrapper),
@@ -1141,6 +1150,9 @@ function convertDateToHours(date) {
   return Math.floor((now - date.getTime()) / 1000 / 60 / 60); // hours
 }
 
+/**
+ * Handles the firefox record Remove Initiated Telemetry workflow.
+ */
 export function recordRemoveInitiatedTelemetry(modelAddonWrapper, source) {
   const { lastUsed, updateDate, totalSize } = modelAddonWrapper;
   Glean.modelManagement.removeInitiated.record({
@@ -1152,18 +1164,27 @@ export function recordRemoveInitiatedTelemetry(modelAddonWrapper, source) {
   });
 }
 
+/**
+ * Handles the firefox record Model Card Link Telemetry workflow.
+ */
 export function recordModelCardLinkTelemetry(modelAddonWrapper) {
   Glean.modelManagement.modelCardLink.record({
     ...baseRecordData(modelAddonWrapper),
   });
 }
 
+/**
+ * Handles the firefox record List View Telemetry workflow.
+ */
 export function recordListViewTelemetry(qty) {
   Glean.modelManagement.listView.record({
     models: qty,
   });
 }
 
+/**
+ * Handles the firefox record Details View Telemetry workflow.
+ */
 export function recordDetailsViewTelemetry(modelAddonWrapper) {
   Glean.modelManagement.detailsView.record({
     ...baseRecordData(modelAddonWrapper),

@@ -41,6 +41,9 @@ function buildFlags(caseSensitive, isGlobal) {
   return null;
 }
 
+/**
+ * Builds the Query.
+ */
 export default function buildQuery(
   originalQuery,
   modifiers,

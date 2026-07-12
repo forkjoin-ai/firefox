@@ -5,6 +5,9 @@
 import React, { useCallback } from "react";
 import { actionCreators as ac, actionTypes as at } from "common/Actions.mjs";
 
+/**
+ * Renders the Activation Window Message view.
+ */
 export function ActivationWindowMessage({
   dispatch,
   handleBlock,

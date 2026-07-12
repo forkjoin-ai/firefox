@@ -37,6 +37,9 @@ const ArrayBufferInputStream = Components.Constructor(
  * See SubstituteChannel in netwerk/protocol/res/ExtensionProtocolHandler.cpp
  * for usage.
  */
+/**
+ * Renders the Addon Localization Converter view.
+ */
 export function AddonLocalizationConverter() {}
 
 AddonLocalizationConverter.prototype = {
@@ -128,6 +131,9 @@ AddonLocalizationConverter.prototype = {
   },
 };
 
+/**
+ * Renders the Http Index Viewer view.
+ */
 export function HttpIndexViewer() {}
 
 HttpIndexViewer.prototype = {

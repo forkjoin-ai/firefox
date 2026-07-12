@@ -43,6 +43,9 @@ export class ContextError extends Error {
   }
 }
 
+/**
+ * Handles the firefox validate Navigate Context workflow.
+ */
 export function validateNavigateContext(state, cx) {
   const newcx = getThreadContext(state);
 
@@ -51,6 +54,9 @@ export function validateNavigateContext(state, cx) {
   }
 }
 
+/**
+ * Handles the firefox validate Thread Context workflow.
+ */
 export function validateThreadContext(state, cx) {
   const newcx = getThreadContext(state);
 
@@ -63,6 +69,9 @@ export function validateThreadContext(state, cx) {
   }
 }
 
+/**
+ * Handles the firefox validate Context workflow.
+ */
 export function validateContext(state, cx) {
   validateNavigateContext(state, cx);
 
@@ -71,6 +80,9 @@ export function validateContext(state, cx) {
   }
 }
 
+/**
+ * Handles the firefox validate Selected Frame workflow.
+ */
 export function validateSelectedFrame(state, selectedFrame) {
   const newThread = getCurrentThread(state);
   if (selectedFrame.thread != newThread) {
@@ -84,6 +96,9 @@ export function validateSelectedFrame(state, selectedFrame) {
   }
 }
 
+/**
+ * Handles the firefox validate Breakpoint workflow.
+ */
 export function validateBreakpoint(state, breakpoint) {
   // XHR breakpoint don't use any location and are always valid
   if (!breakpoint.location) {
@@ -102,6 +117,9 @@ export function validateBreakpoint(state, breakpoint) {
   }
 }
 
+/**
+ * Handles the firefox validate Source workflow.
+ */
 export function validateSource(state, source) {
   if (!hasSource(state, source.id)) {
     throw new ContextError(
@@ -110,6 +128,9 @@ export function validateSource(state, source) {
   }
 }
 
+/**
+ * Handles the firefox validate Source Actor workflow.
+ */
 export function validateSourceActor(state, sourceActor) {
   if (!hasSourceActor(state, sourceActor.id)) {
     throw new ContextError(
@@ -118,6 +139,9 @@ export function validateSourceActor(state, sourceActor) {
   }
 }
 
+/**
+ * Handles the firefox validate Thread Frames workflow.
+ */
 export function validateThreadFrames(state, thread, frames) {
   const newThread = getCurrentThread(state);
   if (thread != newThread) {
@@ -129,6 +153,9 @@ export function validateThreadFrames(state, thread, frames) {
   }
 }
 
+/**
+ * Handles the firefox validate Frame workflow.
+ */
 export function validateFrame(state, frame) {
   if (!hasFrame(state, frame)) {
     throw new ContextError(
@@ -137,6 +164,9 @@ export function validateFrame(state, frame) {
   }
 }
 
+/**
+ * Returns whether is Valid Thread Context is true.
+ */
 export function isValidThreadContext(state, cx) {
   const newcx = getThreadContext(state);
   return cx.thread == newcx.thread && cx.pauseCounter == newcx.pauseCounter;

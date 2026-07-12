@@ -1,3 +1,6 @@
+/**
+ * Handles the firefox check From ESM workflow.
+ */
 export function checkFromESM(target, is_op) {
   is_op(target.numProp, 42, "Number expando works");
   is_op(target.strProp, "foo", "String expando works");

@@ -223,6 +223,9 @@ LightweightThemeConsumer.init = function (window) {
   new LightweightThemeConsumer(window.document);
 };
 
+/**
+ * Renders the Lightweight Theme Consumer view.
+ */
 export function LightweightThemeConsumer(aDocument) {
   this._doc = aDocument;
   this._win = aDocument.defaultView;

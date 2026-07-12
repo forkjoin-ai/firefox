@@ -4,6 +4,9 @@
 
 let usablePerfObj = window.performance;
 
+/**
+ * Handles the firefox Perf Service workflow.
+ */
 export function _PerfService(options) {
   // For testing, so that we can use a fake Window.performance object with
   // known state.

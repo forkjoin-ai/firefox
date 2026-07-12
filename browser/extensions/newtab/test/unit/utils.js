@@ -301,6 +301,9 @@ EventEmitter.prototype = {
   },
 };
 
+/**
+ * Renders the Fake Performance view.
+ */
 export function FakePerformance() {}
 FakePerformance.prototype = {
   marks: new Map(),
@@ -395,6 +398,9 @@ export class FakeConsoleAPI {
   }
 }
 
+/**
+ * Renders the Fake Nimbus Feature view.
+ */
 export function FakeNimbusFeature() {
   return {
     getEnrollmentMetadata() {},
@@ -406,6 +412,9 @@ export function FakeNimbusFeature() {
   };
 }
 
+/**
+ * Renders the Fake Nimbus Features view.
+ */
 export function FakeNimbusFeatures(featureIds) {
   return Object.fromEntries(
     featureIds.map(featureId => [featureId, FakeNimbusFeature()])

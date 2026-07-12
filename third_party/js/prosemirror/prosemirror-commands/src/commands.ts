@@ -354,6 +354,9 @@ export const liftEmptyBlock: Command = (state, dispatch) => {
 
 /// Create a variant of [`splitBlock`](#commands.splitBlock) that uses
 /// a custom function to determine the type of the newly split off block.
+/**
+ * Handles the firefox split Block As workflow.
+ */
 export function splitBlockAs(
   splitNode?: (node: Node, atEnd: boolean, $from: ResolvedPos) => {type: NodeType, attrs?: Attrs} | null
 ): Command {
@@ -530,6 +533,9 @@ export const selectTextblockEnd = selectTextblockSide(1)
 
 /// Wrap the selection in a node of the given type with the given
 /// attributes.
+/**
+ * Handles the firefox wrap In workflow.
+ */
 export function wrapIn(nodeType: NodeType, attrs: Attrs | null = null): Command {
   return function(state, dispatch) {
     let {$from, $to} = state.selection
@@ -542,6 +548,9 @@ export function wrapIn(nodeType: NodeType, attrs: Attrs | null = null): Command 
 
 /// Returns a command that tries to set the selected textblocks to the
 /// given node type with the given attributes.
+/**
+ * Handles the firefox set Block Type workflow.
+ */
 export function setBlockType(nodeType: NodeType, attrs: Attrs | null = null): Command {
   return function(state, dispatch) {
     let applicable = false
@@ -608,6 +617,9 @@ function removeInlineAtoms(ranges: readonly SelectionRange[]): readonly Selectio
 /// selection is empty, this applies to the [stored
 /// marks](#state.EditorState.storedMarks) instead of a range of the
 /// document.
+/**
+ * Converts input into toggle Mark.
+ */
 export function toggleMark(markType: MarkType, attrs: Attrs | null = null, options?: {
   /// Controls whether, when part of the selected range has the mark
   /// already and part doesn't, the mark is removed (`true`, the
@@ -714,6 +726,9 @@ function wrapDispatchForJoin(dispatch: (tr: Transaction) => void, isJoinable: (a
 /// when the `isJoinable` predicate returns true for them or, if an
 /// array of strings was passed, if their node type name is in that
 /// array.
+/**
+ * Handles the firefox auto Join workflow.
+ */
 export function autoJoin(
   command: Command,
   isJoinable: ((before: Node, after: Node) => boolean) | readonly string[]
@@ -725,6 +740,9 @@ export function autoJoin(
 
 /// Combine a number of command functions into a single function (which
 /// calls them one by one until one returns true).
+/**
+ * Handles the firefox chain Commands workflow.
+ */
 export function chainCommands(...commands: readonly Command[]): Command {
   return function(state, dispatch, view) {
     for (let i = 0; i < commands.length; i++)

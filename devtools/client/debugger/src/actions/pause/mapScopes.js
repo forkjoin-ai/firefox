@@ -28,6 +28,9 @@ import { getMappedLocation } from "../../utils/source-maps";
 
 const expressionRegex = /\bfp\(\)/g;
 
+/**
+ * Builds the Original Scopes.
+ */
 export async function buildOriginalScopes(
   selectedFrame,
   client,
@@ -80,6 +83,9 @@ export async function buildOriginalScopes(
   };
 }
 
+/**
+ * Converts input into toggle Map Scopes.
+ */
 export function toggleMapScopes() {
   return async function ({ dispatch, getState }) {
     if (isMapScopesEnabled(getState())) {
@@ -110,6 +116,9 @@ export function toggleMapScopes() {
   };
 }
 
+/**
+ * Handles the firefox map Scopes workflow.
+ */
 export function mapScopes(selectedFrame, scopes) {
   return async function (thunkArgs) {
     const { getState, dispatch, client } = thunkArgs;

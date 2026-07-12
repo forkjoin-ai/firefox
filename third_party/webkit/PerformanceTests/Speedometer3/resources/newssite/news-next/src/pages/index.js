@@ -4,6 +4,9 @@ import Page from "@/partials/page/page";
 import Head from "next/head";
 import { DataContextProvider } from "@/context/data-context";
 
+/**
+ * Renders the App view.
+ */
 export default function App() {
     return (
         <>

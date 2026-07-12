@@ -6,6 +6,9 @@ import { Weave } from "resource://services-sync/main.sys.mjs";
 import { RawCryptoWrapper } from "resource://services-sync/record.sys.mjs";
 import { Utils } from "resource://services-sync/util.sys.mjs";
 
+/**
+ * Renders the Fake Filesystem Service view.
+ */
 export function FakeFilesystemService(contents) {
   this.fakeContents = contents;
   let self = this;
@@ -51,6 +54,9 @@ export function FakeFilesystemService(contents) {
   };
 }
 
+/**
+ * Handles the firefox fake SHA256 HMAC workflow.
+ */
 export function fakeSHA256HMAC(message) {
   message = message.substr(0, 64);
   while (message.length < 64) {
@@ -59,6 +65,9 @@ export function fakeSHA256HMAC(message) {
   return message;
 }
 
+/**
+ * Renders the Fake GUIDService view.
+ */
 export function FakeGUIDService() {
   let latestGUID = 0;
 
@@ -72,6 +81,9 @@ export function FakeGUIDService() {
 /*
  * Mock implementation of WeaveCrypto. It does not encrypt or
  * decrypt, merely returning the input verbatim.
+ */
+/**
+ * Renders the Fake Crypto Service view.
  */
 export function FakeCryptoService() {
   this.counter = 0;

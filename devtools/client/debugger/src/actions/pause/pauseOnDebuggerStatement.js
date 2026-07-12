@@ -6,6 +6,9 @@ const {
   PROMISE,
 } = require("resource://devtools/client/shared/redux/middleware/promise.js");
 
+/**
+ * Handles the firefox pause On Debugger Statement workflow.
+ */
 export function pauseOnDebuggerStatement(shouldPauseOnDebuggerStatement) {
   return ({ dispatch, client }) => {
     return dispatch({

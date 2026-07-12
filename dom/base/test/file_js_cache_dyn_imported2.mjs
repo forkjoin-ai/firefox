@@ -17,6 +17,9 @@
 
 const { func3 } = await import("./file_js_cache_dyn_imported3.mjs");
 
+/**
+ * Handles the firefox func2 workflow.
+ */
 export function func2() {
   func3();
 }

@@ -52,6 +52,9 @@ function formatSelectedColumnBreakpoints(dbg) {
 
 const diff = (a, b) => Object.keys(a).filter(key => !Object.is(a[key], b[key]));
 
+/**
+ * Handles the firefox setup Helper workflow.
+ */
 export function setupHelper(obj) {
   const selectors = bindSelectors(obj);
   const dbg = {

@@ -277,6 +277,9 @@ async function cleanupOtherDirectories(
 // metricsId - [optional] The identifier for Glean metrics, in PascalCase.
 //             It'll be submitted only when the matching identifier exists in
 //             toolkit/components/backgroundtasks/metrics.yaml.
+/**
+ * Handles the firefox run Background Task workflow.
+ */
 export async function runBackgroundTask(commandLine) {
   const testSleep = Number.parseInt(
     commandLine.handleFlagWithParam("test-sleep", false)

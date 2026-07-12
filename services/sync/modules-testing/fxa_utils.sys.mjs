@@ -12,6 +12,9 @@ import { configureFxAccountIdentity } from "resource://testing-common/services/s
 
 // Create a new sync_auth object and initialize it with a
 // mocked TokenServerClient which always receives the specified response.
+/**
+ * Handles the firefox initialize Identity With Token Server Response workflow.
+ */
 export var initializeIdentityWithTokenServerResponse = function (response) {
   // First create a mock "request" object that well' hack into the token server.
   // A log for it

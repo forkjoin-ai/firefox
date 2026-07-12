@@ -196,6 +196,9 @@ export class CaseCache implements Cacheable<Record<string, Case[]>> {
   private readonly builders: Record<string, CaseListBuilder>;
 }
 
+/**
+ * Handles the firefox make Case Cache workflow.
+ */
 export function makeCaseCache(name: string, builders: Record<string, CaseListBuilder>): CaseCache {
   return new CaseCache(name, builders);
 }

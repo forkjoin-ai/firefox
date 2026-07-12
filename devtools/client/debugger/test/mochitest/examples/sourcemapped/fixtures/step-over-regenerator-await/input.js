@@ -10,6 +10,9 @@ function doAsync() {
   return Promise.resolve();
 }
 
+/**
+ * Handles the firefox root workflow.
+ */
 export default function root() {
   fn();
 }

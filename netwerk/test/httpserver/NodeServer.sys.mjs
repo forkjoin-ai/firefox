@@ -1441,6 +1441,9 @@ export class NodeWebSocketHttp2Server extends BaseNodeServer {
 
 // Helper functions
 
+/**
+ * Handles the firefox with node servers workflow.
+ */
 export async function with_node_servers(arrayOfClasses, asyncClosure) {
   for (let s of arrayOfClasses) {
     let server = new s();

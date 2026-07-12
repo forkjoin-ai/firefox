@@ -33,13 +33,7 @@ export function pickCanonicalUrl(sources) {
 }
 
 /**
- * TODO: resolve relative URLs
- * TODO: can be a different hostname or domain; does that need special handling?
- *
- * @see https://www.rfc-editor.org/rfc/rfc6596
- *
- * @param {Document} document
- * @returns {string|null}
+ * Handles the firefox get Link Rel Canonical workflow.
  */
 export function getLinkRelCanonical(document) {
   const url = document
@@ -64,13 +58,7 @@ export function getOpenGraphUrl(document) {
 }
 
 /**
- * Naïvely returns the first JSON-LD entity's URL, if found.
- * TODO: make sure it's a web page-like/content schema?
- *
- * @see https://schema.org/url
- *
- * @param {Document} document
- * @returns {string|null}
+ * Handles the firefox get JSONLDUrl workflow.
  */
 export function getJSONLDUrl(document) {
   const firstMatch = Array.from(

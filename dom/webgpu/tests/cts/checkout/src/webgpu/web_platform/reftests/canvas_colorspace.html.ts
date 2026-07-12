@@ -47,6 +47,9 @@ function render(
   device.queue.writeTexture({ texture }, textureData, {}, { width: 4, height: 1 });
 }
 
+/**
+ * Handles the firefox run Color Space Test workflow.
+ */
 export function runColorSpaceTest(format: GPUTextureFormat) {
   runRefTest(async t => {
     // prettier-ignore

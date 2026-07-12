@@ -315,6 +315,9 @@ function rangeToSelectionRange(view: EditorView, range: StaticRange) {
 
 // Used to work around a Safari Selection/shadow DOM bug
 // Based on https://github.com/codemirror/dev/issues/414 fix
+/**
+ * Handles the firefox safari Shadow Selection Range workflow.
+ */
 export function safariShadowSelectionRange(view: EditorView, selection: DOMSelection): DOMSelectionRange | null {
   if ((selection as any).getComposedRanges) {
     let range = (selection as any).getComposedRanges(view.root)[0] as StaticRange

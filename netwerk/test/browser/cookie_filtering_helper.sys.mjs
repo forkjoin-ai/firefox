@@ -16,20 +16,32 @@ export var HTTPS_EXAMPLE_ORG = "https://example.org";
 export var HTTPS_EXAMPLE_COM = "https://example.com";
 export var HTTP_EXAMPLE_COM = "http://example.com";
 
+/**
+ * Handles the firefox browser Test Path workflow.
+ */
 export function browserTestPath(uri) {
   return uri + "/browser/netwerk/test/browser/";
 }
 
+/**
+ * Handles the firefox wait For All Expected Tests workflow.
+ */
 export function waitForAllExpectedTests() {
   return ContentTaskUtils.waitForCondition(() => {
     return content.testDone === true;
   });
 }
 
+/**
+ * Handles the firefox cleanup Observers workflow.
+ */
 export function cleanupObservers() {
   Services.obs.notifyObservers(null, "cookie-content-filter-cleanup");
 }
 
+/**
+ * Handles the firefox preclean test workflow.
+ */
 export async function preclean_test() {
   // enable all cookies for the set-cookie trigger via setCookieStringFromHttp
   Services.prefs.setIntPref("network.cookie.cookieBehavior", 0);
@@ -48,6 +60,9 @@ export async function preclean_test() {
   Services.cookies.removeAll();
 }
 
+/**
+ * Handles the firefox cleanup test workflow.
+ */
 export async function cleanup_test() {
   Services.prefs.clearUserPref("network.cookie.cookieBehavior");
   Services.prefs.clearUserPref(
@@ -61,6 +76,9 @@ export async function cleanup_test() {
   Services.cookies.removeAll();
 }
 
+/**
+ * Fetches the Helper.
+ */
 export async function fetchHelper(url, cookie, secure, domain = "") {
   let headers = new Headers();
 
@@ -80,6 +98,9 @@ export async function fetchHelper(url, cookie, secure, domain = "") {
 
 // cookie header strings with multiple name=value pairs delimited by \n
 // will trigger multiple "cookie-changed" signals
+/**
+ * Handles the firefox trigger Set Cookie From Http workflow.
+ */
 export function triggerSetCookieFromHttp(uri, cookie, fpd = "", ucd = 0) {
   info("about to trigger set-cookie: " + uri + " " + cookie);
   let channel = NetUtil.newChannel({
@@ -98,6 +119,9 @@ export function triggerSetCookieFromHttp(uri, cookie, fpd = "", ucd = 0) {
   Services.cookies.setCookieStringFromHttp(uri, cookie, channel);
 }
 
+/**
+ * Handles the firefox trigger Set Cookie From Http Private workflow.
+ */
 export async function triggerSetCookieFromHttpPrivate(uri, cookie) {
   info("about to trigger set-cookie: " + uri + " " + cookie);
   let channel = NetUtil.newChannel({
@@ -112,6 +136,9 @@ export async function triggerSetCookieFromHttpPrivate(uri, cookie) {
 
 // observer/listener function that will be run on the content processes
 // listens and checks for the expected cookies
+/**
+ * Handles the firefox check Expected Cookies workflow.
+ */
 export function checkExpectedCookies(expected, browserName) {
   const COOKIE_FILTER_TEST_MESSAGE = "content-added-cookie";
   const COOKIE_FILTER_TEST_CLEANUP = "cookie-content-filter-cleanup";

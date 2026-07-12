@@ -6,10 +6,16 @@ import { createThread } from "../client/firefox/create";
 import { getSourcesToRemoveForThread } from "../selectors/index";
 import { removeSources } from "./sources/removeSources";
 
+/**
+ * Handles the firefox add Target workflow.
+ */
 export function addTarget(targetFront) {
   return { type: "INSERT_THREAD", newThread: createThread(targetFront) };
 }
 
+/**
+ * Handles the firefox remove Target workflow.
+ */
 export function removeTarget(targetFront) {
   return async ({ getState, dispatch }) => {
     const threadActorID = targetFront.targetForm.threadActor;
@@ -39,6 +45,9 @@ export function removeTarget(targetFront) {
   };
 }
 
+/**
+ * Converts input into toggle Java Script Enabled.
+ */
 export function toggleJavaScriptEnabled(enabled) {
   return async ({ dispatch, client }) => {
     await client.toggleJavaScriptEnabled(enabled);

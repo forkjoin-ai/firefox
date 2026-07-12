@@ -30,6 +30,9 @@ function folder(platform: BrowserPlatform): string {
   }
 }
 
+/**
+ * Resolves the Download Url.
+ */
 export function resolveDownloadUrl(
   platform: BrowserPlatform,
   buildId: string,
@@ -38,6 +41,9 @@ export function resolveDownloadUrl(
   return `${baseUrl}/${resolveDownloadPath(platform, buildId).join('/')}`;
 }
 
+/**
+ * Resolves the Download Path.
+ */
 export function resolveDownloadPath(
   platform: BrowserPlatform,
   buildId: string,
@@ -45,6 +51,9 @@ export function resolveDownloadPath(
   return [buildId, folder(platform), `chrome-${folder(platform)}.zip`];
 }
 
+/**
+ * Handles the firefox relative Executable Path workflow.
+ */
 export function relativeExecutablePath(
   platform: BrowserPlatform,
   _buildId: string,
@@ -70,13 +79,22 @@ export function relativeExecutablePath(
 
 let baseVersionUrl = 'https://googlechromelabs.github.io/chrome-for-testing';
 
+/**
+ * Handles the firefox change Base Version Url For Testing workflow.
+ */
 export function changeBaseVersionUrlForTesting(url: string): void {
   baseVersionUrl = url;
 }
+/**
+ * Handles the firefox reset Base Version Url For Testing workflow.
+ */
 export function resetBaseVersionUrlForTesting(): void {
   baseVersionUrl = 'https://googlechromelabs.github.io/chrome-for-testing';
 }
 
+/**
+ * Handles the firefox get Last Known Good Release For Channel workflow.
+ */
 export async function getLastKnownGoodReleaseForChannel(
   channel: ChromeReleaseChannel,
 ): Promise<{version: string; revision: string}> {
@@ -101,6 +119,9 @@ export async function getLastKnownGoodReleaseForChannel(
   ).channels[channel];
 }
 
+/**
+ * Handles the firefox get Last Known Good Release For Milestone workflow.
+ */
 export async function getLastKnownGoodReleaseForMilestone(
   milestone: string,
 ): Promise<{version: string; revision: string} | undefined> {
@@ -114,6 +135,9 @@ export async function getLastKnownGoodReleaseForMilestone(
     | undefined;
 }
 
+/**
+ * Handles the firefox get Last Known Good Release For Build workflow.
+ */
 export async function getLastKnownGoodReleaseForBuild(
   /**
    * @example `112.0.23`,
@@ -130,12 +154,21 @@ export async function getLastKnownGoodReleaseForBuild(
     | undefined;
 }
 
+/**
+ * Resolves the Build Id.
+ */
 export async function resolveBuildId(
   channel: ChromeReleaseChannel,
 ): Promise<string>;
+/**
+ * Resolves the Build Id.
+ */
 export async function resolveBuildId(
   channel: string,
 ): Promise<string | undefined>;
+/**
+ * Resolves the Build Id.
+ */
 export async function resolveBuildId(
   channel: ChromeReleaseChannel | string,
 ): Promise<string | undefined> {
@@ -274,6 +307,9 @@ function getChromeLinuxOrWslLocation(
   return locations as [string, ...string[]];
 }
 
+/**
+ * Resolves the System Executable Paths.
+ */
 export function resolveSystemExecutablePaths(
   platform: BrowserPlatform,
   channel: ChromeReleaseChannel,
@@ -320,6 +356,9 @@ export function resolveSystemExecutablePaths(
   }
 }
 
+/**
+ * Resolves the Default User Data Dir.
+ */
 export function resolveDefaultUserDataDir(
   platform: BrowserPlatform,
   channel: ChromeReleaseChannel,
@@ -405,6 +444,9 @@ function getBaseUserDataDirPathMac() {
   return path.join(os.homedir(), 'Library', 'Application Support', 'Google');
 }
 
+/**
+ * Handles the firefox compare Versions workflow.
+ */
 export function compareVersions(a: string, b: string): number {
   if (!semver.valid(a)) {
     throw new Error(`Version ${a} is not a valid semver version`);

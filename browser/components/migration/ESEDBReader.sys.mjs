@@ -163,6 +163,9 @@ function handleESEError(
   };
 }
 
+/**
+ * Handles the firefox declare ESEFunction workflow.
+ */
 export function declareESEFunction(methodName, ...args) {
   let declaration = ["Jet" + methodName, ctypes.winapi_abi, ESE.JET_ERR].concat(
     args
@@ -301,6 +304,9 @@ function unloadLibraries() {
   delete gLibs.kernel;
 }
 
+/**
+ * Loads the Libraries.
+ */
 export function loadLibraries() {
   Services.obs.addObserver(unloadLibraries, "xpcom-shutdown");
   gLibs.ese = ctypes.open("esent.dll");

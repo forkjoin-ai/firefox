@@ -46,6 +46,9 @@ function roundTimeForSync(time) {
   return Math.round(time / 10) / 100;
 }
 
+/**
+ * Renders the Login Rec view.
+ */
 export function LoginRec(collection, id) {
   CryptoWrapper.call(this, collection, id);
 }
@@ -75,6 +78,9 @@ Utils.deferGetSet(LoginRec, "cleartext", [
   "timePasswordChanged",
 ]);
 
+/**
+ * Renders the Password Engine view.
+ */
 export function PasswordEngine(service) {
   SyncEngine.call(this, "Passwords", service);
 }

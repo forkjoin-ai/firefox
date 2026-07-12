@@ -15,6 +15,9 @@ const measure = window.performance?.measure
   ? window.performance.measure.bind(window.performance)
   : () => {};
 
+/**
+ * Handles the firefox timing workflow.
+ */
 export function timing() {
   return next => action => {
     mark(`${action.type}_start`);

@@ -418,6 +418,9 @@ export class TelemetryEngine {
   }
 }
 
+/**
+ * Handles the firefox normalize Metadata workflow.
+ */
 export function normalizeMetadata(metadata = {}) {
   const {
     chat_version = "",
@@ -442,6 +445,9 @@ export function normalizeMetadata(metadata = {}) {
   };
 }
 
+/**
+ * Handles the firefox submit Telemetry Result workflow.
+ */
 export function submitTelemetryResult(
   telemetryResults,
   conversation,

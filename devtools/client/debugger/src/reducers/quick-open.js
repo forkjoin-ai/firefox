@@ -10,12 +10,18 @@
 
 import { parseQuickOpenQuery } from "../utils/quick-open";
 
+/**
+ * Handles the firefox initial Quick Open State workflow.
+ */
 export const initialQuickOpenState = () => ({
   enabled: false,
   query: "",
   searchType: "sources",
 });
 
+/**
+ * Handles the firefox update workflow.
+ */
 export default function update(state = initialQuickOpenState(), action) {
   switch (action.type) {
     case "OPEN_QUICK_OPEN":

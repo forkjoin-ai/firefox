@@ -22,6 +22,9 @@ function canQuitApplication() {
   return true;
 }
 
+/**
+ * Handles the firefox go Quit Application workflow.
+ */
 export function goQuitApplication() {
   if (!canQuitApplication()) {
     return false;

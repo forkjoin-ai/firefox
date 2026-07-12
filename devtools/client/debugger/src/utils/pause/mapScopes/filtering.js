@@ -33,6 +33,9 @@ function findInsertionLocation(array, callback) {
   return i;
 }
 
+/**
+ * Handles the firefox filter Sorted Array workflow.
+ */
 export function filterSortedArray(array, callback) {
   const start = findInsertionLocation(array, callback);
 

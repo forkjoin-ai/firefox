@@ -18,6 +18,9 @@ ChromeUtils.defineESModuleGetters(lazy, {
 
 var loggingConfigured = false;
 
+/**
+ * Handles the firefox configure Logging workflow.
+ */
 export var configureLogging = function () {
   if (loggingConfigured) {
     return;
@@ -31,6 +34,9 @@ export var configureLogging = function () {
   loggingConfigured = true;
 };
 
+/**
+ * Handles the firefox sleep workflow.
+ */
 export var sleep = function (wait) {
   return new Promise(resolve => {
     lazy.setTimeout(() => {
@@ -39,6 +45,9 @@ export var sleep = function (wait) {
   });
 };
 
+/**
+ * Renders the Testing Crash Manager view.
+ */
 export var TestingCrashManager = function (options) {
   CrashManager.call(this, options);
   // Disable the Glean ping by default.
@@ -145,6 +154,9 @@ Object.setPrototypeOf(TestingCrashManager.prototype, CrashManager.prototype);
 
 var DUMMY_DIR_COUNT = 0;
 
+/**
+ * Handles the firefox get Manager workflow.
+ */
 export var getManager = function () {
   return (async function () {
     const dirMode = 0o700;

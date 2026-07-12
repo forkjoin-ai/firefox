@@ -14,5 +14,8 @@ info: |
 flags: [module]
 ---*/
 
+/**
+ * Renders the F view.
+ */
 export default function F() {}
 F.foo = '';

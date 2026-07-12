@@ -31,12 +31,18 @@ export function tracingToggled(thread, enabled, traceValues) {
   };
 }
 
+/**
+ * Handles the firefox clear Tracer Data workflow.
+ */
 export function clearTracerData() {
   return {
     type: "TRACING_CLEAR",
   };
 }
 
+/**
+ * Handles the firefox add Traces workflow.
+ */
 export function addTraces(traces) {
   return async function ({ dispatch, getState }) {
     if (!getIsCurrentlyTracing(getState())) {
@@ -50,6 +56,9 @@ export function addTraces(traces) {
   };
 }
 
+/**
+ * Handles the firefox select Trace workflow.
+ */
 export function selectTrace(traceIndex) {
   return async function (thunkArgs) {
     const { dispatch, getState } = thunkArgs;
@@ -95,6 +104,9 @@ export function selectTrace(traceIndex) {
   };
 }
 
+/**
+ * Handles the firefox set Local And Remote Runtime Version workflow.
+ */
 export function setLocalAndRemoteRuntimeVersion(
   localPlatformVersion,
   remotePlatformVersion
@@ -112,6 +124,9 @@ export function setLocalAndRemoteRuntimeVersion(
 // the UI.
 let currentSearchSymbol;
 
+/**
+ * Handles the firefox search Trace Arguments workflow.
+ */
 export function searchTraceArguments(searchString) {
   return async function ({ dispatch, client, panel }) {
     // Ignore any starting and ending spaces in the query string
@@ -204,6 +219,9 @@ export function searchTraceArguments(searchString) {
   };
 }
 
+/**
+ * Handles the firefox update Selected Location Traces workflow.
+ */
 export function updateSelectedLocationTraces(selectedLocation) {
   return async function ({ getState, dispatch }) {
     if (!selectedLocation) {

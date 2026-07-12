@@ -4,6 +4,9 @@
 
 import { positionCmp } from "./positionCmp";
 
+/**
+ * Handles the firefox mapping Contains workflow.
+ */
 export function mappingContains(mapped, item) {
   return (
     positionCmp(item.start, mapped.start) >= 0 &&

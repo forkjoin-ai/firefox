@@ -2,6 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+/**
+ * Renders the Content Pref view.
+ */
 export function ContentPref(domain, name, value) {
   this.domain = domain;
   this.name = name;
@@ -12,18 +15,30 @@ ContentPref.prototype = {
   QueryInterface: ChromeUtils.generateQI(["nsIContentPref"]),
 };
 
+/**
+ * Handles the firefox cb Handle Result workflow.
+ */
 export function cbHandleResult(callback, pref) {
   safeCallback(callback, "handleResult", [pref]);
 }
 
+/**
+ * Handles the firefox cb Handle Completion workflow.
+ */
 export function cbHandleCompletion(callback, reason) {
   safeCallback(callback, "handleCompletion", [reason]);
 }
 
+/**
+ * Handles the firefox cb Handle Error workflow.
+ */
 export function cbHandleError(callback, nsresult) {
   safeCallback(callback, "handleError", [nsresult]);
 }
 
+/**
+ * Handles the firefox safe Callback workflow.
+ */
 export function safeCallback(callbackObj, methodName, args) {
   if (!callbackObj || typeof callbackObj[methodName] != "function") {
     return;

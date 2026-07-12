@@ -156,6 +156,9 @@ export function calculateSchedule(
 }
 
 // Create scheduled tasks with requested date/time
+/**
+ * Creates the Scheduled Restart Tasks.
+ */
 export function createScheduledRestartTasks(
   restartZonedDateTime,
   notificationZonedDateTime
@@ -173,6 +176,9 @@ export function createScheduledRestartTasks(
 }
 
 // Read the policy from prefs and parse the JSON.
+/**
+ * Handles the firefox get Compulsory Restart Policy workflow.
+ */
 export function getCompulsoryRestartPolicy() {
   const compulsoryRestartSettingStr = Services.prefs.getStringPref(
     PREF_APP_UPDATE_COMPULSORY_RESTART,
@@ -195,6 +201,9 @@ export function getCompulsoryRestartPolicy() {
 // This is the main entry point into this module.
 // This function is called when an update is staged, to set timers for
 // when to show the notification and when to force a restart.
+/**
+ * Handles the Compulsory Update Policy request flow.
+ */
 export function handleCompulsoryUpdatePolicy() {
   if (!deferredRestartTasks) {
     const compulsoryRestartSetting = getCompulsoryRestartPolicy();

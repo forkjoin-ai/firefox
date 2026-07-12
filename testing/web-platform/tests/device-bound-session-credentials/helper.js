@@ -1,7 +1,13 @@
+/**
+ * Handles the firefox document Has Cookie workflow.
+ */
 export function documentHasCookie(cookieAndValue) {
   return document.cookie.split(';').some(item => item.includes(cookieAndValue));
 }
 
+/**
+ * Handles the firefox wait For Cookie workflow.
+ */
 export async function waitForCookie(cookieAndValue, expectCookie) {
   const startTime = Date.now();
   const hasCookie = await new Promise(resolve => {
@@ -19,11 +25,17 @@ export async function waitForCookie(cookieAndValue, expectCookie) {
   assert_equals(hasCookie, expectCookie);
 }
 
+/**
+ * Handles the firefox expire Cookie workflow.
+ */
 export function expireCookie(cookieAndAttributes) {
   document.cookie =
       `${cookieAndAttributes}; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
 }
 
+/**
+ * Handles the firefox add Cookie And Session Cleanup workflow.
+ */
 export function addCookieAndSessionCleanup(test) {
   // Clean up any set cookies once the test completes.
   test.add_cleanup(async () => {
@@ -32,6 +44,9 @@ export function addCookieAndSessionCleanup(test) {
   });
 }
 
+/**
+ * Handles the firefox post Json workflow.
+ */
 export async function postJson(url, obj) {
   return await fetch(url, {
     method: 'POST',
@@ -40,6 +55,9 @@ export async function postJson(url, obj) {
   });
 }
 
+/**
+ * Handles the firefox configure Server workflow.
+ */
 export async function configureServer(obj) {
   const response = await fetch('configure_server.py', {
     method: 'POST',
@@ -49,6 +67,9 @@ export async function configureServer(obj) {
   assert_equals(response.status, 200);
 }
 
+/**
+ * Handles the firefox setup Sharded Server State workflow.
+ */
 export async function setupShardedServerState(obj) {
   if (obj === undefined) {
     obj = {};
@@ -64,6 +85,9 @@ export async function setupShardedServerState(obj) {
   return testIdCookie.split('=')[1];
 }
 
+/**
+ * Handles the firefox pull Server State workflow.
+ */
 export async function pullServerState() {
   const response = await fetch('pull_server_state.py');
   assert_equals(response.status, 200);
@@ -71,6 +95,9 @@ export async function pullServerState() {
 }
 
 // Create an iframe that fetches URLs on demand via postMessage.
+/**
+ * Handles the firefox cross Site Fetch workflow.
+ */
 export async function crossSiteFetch(fromSite, url, fetchParams) {
   const frame = document.createElement('iframe');
   const frameLoadPromise = new Promise((resolve, reject) => {

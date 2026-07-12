@@ -11,6 +11,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { reducers } from "common/Reducers.sys.mjs";
 
+/**
+ * Renders the New Tab view.
+ */
 export const NewTab = ({ store }) => (
   <Provider store={store}>
     <Base />
@@ -45,6 +48,9 @@ function doRequestWhenReady() {
   return doRequestPromise;
 }
 
+/**
+ * Handles the firefox render Without State workflow.
+ */
 export function renderWithoutState() {
   const store = initStore(reducers);
   new DetectUserSessionStart(store).sendEventOrAddListener();
@@ -67,6 +73,9 @@ export function renderWithoutState() {
   }
 }
 
+/**
+ * Handles the firefox render Cache workflow.
+ */
 export function renderCache(initialState) {
   if (initialState) {
     initialState.App.isForStartupCache.App = false;

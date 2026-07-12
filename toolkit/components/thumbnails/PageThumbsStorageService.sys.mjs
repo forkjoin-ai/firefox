@@ -13,6 +13,9 @@ ChromeUtils.defineLazyGetter(lazy, "gCryptoHash", function () {
 ChromeUtils.defineLazyGetter(lazy, "textEncoder", function () {
   return new TextEncoder();
 });
+/**
+ * Renders the Page Thumbs Storage Service view.
+ */
 export function PageThumbsStorageService() {}
 
 PageThumbsStorageService.prototype = {

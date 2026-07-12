@@ -45,6 +45,9 @@ async function createRequestInit(requestBuilder) {
   throw new Error("invalid request builder format");
 }
 
+/**
+ * Handles the firefox run Background Task workflow.
+ */
 export async function runBackgroundTask(commandLine) {
   const requestUrl = commandLine.getArgument(0);
   const requestUserAgent = commandLine.getArgument(1);

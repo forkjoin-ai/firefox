@@ -19,6 +19,9 @@ const lazy = XPCOMUtils.declareLazy({
   },
 });
 
+/**
+ * Handles the firefox am Content Handler workflow.
+ */
 export function amContentHandler() {}
 
 amContentHandler.prototype = {

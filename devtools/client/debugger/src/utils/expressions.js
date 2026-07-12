@@ -13,6 +13,9 @@ const UNAVAILABLE_GRIP = { unavailable: true };
  *
  * NOTE: we add line after the expression to protect against comments.
  */
+/**
+ * Handles the firefox wrap Expression workflow.
+ */
 export function wrapExpression(input) {
   return correctIndentation(`
     try {

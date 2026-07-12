@@ -16,6 +16,9 @@ import { runRefTest } from './gpu_ref_test.js';
 
 
 
+/**
+ * Handles the firefox run workflow.
+ */
 export function run(
 format,
 targets)

@@ -40,6 +40,9 @@ export let logManager = new LogManager({
 
 // A boolean to indicate if personally identifiable information (or anything
 // else sensitive, such as credentials) should be logged.
+/**
+ * Handles the firefox log PII workflow.
+ */
 export let logPII = () =>
   Services.prefs.getBoolPref(PREF_LOG_SENSITIVE_DETAILS, false);
 

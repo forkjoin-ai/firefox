@@ -22,6 +22,9 @@ import { SubmenuButton } from "./SubmenuButton";
 
 const DEFAULT_AUTO_ADVANCE_MS = 20000;
 
+/**
+ * Renders the Multi Stage Proton Screen view.
+ */
 export const MultiStageProtonScreen = props => {
   const {
     autoAdvance,
@@ -223,6 +226,9 @@ export const MultiStageProtonScreen = props => {
   );
 };
 
+/**
+ * Renders the Proton Screen Action Buttons view.
+ */
 export const ProtonScreenActionButtons = props => {
   const {
     content,

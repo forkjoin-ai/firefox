@@ -23,6 +23,9 @@ const { DevToolsLoader } = ChromeUtils.importESModule(
 let systemLoader = null;
 const systemLoaderRequesters = new Set();
 
+/**
+ * Provides the use Distinct System Principal Loader hook.
+ */
 export function useDistinctSystemPrincipalLoader(requester) {
   if (!systemLoader) {
     systemLoader = new DevToolsLoader({
@@ -34,6 +37,9 @@ export function useDistinctSystemPrincipalLoader(requester) {
   return systemLoader;
 }
 
+/**
+ * Handles the firefox release Distinct System Principal Loader workflow.
+ */
 export function releaseDistinctSystemPrincipalLoader(requester) {
   systemLoaderRequesters.delete(requester);
   if (systemLoaderRequesters.size == 0) {

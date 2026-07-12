@@ -6,6 +6,9 @@ import { Provider } from "react-redux";
 import { createStore, combineReducers } from "redux";
 import { INITIAL_STATE, reducers } from "common/Reducers.sys.mjs";
 
+/**
+ * Renders the Wrap With Provider view.
+ */
 export function WrapWithProvider({ children, state = INITIAL_STATE }) {
   const store = createStore(combineReducers(reducers), state);
   return <Provider store={store}>{children}</Provider>;

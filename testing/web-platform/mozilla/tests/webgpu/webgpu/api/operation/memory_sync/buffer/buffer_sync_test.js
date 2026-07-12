@@ -70,6 +70,9 @@ const kOpInfo =
   }
 };
 
+/**
+ * Handles the firefox check Ops Valid For Context workflow.
+ */
 export function checkOpsValidForContext(
 ops,
 context)

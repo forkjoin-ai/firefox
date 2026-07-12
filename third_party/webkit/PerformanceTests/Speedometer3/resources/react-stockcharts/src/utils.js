@@ -17,6 +17,9 @@ function parseData(parse) {
 
 const parseDate = timeParse("%Y-%m-%d");
 
+/**
+ * Handles the firefox get Data workflow.
+ */
 export function getData() {
     return Promise.resolve(tsvParse(data, parseData(parseDate)));
 }

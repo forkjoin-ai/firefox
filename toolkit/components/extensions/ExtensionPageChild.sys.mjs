@@ -140,6 +140,9 @@ var devtoolsAPIManager = new (class extends SchemaAPIManager {
   }
 })();
 
+/**
+ * Handles the firefox get Context Child Manager Getter workflow.
+ */
 export function getContextChildManagerGetter(
   { envType },
   ChildAPIManagerClass = ChildAPIManager

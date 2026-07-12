@@ -3,6 +3,9 @@ import classnames from "classnames";
 import CheckmarkIcon from "./../../assets/Smock_Checkmark_18_N.svg";
 import CheckmarkIcon75 from "./../../assets/CheckmarkSize75.svg";
 
+/**
+ * Renders the Reminder Pop Over view.
+ */
 export const ReminderPopOver = ({ className }) => {
     let children = [];
     children = children.concat([

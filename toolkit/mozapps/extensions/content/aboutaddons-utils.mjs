@@ -80,6 +80,9 @@ export const OPTIONS_TYPE_MAP = {
     : "tab",
 };
 
+/**
+ * Returns whether is Discover Enabled is true.
+ */
 export function isDiscoverEnabled() {
   try {
     if (!Services.prefs.getBoolPref(PREF_DISCOVER_ENABLED)) {
@@ -94,10 +97,16 @@ export function isDiscoverEnabled() {
   return true;
 }
 
+/**
+ * Handles the firefox get Browser Element workflow.
+ */
 export function getBrowserElement() {
   return window.docShell.chromeEventHandler;
 }
 
+/**
+ * Handles the firefox promise Event workflow.
+ */
 export function promiseEvent(event, target, capture = false) {
   return new Promise(resolve => {
     target.addEventListener(event, resolve, { capture, once: true });
@@ -170,16 +179,25 @@ function installPromptHandler(info) {
   });
 }
 
+/**
+ * Handles the firefox attach Update Handler workflow.
+ */
 export function attachUpdateHandler(install) {
   install.promptHandler = installPromptHandler;
 }
 
+/**
+ * Handles the firefox detach Update Handler workflow.
+ */
 export function detachUpdateHandler(install) {
   if (install?.promptHandler === installPromptHandler) {
     install.promptHandler = null;
   }
 }
 
+/**
+ * Loads the Release Notes.
+ */
 export async function loadReleaseNotes(uri) {
   const res = await fetch(uri.spec, { credentials: "omit" });
 
@@ -204,6 +222,9 @@ export async function loadReleaseNotes(uri) {
   return ParserUtils.parseFragment(text, flags, false, uri, context);
 }
 
+/**
+ * Handles the firefox open Options In Tab workflow.
+ */
 export function openOptionsInTab(optionsURL) {
   let mainWindow = window.windowRoot.window;
   if ("switchToTabHavingURI" in mainWindow) {
@@ -216,6 +237,9 @@ export function openOptionsInTab(optionsURL) {
   return false;
 }
 
+/**
+ * Handles the firefox open About Settings In Tab workflow.
+ */
 export function openAboutSettingsInTab() {
   let mainWindow = window.windowRoot.window;
   if ("switchToTabHavingURI" in mainWindow) {
@@ -238,6 +262,9 @@ export function openAboutSettingsInTab() {
   return false;
 }
 
+/**
+ * Handles the firefox should Show Permissions Prompt workflow.
+ */
 export function shouldShowPermissionsPrompt(addon) {
   if (!addon.isWebExtension || addon.seen) {
     return false;
@@ -247,6 +274,9 @@ export function shouldShowPermissionsPrompt(addon) {
   return perms?.origins.length || perms?.permissions.length;
 }
 
+/**
+ * Handles the firefox show Permissions Prompt workflow.
+ */
 export function showPermissionsPrompt(addon) {
   return new Promise(resolve => {
     const permissions = addon.installPermissions;
@@ -289,12 +319,18 @@ export function showPermissionsPrompt(addon) {
   });
 }
 
+/**
+ * Returns whether is Correctly Signed is true.
+ */
 export function isCorrectlySigned(addon) {
   // Add-ons without an "isCorrectlySigned" property are correctly signed as
   // they aren't the correct type for signing.
   return addon.isCorrectlySigned !== false;
 }
 
+/**
+ * Returns whether is Unsigned Warning Message Disabled is true.
+ */
 export function isUnsignedWarningMessageDisabled() {
   // While running in automation, in a local build or in a Thunderbird
   // application instance, allow to hide the unsigned add-on message bars
@@ -307,6 +343,9 @@ export function isUnsignedWarningMessageDisabled() {
   );
 }
 
+/**
+ * Returns whether is Disabled Unsigned is true.
+ */
 export function isDisabledUnsigned(addon) {
   let signingRequired =
     addon.type == "locale"
@@ -315,11 +354,17 @@ export function isDisabledUnsigned(addon) {
   return signingRequired && !isCorrectlySigned(addon);
 }
 
+/**
+ * Returns whether is Pending is true.
+ */
 export function isPending(addon, action) {
   const amAction = AddonManager["PENDING_" + action.toUpperCase()];
   return !!(addon.pendingOperations & amAction);
 }
 
+/**
+ * Handles the firefox install Addons From File Picker workflow.
+ */
 export async function installAddonsFromFilePicker() {
   let [dialogTitle, filterName] = await document.l10n.formatMessages([
     { id: "addon-install-from-file-dialog-title" },
@@ -372,6 +417,9 @@ export async function installAddonsFromFilePicker() {
   });
 }
 
+/**
+ * Handles the firefox should Skip Animations workflow.
+ */
 export function shouldSkipAnimations() {
   return (
     document.body.hasAttribute("skip-animations") ||
@@ -379,6 +427,9 @@ export function shouldSkipAnimations() {
   );
 }
 
+/**
+ * Handles the firefox call Listeners workflow.
+ */
 export function callListeners(name, args, listeners) {
   for (let listener of listeners) {
     try {
@@ -391,6 +442,9 @@ export function callListeners(name, args, listeners) {
   }
 }
 
+/**
+ * Handles the firefox get Update Install workflow.
+ */
 export function getUpdateInstall(addon) {
   return (
     // Install object for a pending update.
@@ -404,6 +458,9 @@ export function getUpdateInstall(addon) {
   );
 }
 
+/**
+ * Returns whether is Manual Update is true.
+ */
 export function isManualUpdate(install) {
   const isExistingHidden = install.existingAddon?.hidden;
   // install.addon can be missing if the install was retrieved from an update
@@ -514,6 +571,9 @@ export const AddonCardListenerHandler = new Proxy(
 );
 AddonManagerListenerHandler.addListener(AddonCardListenerHandler);
 
+/**
+ * Returns whether is Abuse Report Supported is true.
+ */
 export function isAbuseReportSupported(addon) {
   return (
     lazy.ABUSE_REPORT_ENABLED &&
@@ -522,20 +582,32 @@ export function isAbuseReportSupported(addon) {
   );
 }
 
+/**
+ * Returns whether is Allowed In Private Browsing is true.
+ */
 export async function isAllowedInPrivateBrowsing(addon) {
   // Use the Promise directly so this function stays sync for the other case.
   let perms = await lazy.ExtensionPermissions.get(addon.id);
   return perms.permissions.includes(PRIVATE_BROWSING_PERM_NAME);
 }
 
+/**
+ * Returns whether has Permission is true.
+ */
 export function hasPermission(addon, permission) {
   return !!(addon.permissions & PERMISSION_MASKS[permission]);
 }
 
+/**
+ * Returns whether is In State is true.
+ */
 export function isInState(install, state) {
   return install.state == AddonManager["STATE_" + state.toUpperCase()];
 }
 
+/**
+ * Handles the firefox get Addon Message Info workflow.
+ */
 export async function getAddonMessageInfo(
   addon,
   { isCardExpanded, isInDisabledSection }
@@ -622,6 +694,9 @@ export async function getAddonMessageInfo(
   return {};
 }
 
+/**
+ * Handles the firefox check For Update workflow.
+ */
 export function checkForUpdate(addon) {
   return new Promise(resolve => {
     let listener = {
@@ -665,6 +740,9 @@ export function checkForUpdate(addon) {
   });
 }
 
+/**
+ * Handles the firefox check For Updates workflow.
+ */
 export async function checkForUpdates() {
   let addons = await AddonManager.getAddonsByTypes(null);
   addons = addons.filter(addon => hasPermission(addon, "upgrade"));
@@ -682,11 +760,17 @@ export async function checkForUpdates() {
 
 // Check if an add-on has the provided options type, accounting for the pref
 // to disable inline options.
+/**
+ * Handles the firefox get Options Type workflow.
+ */
 export function getOptionsType(addon) {
   return OPTIONS_TYPE_MAP[addon.optionsType];
 }
 
 // Check whether the options page can be loaded in the current browser window.
+/**
+ * Returns whether is Addon Options UIAllowed is true.
+ */
 export async function isAddonOptionsUIAllowed(addon) {
   if (addon.type !== "extension" || !getOptionsType(addon)) {
     // Themes never have options pages.
@@ -708,6 +792,9 @@ export async function isAddonOptionsUIAllowed(addon) {
   );
 }
 
+/**
+ * Handles the firefox nl2br workflow.
+ */
 export function nl2br(text) {
   let frag = document.createDocumentFragment();
   let hasAppended = false;
@@ -924,6 +1011,9 @@ const domParser = new DOMParser();
 // from the string returned by a `markup` static getter, which is meant
 // to be provided by the custom elements subclassing the returned class,
 // and return its content elements imported into the current document.
+/**
+ * Renders the About Addons Element Mixin view.
+ */
 export function AboutAddonsElementMixin(Base) {
   let AboutAddonsElementBase = class extends Base {
     static get markup() {

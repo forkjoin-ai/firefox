@@ -36,6 +36,9 @@ async function findBreakpointPosition({ dispatch }, location) {
 //   has changed, we need to make sure that only a single breakpoint is added
 //   to the reducer for the new location corresponding to the original location
 //   in the pending breakpoint.
+/**
+ * Handles the firefox sync Pending Breakpoint workflow.
+ */
 export function syncPendingBreakpoint(source, pendingBreakpoint) {
   return async thunkArgs => {
     const { getState, client, dispatch } = thunkArgs;

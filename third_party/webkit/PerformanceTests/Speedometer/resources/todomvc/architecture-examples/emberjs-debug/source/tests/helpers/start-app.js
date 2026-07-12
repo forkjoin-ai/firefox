@@ -2,6 +2,9 @@ import Ember from 'ember';
 import Application from '../../app';
 import config from '../../config/environment';
 
+/**
+ * Handles the firefox start App workflow.
+ */
 export default function startApp(attrs) {
     let application;
 

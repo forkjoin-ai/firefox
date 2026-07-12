@@ -9,6 +9,9 @@ import SocialIcons from "@/partials/icons/social-icons";
 import navbarStyles from "news-site-css/dist/navbar.module.css";
 import navStyles from "news-site-css/dist/nav.module.css";
 
+/**
+ * Renders the Navbar view.
+ */
 export default function Navbar({ callback }) {
     const location = useLocation();
     const [isOpen, setIsOpen] = useState(false);

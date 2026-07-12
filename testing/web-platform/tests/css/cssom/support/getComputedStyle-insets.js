@@ -366,6 +366,9 @@ const writingModes = [{
   inlineEnd: "top",
 }];
 
+/**
+ * Handles the firefox run Tests workflow.
+ */
 export function runTests(data) {
   for (let testWM of writingModes) {
     for (let cbWM of writingModes) {

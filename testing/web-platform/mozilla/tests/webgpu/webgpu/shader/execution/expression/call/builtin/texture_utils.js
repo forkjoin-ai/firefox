@@ -1082,6 +1082,9 @@ const kTextureTypeInfo = {
   }
 };
 
+/**
+ * Handles the firefox get Texture Format Type Info workflow.
+ */
 export function getTextureFormatTypeInfo(
 format,
 aspect = 'all')
@@ -1383,14 +1386,26 @@ const kTextureCallArgNames = [
 
 
 
+/**
+ * Returns whether is Builtin Comparison is true.
+ */
 export const isBuiltinComparison = (builtin) =>
 builtin === 'textureGatherCompare' ||
 builtin === 'textureSampleCompare' ||
 builtin === 'textureSampleCompareLevel';
+/**
+ * Returns whether is Builtin Gather is true.
+ */
 export const isBuiltinGather = (builtin) =>
 builtin === 'textureGather' || builtin === 'textureGatherCompare';
+/**
+ * Handles the firefox builtin Needs Sampler workflow.
+ */
 export const builtinNeedsSampler = (builtin) =>
 builtin.startsWith('textureSample') || builtin.startsWith('textureGather');
+/**
+ * Handles the firefox builtin Needs Derivatives workflow.
+ */
 export const builtinNeedsDerivatives = (builtin) =>
 builtin === 'textureSample' ||
 builtin === 'textureSampleBias' ||
@@ -1566,6 +1581,9 @@ component)
   }
 }
 
+/**
+ * Handles the firefox swizzle Texel workflow.
+ */
 export function swizzleTexel(
 src,
 swizzle)
@@ -4331,14 +4349,23 @@ function quantizeMipLevel(mipLevel, mipmapFilter) {
 
 
 
+/**
+ * Handles the firefox generate Texture Builtin Inputs1 D workflow.
+ */
 export function generateTextureBuiltinInputs1D(...args) {
   return generateTextureBuiltinInputsImpl((x) => [x], ...args);
 }
 
+/**
+ * Handles the firefox generate Texture Builtin Inputs2 D workflow.
+ */
 export function generateTextureBuiltinInputs2D(...args) {
   return generateTextureBuiltinInputsImpl((x, y) => [x, y], ...args);
 }
 
+/**
+ * Handles the firefox generate Texture Builtin Inputs3 D workflow.
+ */
 export function generateTextureBuiltinInputs3D(...args) {
   return generateTextureBuiltinInputsImpl(
     (x, y, z) => [x, y, z],
@@ -5551,6 +5578,9 @@ ${stageWGSL}
   };
 }
 
+/**
+ * Handles the firefox do Texture Calls workflow.
+ */
 export async function doTextureCalls(
 t,
 gpuTexture,

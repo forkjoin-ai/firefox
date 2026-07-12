@@ -7,6 +7,9 @@ import { EXIT_CODE } from "resource://gre/modules/BackgroundTasksManager.sys.mjs
 // Increase the minimum runtime before shutdown
 export const backgroundTaskMinRuntimeMS = 2000;
 
+/**
+ * Handles the firefox run Background Task workflow.
+ */
 export async function runBackgroundTask() {
   return EXIT_CODE.SUCCESS;
 }

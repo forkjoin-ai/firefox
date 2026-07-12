@@ -29,6 +29,9 @@ ChromeUtils.defineLazyGetter(lazy, "md", () => {
 });
 
 let _savedLoadPromptDescriptor = null;
+/**
+ * Handles the firefox set Load Prompt For Testing workflow.
+ */
 export function _setLoadPromptForTesting(fn) {
   if (fn !== null) {
     _savedLoadPromptDescriptor = Object.getOwnPropertyDescriptor(

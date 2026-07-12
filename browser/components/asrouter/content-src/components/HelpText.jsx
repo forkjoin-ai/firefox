@@ -7,6 +7,9 @@ import { Localized } from "./MSLocalized";
 import { MultiStageUtils } from "../lib/multistage-utils.mjs";
 const MS_STRING_PROP = "string_id";
 
+/**
+ * Renders the Help Text view.
+ */
 export const HelpText = props => {
   if (!props.text) {
     return null;

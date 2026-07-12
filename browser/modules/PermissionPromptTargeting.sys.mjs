@@ -12,6 +12,9 @@ export const PERMISSION_UI_FEATURE_ID = "webNotificationsPermissionUi";
 
 const ALLOWED_LOGO_SCHEMES = ["chrome:", "resource:", "https:"];
 
+/**
+ * Returns whether is Valid Logo Url is true.
+ */
 export function isValidLogoUrl(url) {
   if (typeof url !== "string" || !url) {
     return false;
@@ -24,6 +27,9 @@ export function isValidLogoUrl(url) {
   }
 }
 
+/**
+ * Handles the firefox eval Permission Prompt Targeting workflow.
+ */
 export async function evalPermissionPromptTargeting(jexlString, siteCategory) {
   if (!jexlString) {
     return true;

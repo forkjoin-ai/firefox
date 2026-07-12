@@ -10,6 +10,9 @@ ChromeUtils.defineESModuleGetters(lazy, {
   EventEmitter: "resource://gre/modules/EventEmitter.sys.mjs",
 });
 
+/**
+ * Renders the Web Socket Transport view.
+ */
 export function WebSocketTransport(socket) {
   lazy.EventEmitter.decorate(this);
 

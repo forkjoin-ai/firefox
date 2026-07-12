@@ -232,6 +232,9 @@ var BinaryOutputStream = CC(
   "setOutputStream"
 );
 
+/**
+ * Handles the firefox override Binary Streams For Tests workflow.
+ */
 export function overrideBinaryStreamsForTests(
   inputStream,
   outputStream,

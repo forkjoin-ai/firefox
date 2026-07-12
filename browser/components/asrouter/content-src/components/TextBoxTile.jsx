@@ -7,6 +7,9 @@ import { MultiStageUtils } from "../lib/multistage-utils.mjs";
 
 const TEXTBOX_STYLES = ["backgroundColor", "maxHeight"];
 
+/**
+ * Renders the Text Box Tile view.
+ */
 export const TextBoxTile = ({ content, contentToggled }) => {
   const { data } = content.tiles;
 

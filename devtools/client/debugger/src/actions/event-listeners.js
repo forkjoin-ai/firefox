@@ -25,6 +25,9 @@ async function updateExpanded(dispatch, panelKey, newExpanded) {
   });
 }
 
+/**
+ * Handles the firefox highlight Event Listeners workflow.
+ */
 export function highlightEventListeners(panelKey, eventIds) {
   return {
     type: "HIGHLIGHT_EVENT_LISTENERS",
@@ -33,6 +36,9 @@ export function highlightEventListeners(panelKey, eventIds) {
   };
 }
 
+/**
+ * Handles the firefox add Event Listener Breakpoints workflow.
+ */
 export function addEventListenerBreakpoints(panelKey, eventsToAdd) {
   return async ({ dispatch, client, getState }) => {
     const activeListenerBreakpoints = getActiveEventListeners(
@@ -47,6 +53,9 @@ export function addEventListenerBreakpoints(panelKey, eventsToAdd) {
   };
 }
 
+/**
+ * Handles the firefox remove Event Listener Breakpoints workflow.
+ */
 export function removeEventListenerBreakpoints(panelKey, eventsToRemove) {
   return async ({ dispatch, client, getState }) => {
     const activeListenerBreakpoints = getActiveEventListeners(
@@ -62,6 +71,9 @@ export function removeEventListenerBreakpoints(panelKey, eventsToRemove) {
   };
 }
 
+/**
+ * Converts input into toggle Event Logging.
+ */
 export function toggleEventLogging() {
   return async ({ dispatch, getState, client }) => {
     const logEventBreakpoints = !shouldLogEventBreakpoints(getState());
@@ -70,6 +82,9 @@ export function toggleEventLogging() {
   };
 }
 
+/**
+ * Handles the firefox add Event Listener Expanded workflow.
+ */
 export function addEventListenerExpanded(panelKey, category) {
   return async ({ dispatch, getState }) => {
     const expanded = await getEventListenerExpanded(getState(), panelKey);
@@ -78,6 +93,9 @@ export function addEventListenerExpanded(panelKey, category) {
   };
 }
 
+/**
+ * Handles the firefox remove Event Listener Expanded workflow.
+ */
 export function removeEventListenerExpanded(panelKey, category) {
   return async ({ dispatch, getState }) => {
     const expanded = await getEventListenerExpanded(getState(), panelKey);
@@ -88,6 +106,9 @@ export function removeEventListenerExpanded(panelKey, category) {
   };
 }
 
+/**
+ * Handles the firefox get Event Listener Breakpoint Types workflow.
+ */
 export function getEventListenerBreakpointTypes() {
   return async ({ dispatch, client }) => {
     const categories = await client.getEventListenerBreakpointTypes();

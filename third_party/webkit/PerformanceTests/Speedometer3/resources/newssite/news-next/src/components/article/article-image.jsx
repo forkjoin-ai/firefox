@@ -4,6 +4,9 @@ import ArticleTag from "./article-tag";
 
 import styles from "news-site-css/dist/article.module.css";
 
+/**
+ * Renders the Article Image view.
+ */
 export default function ArticleImage({ image, imageClass, meta }) {
     if (!image)
         return null;

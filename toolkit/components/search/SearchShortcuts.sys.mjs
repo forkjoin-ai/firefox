@@ -52,6 +52,9 @@ export const SEARCH_SHORTCUTS_SEARCH_ENGINES_PREF =
 export const SEARCH_SHORTCUTS_HAVE_PINNED_PREF =
   "improvesearch.topSiteSearchShortcuts.havePinned";
 
+/**
+ * Handles the firefox get Search Provider workflow.
+ */
 export function getSearchProvider(candidateShortURL) {
   return (
     SEARCH_SHORTCUTS.filter(match => candidateShortURL === match.shortURL)[0] ||
@@ -61,6 +64,9 @@ export function getSearchProvider(candidateShortURL) {
 
 // Check topsite against predefined list of valid search engines
 // https://searchfox.org/mozilla-central/rev/ca869724246f4230b272ed1c8b9944596e80d920/toolkit/components/search/nsSearchService.js#939
+/**
+ * Handles the firefox check Has Search Engine workflow.
+ */
 export async function checkHasSearchEngine(keyword) {
   try {
     return !!(await lazy.SearchService.getAppProvidedEngines()).find(

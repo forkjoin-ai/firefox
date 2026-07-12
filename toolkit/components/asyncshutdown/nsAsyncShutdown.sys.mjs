@@ -206,6 +206,9 @@ nsAsyncShutdownBarrier.prototype = {
   QueryInterface: ChromeUtils.generateQI(["nsIAsyncShutdownBarrier"]),
 };
 
+/**
+ * Handles the firefox ns Async Shutdown Service workflow.
+ */
 export function nsAsyncShutdownService() {
   // Cache for the getters
 

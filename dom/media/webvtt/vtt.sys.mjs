@@ -1144,6 +1144,9 @@ function adjustBoxPosition(styleBox, containerBox, controlBarBox, outputBoxes) {
   return box;
 }
 
+/**
+ * Renders the Web VTT view.
+ */
 export function WebVTT() {
   this.isProcessingCues = false;
   // Nothing

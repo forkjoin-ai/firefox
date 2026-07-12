@@ -9,6 +9,9 @@ const DEFAULT_DIR = "ltr";
 
 const DataContext = createContext(null);
 
+/**
+ * Renders the Data Context Provider view.
+ */
 export const DataContextProvider = ({ children }) => {
     const urlParams = new URLSearchParams(window.location.search);
     const langFromUrl = urlParams.get("lang")?.toLowerCase();
@@ -58,6 +61,9 @@ export const DataContextProvider = ({ children }) => {
     return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };
 
+/**
+ * Provides the use Data Context hook.
+ */
 export const useDataContext = () => {
     const dataContext = useContext(DataContext);
 

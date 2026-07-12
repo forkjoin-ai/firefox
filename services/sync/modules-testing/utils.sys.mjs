@@ -23,6 +23,9 @@ import { FxAccountsClient } from "resource://gre/modules/FxAccountsClient.sys.mj
 import { SCOPE_APP_SYNC } from "resource://gre/modules/FxAccountsCommon.sys.mjs";
 
 // A mock "storage manager" for FxAccounts that doesn't actually write anywhere.
+/**
+ * Renders the Mock Fxa Storage Manager view.
+ */
 export function MockFxaStorageManager() {}
 
 MockFxaStorageManager.prototype = {
@@ -93,12 +96,18 @@ export function waitForZeroTimer(callback) {
   CommonUtils.namedTimer(wait, 150, {}, "timer");
 }
 
+/**
+ * Handles the firefox promise Zero Timer workflow.
+ */
 export var promiseZeroTimer = function () {
   return new Promise(resolve => {
     waitForZeroTimer(resolve);
   });
 };
 
+/**
+ * Handles the firefox promise Named Timer workflow.
+ */
 export var promiseNamedTimer = function (wait, thisObj, name) {
   return new Promise(resolve => {
     CommonUtils.namedTimer(resolve, wait, thisObj, name);
@@ -109,6 +118,9 @@ export var promiseNamedTimer = function (wait, thisObj, name) {
 // providers.  |overrides| can specify overrides for any default values.
 // |server| is optional, but if specified, will be used to form the cluster
 // URL for the FxA identity.
+/**
+ * Handles the firefox make Identity Config workflow.
+ */
 export var makeIdentityConfig = function (overrides) {
   // first setup the defaults.
   let result = {
@@ -156,6 +168,9 @@ export var makeIdentityConfig = function (overrides) {
   return result;
 };
 
+/**
+ * Handles the firefox make Fx Accounts Internal Mock workflow.
+ */
 export var makeFxAccountsInternalMock = function (config) {
   return {
     newAccountState(credentials) {
@@ -192,6 +207,9 @@ export var makeFxAccountsInternalMock = function (config) {
 
 // Configure an instance of an FxAccount identity provider with the specified
 // config (or the default config if not specified).
+/**
+ * Handles the firefox configure Fx Account Identity workflow.
+ */
 export var configureFxAccountIdentity = function (
   authService,
   config = makeIdentityConfig(),
@@ -238,6 +256,9 @@ export var configureFxAccountIdentity = function (
   authService._account = config.fxaccount.user.email;
 };
 
+/**
+ * Handles the firefox configure Identity workflow.
+ */
 export var configureIdentity = async function (identityOverrides, server) {
   let config = makeIdentityConfig(identityOverrides, server);
   // Must be imported after the identity configuration is set up.
@@ -268,6 +289,9 @@ export var configureIdentity = async function (identityOverrides, server) {
   }
 };
 
+/**
+ * Handles the firefox sync Test Logging workflow.
+ */
 export function syncTestLogging(level = "Trace") {
   let logStats = initTestLogging(level);
   Services.prefs.setStringPref("services.sync.log.logger", level);
@@ -275,6 +299,9 @@ export function syncTestLogging(level = "Trace") {
   return logStats;
 }
 
+/**
+ * Renders the Sync Testing Infrastructure view.
+ */
 export var SyncTestingInfrastructure = async function (server, username) {
   let config = makeIdentityConfig({ username });
   await configureIdentity(config, server);
@@ -301,6 +328,9 @@ export function encryptPayload(cleartext) {
   };
 }
 
+/**
+ * Handles the firefox sum Histogram workflow.
+ */
 export var sumHistogram = function (name, options = {}) {
   let histogram = options.key
     ? Services.telemetry.getKeyedHistogramById(name)

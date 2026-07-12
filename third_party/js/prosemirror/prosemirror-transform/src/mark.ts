@@ -5,6 +5,9 @@ import {Transform} from "./transform"
 import {AddMarkStep, RemoveMarkStep} from "./mark_step"
 import {ReplaceStep} from "./replace_step"
 
+/**
+ * Handles the firefox add Mark workflow.
+ */
 export function addMark(tr: Transform, from: number, to: number, mark: Mark) {
   let removed: Step[] = [], added: Step[] = []
   let removing: RemoveMarkStep | undefined, adding: AddMarkStep | undefined
@@ -35,6 +38,9 @@ export function addMark(tr: Transform, from: number, to: number, mark: Mark) {
   added.forEach(s => tr.step(s))
 }
 
+/**
+ * Handles the firefox remove Mark workflow.
+ */
 export function removeMark(tr: Transform, from: number, to: number, mark?: Mark | MarkType | null) {
   let matched: {style: Mark, from: number, to: number, step: number}[] = [], step = 0
   tr.doc.nodesBetween(from, to, (node, pos) => {
@@ -72,6 +78,9 @@ export function removeMark(tr: Transform, from: number, to: number, mark?: Mark 
   matched.forEach(m => tr.step(new RemoveMarkStep(m.from, m.to, m.style)))
 }
 
+/**
+ * Handles the firefox clear Incompatible workflow.
+ */
 export function clearIncompatible(tr: Transform, pos: number, parentType: NodeType,
                                   match = parentType.contentMatch,
                                   clearNewlines = true) {

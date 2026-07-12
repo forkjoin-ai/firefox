@@ -14,6 +14,9 @@ import { BASE_PARAMS, addUtmParams } from "../lib/addUtmParams.mjs";
 const TRANSITION_OUT_TIME = 1000;
 const LANGUAGE_MISMATCH_SCREEN_ID = "AW_LANGUAGE_MISMATCH";
 
+/**
+ * Renders the Multi Stage About Welcome view.
+ */
 export const MultiStageAboutWelcome = props => {
   const gateInitialPaint = props.gateInitialPaint ?? false;
   let { defaultScreens } = props;
@@ -517,6 +520,9 @@ const renderSingleSecondaryCTAButton = ({
   );
 };
 
+/**
+ * Renders the Secondary CTA view.
+ */
 export const SecondaryCTA = props => {
   const { content, position } = props;
 
@@ -597,6 +603,9 @@ export const SecondaryCTA = props => {
   });
 };
 
+/**
+ * Renders the Steps Indicator view.
+ */
 export const StepsIndicator = props => {
   let steps = [];
   for (let i = 0; i < props.totalNumberOfScreens; i++) {
@@ -610,6 +619,9 @@ export const StepsIndicator = props => {
   return steps;
 };
 
+/**
+ * Renders the Progress Bar view.
+ */
 export const ProgressBar = ({ step, previousStep, totalNumberOfScreens }) => {
   const [progress, setProgress] = React.useState(
     previousStep / totalNumberOfScreens

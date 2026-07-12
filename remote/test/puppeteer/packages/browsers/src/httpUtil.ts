@@ -11,6 +11,9 @@ import {URL, urlToHttpOptions} from 'node:url';
 
 import {ProxyAgent} from 'proxy-agent';
 
+/**
+ * Handles the firefox head Http Request workflow.
+ */
 export function headHttpRequest(url: URL): Promise<boolean> {
   return new Promise(resolve => {
     const request = httpRequest(
@@ -29,6 +32,9 @@ export function headHttpRequest(url: URL): Promise<boolean> {
   });
 }
 
+/**
+ * Handles the firefox http Request workflow.
+ */
 export function httpRequest(
   url: URL,
   method: string,
@@ -123,6 +129,9 @@ export function downloadFile(
   });
 }
 
+/**
+ * Handles the firefox get JSON workflow.
+ */
 export async function getJSON(url: URL): Promise<unknown> {
   const text = await getText(url);
   try {
@@ -132,6 +141,9 @@ export async function getJSON(url: URL): Promise<unknown> {
   }
 }
 
+/**
+ * Handles the firefox get Text workflow.
+ */
 export function getText(url: URL): Promise<string> {
   return new Promise((resolve, reject) => {
     const request = httpRequest(

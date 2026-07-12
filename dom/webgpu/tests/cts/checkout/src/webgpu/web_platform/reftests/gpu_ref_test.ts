@@ -6,6 +6,9 @@ interface GPURefTest {
   readonly queue: GPUQueue;
 }
 
+/**
+ * Handles the firefox run Ref Test workflow.
+ */
 export function runRefTest(fn: (t: GPURefTest) => Promise<void> | void): void {
   void (async () => {
     assert(

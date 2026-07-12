@@ -1468,6 +1468,9 @@ async function integrity(dbName) {
   }
 }
 
+/**
+ * Renders the Places DBUtils Idle Maintenance view.
+ */
 export function PlacesDBUtilsIdleMaintenance() {}
 
 PlacesDBUtilsIdleMaintenance.prototype = {

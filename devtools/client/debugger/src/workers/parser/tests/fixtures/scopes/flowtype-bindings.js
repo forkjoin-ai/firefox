@@ -6,6 +6,9 @@ type Other = {
 
 const aConst = (window: Array<string>);
 
+/**
+ * Handles the firefox root workflow.
+ */
 export default function root() {
 
 }

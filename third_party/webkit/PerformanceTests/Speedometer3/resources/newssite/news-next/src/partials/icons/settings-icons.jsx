@@ -3,6 +3,9 @@ import A11yIcon from "@/assets/a11y-icon";
 
 import styles from "news-site-css/dist/icons-group.module.css";
 
+/**
+ * Renders the Settings Icons view.
+ */
 export default function SettingsIcons({ onClick, id }) {
     return (
         <div className={styles["icons-group"]}>

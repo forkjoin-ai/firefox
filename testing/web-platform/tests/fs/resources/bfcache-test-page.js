@@ -9,6 +9,9 @@ export const createAndReleaseSAH =
 
 let openWFS;
 
+/**
+ * Creates the WFS.
+ */
 export async function createWFS(mode, fileName) {
   if (openWFS) {
     throw new Error('Already have an open writable.');
@@ -18,6 +21,9 @@ export async function createWFS(mode, fileName) {
   return openWFS !== undefined;
 }
 
+/**
+ * Handles the firefox release WFS workflow.
+ */
 export async function releaseWFS() {
   if (!openWFS) {
     throw new Error('No open writable.');
@@ -26,6 +32,9 @@ export async function releaseWFS() {
   openWFS = undefined;
 }
 
+/**
+ * Creates the And Release WFS.
+ */
 export async function createAndReleaseWFS(mode, fileName) {
   const wfsLock = await tryToCreateLock(
       fileName, fileHandle => fileHandle.createWritable({mode}));

@@ -416,6 +416,9 @@ export async function getModelForChoice(choiceId = getCurrentModelChoiceId()) {
  */
 let _modelsDataCache = null;
 
+/**
+ * Handles the firefox refresh Models Data Cache workflow.
+ */
 export async function refreshModelsDataCache() {
   _modelsDataCache = null;
   await getAllModelsData();
@@ -453,10 +456,16 @@ export function getCachedModelsData() {
   return _modelsDataCache ?? FALLBACK_MODELS;
 }
 
+/**
+ * Handles the firefox get Current Model Name workflow.
+ */
 export function getCurrentModelName() {
   return getCachedModelsData()[getCurrentModelChoiceId()]?.model ?? "";
 }
 
+/**
+ * Handles the firefox get Current Model Choice Id workflow.
+ */
 export function getCurrentModelChoiceId() {
   return Services.prefs.getStringPref(MODEL_CHOICE_PREF, "");
 }

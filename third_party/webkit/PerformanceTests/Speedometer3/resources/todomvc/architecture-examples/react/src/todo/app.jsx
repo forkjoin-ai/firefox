@@ -7,6 +7,9 @@ import { todoReducer } from "./reducer";
 
 import "./app.css";
 
+/**
+ * Renders the App view.
+ */
 export function App() {
     const [todos, dispatch] = useReducer(todoReducer, []);
 

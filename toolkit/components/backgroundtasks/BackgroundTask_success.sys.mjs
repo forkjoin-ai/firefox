@@ -4,6 +4,9 @@
 
 import { EXIT_CODE } from "resource://gre/modules/BackgroundTasksManager.sys.mjs";
 
+/**
+ * Handles the firefox run Background Task workflow.
+ */
 export async function runBackgroundTask() {
   console.error("runBackgroundTask: success");
 

@@ -15,6 +15,9 @@ ChromeUtils.defineESModuleGetters(lazy, {
   BinarySearch: "resource://gre/modules/BinarySearch.sys.mjs",
 });
 
+/**
+ * Handles the firefox initial Threads State workflow.
+ */
 export function initialThreadsState() {
   return {
     threads: [],
@@ -25,6 +28,9 @@ export function initialThreadsState() {
   };
 }
 
+/**
+ * Handles the firefox update workflow.
+ */
 export default function update(state = initialThreadsState(), action) {
   switch (action.type) {
     case "INSERT_THREAD": {

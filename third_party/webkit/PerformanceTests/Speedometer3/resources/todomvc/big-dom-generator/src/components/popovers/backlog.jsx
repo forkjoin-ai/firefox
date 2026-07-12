@@ -6,6 +6,9 @@ import CheckmarkIcon from "./../../assets/CheckmarkSize100.svg";
 import EditIcon from "./../../assets/Smock_Edit_18_N.svg";
 import DeleteIcon from "./../../assets/Smock_Delete_18_N.svg";
 
+/**
+ * Renders the Backlog Pop Over view.
+ */
 export const BacklogPopOver = ({ className }) => {
     const listItems = [];
     for (let i = 0; i < 5; i++) {

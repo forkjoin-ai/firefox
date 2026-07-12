@@ -14,6 +14,9 @@ import { createPendingSelectedLocation } from "../utils/location";
 export const UNDEFINED_LOCATION = Symbol("Undefined location");
 export const NO_LOCATION = Symbol("No location");
 
+/**
+ * Handles the firefox initial Sources State workflow.
+ */
 export function initialSourcesState() {
   /* eslint sort-keys: "error" */
   return {

@@ -7,6 +7,9 @@ import { createSelector } from "devtools/client/shared/vendor/reselect";
 import { makeBreakpointId } from "../utils/breakpoint/index";
 
 // This method is only used from the main test helper
+/**
+ * Handles the firefox get Breakpoints Map workflow.
+ */
 export function getBreakpointsMap(state) {
   return state.breakpoints.breakpoints;
 }
@@ -16,10 +19,16 @@ export const getBreakpointsList = createSelector(
   breakpoints => Object.values(breakpoints)
 );
 
+/**
+ * Handles the firefox get Breakpoint Count workflow.
+ */
 export function getBreakpointCount(state) {
   return getBreakpointsList(state).length;
 }
 
+/**
+ * Handles the firefox get Breakpoint workflow.
+ */
 export function getBreakpoint(state, location) {
   if (!location) {
     return undefined;
@@ -58,16 +67,25 @@ export function getBreakpointsForSource(state, source, lines) {
   });
 }
 
+/**
+ * Handles the firefox get Hidden Breakpoint workflow.
+ */
 export function getHiddenBreakpoint(state) {
   const breakpoints = getBreakpointsList(state);
   return breakpoints.find(bp => bp.options.hidden);
 }
 
+/**
+ * Returns whether has Logpoint is true.
+ */
 export function hasLogpoint(state, location) {
   const breakpoint = getBreakpoint(state, location);
   return breakpoint?.options.logValue;
 }
 
+/**
+ * Handles the firefox get XHRBreakpoints workflow.
+ */
 export function getXHRBreakpoints(state) {
   return state.breakpoints.xhrBreakpoints;
 }

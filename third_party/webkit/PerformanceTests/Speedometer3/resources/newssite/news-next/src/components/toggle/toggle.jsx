@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 
 import styles from "news-site-css/dist/toggle.module.css";
 
+/**
+ * Renders the Toggle view.
+ */
 export default function Toggle({ id, label, onChange, checked }) {
     const [isSelected, setIsSelected] = useState(false);
 

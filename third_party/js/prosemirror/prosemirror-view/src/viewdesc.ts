@@ -903,6 +903,9 @@ export class NodeViewDesc extends ViewDesc {
 
 // Create a view desc for the top-level document node, to be exported
 // and used by the view class.
+/**
+ * Handles the firefox doc View Desc workflow.
+ */
 export function docViewDesc(doc: Node, outerDeco: readonly Decoration[], innerDeco: DecorationSource,
                             dom: HTMLElement, view: EditorView): NodeViewDesc {
   applyOuterDeco(dom, outerDeco, doc)

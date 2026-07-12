@@ -2,6 +2,9 @@ import {Slice, Fragment, DOMParser, DOMSerializer, ResolvedPos, NodeType, Node} 
 import * as browser from "./browser"
 import {EditorView} from "./index"
 
+/**
+ * Handles the firefox serialize For Clipboard workflow.
+ */
 export function serializeForClipboard(view: EditorView, slice: Slice) {
   view.someProp("transformCopied", f => { slice = f(slice!, view) })
 
@@ -40,6 +43,9 @@ export function serializeForClipboard(view: EditorView, slice: Slice) {
 }
 
 // Read a slice of content from the clipboard (or drop data).
+/**
+ * Parses the From Clipboard.
+ */
 export function parseFromClipboard(view: EditorView, text: string, html: string | null, plainText: boolean, $context: ResolvedPos) {
   let inCode = $context.parent.type.spec.code
   let dom: HTMLElement | undefined, slice: Slice | undefined

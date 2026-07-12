@@ -4,6 +4,9 @@
 
 import { ContextualIdentityService } from "resource://gre/modules/ContextualIdentityService.sys.mjs";
 
+/**
+ * Renders the Quota Utils Service view.
+ */
 export function QuotaUtilsService() {}
 
 QuotaUtilsService.prototype = {

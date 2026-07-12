@@ -10,6 +10,9 @@
 
 import { makeBreakpointId } from "../utils/breakpoint/index";
 
+/**
+ * Handles the firefox initial ASTState workflow.
+ */
 export function initialASTState() {
   return {
     // We are using mutable objects as we never return the dictionary as-is from the selectors

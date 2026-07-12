@@ -9,6 +9,9 @@ import { Logger } from "resource://tps/logger.sys.mjs";
 export const STATE_ENABLED = 1;
 export const STATE_DISABLED = 2;
 
+/**
+ * Renders the Addon view.
+ */
 export function Addon(TPS, id) {
   this.TPS = TPS;
   this.id = id;

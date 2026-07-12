@@ -56,6 +56,9 @@ const WIDGETS_FEEDBACK_URL =
 // Because Enzyme tests cannot reliably simulate that pref update or trigger
 // the related useEffect, we expose this helper to at least just test the reset behavior instead
 
+/**
+ * Handles the firefox reset Timer To Defaults workflow.
+ */
 export function resetTimerToDefaults(dispatch, timerType) {
   const originalTime = timerType === "focus" ? 1500 : 300;
 

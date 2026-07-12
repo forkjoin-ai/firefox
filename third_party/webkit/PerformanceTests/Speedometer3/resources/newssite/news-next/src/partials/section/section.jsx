@@ -2,6 +2,9 @@ import Article from "@/components/article/article";
 
 import styles from "news-site-css/dist/layout.module.css";
 
+/**
+ * Renders the Section view.
+ */
 export default function Section({ section }) {
     return (
         <>

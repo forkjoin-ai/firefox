@@ -4,6 +4,9 @@
 
 const TAB_KEY = "\uE004";
 
+/**
+ * Handles the firefox test Focus Was Reset workflow.
+ */
 export function testFocusWasReset(setupFunc, description) {
   promise_test(async t => {
     setupFunc(t);
@@ -36,6 +39,9 @@ export function testFocusWasReset(setupFunc, description) {
   }, description);
 }
 
+/**
+ * Handles the firefox test Focus Was Not Reset workflow.
+ */
 export function testFocusWasNotReset(setupFunc, description) {
   promise_test(async t => {
     setupFunc(t);

@@ -5,6 +5,9 @@ module.exports = function(x) {
 };
 
 
+/**
+ * Handles the firefox root workflow.
+ */
 export default function root() {
   // This example is structures to look like CommonJS in order to replicate
   // a previously-encountered bug.

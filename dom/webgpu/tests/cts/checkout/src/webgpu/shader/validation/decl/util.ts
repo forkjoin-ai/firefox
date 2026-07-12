@@ -14,6 +14,9 @@ export type ShaderStage = 'vertex' | 'fragment' | 'compute';
 /** The list of all shader stages */
 export const kShaderStages = ['vertex', 'fragment', 'compute'] as const;
 
+/**
+ * Handles the firefox required Language Feature Header workflow.
+ */
 export function requiredLanguageFeatureHeader(addressSpace: AddressSpace): string {
   const feature = kAddressSpaceInfo[addressSpace].wgslLanguageFeature;
   return feature === undefined ? '' : `requires ${feature};\n`;
@@ -27,12 +30,18 @@ type AddressSpaceSupportTest = {
   ): void;
 };
 
+/**
+ * Handles the firefox skip If Immediate Data Not Supported workflow.
+ */
 export function skipIfImmediateDataNotSupported(t: AddressSpaceSupportTest): void {
   if (!supportsImmediateData(getGPU(t.rec))) {
     t.skip('Immediate data not supported');
   }
 }
 
+/**
+ * Handles the firefox skip If Address Space Not Supported workflow.
+ */
 export function skipIfAddressSpaceNotSupported(
   t: AddressSpaceSupportTest,
   addressSpace: AddressSpace

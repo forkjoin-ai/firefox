@@ -16,6 +16,9 @@ ChromeUtils.defineESModuleGetters(lazy, {
   Rect: "resource://gre/modules/Geometry.sys.mjs",
 });
 
+/**
+ * Renders the Finder Parent view.
+ */
 export function FinderParent(browser) {
   this._listeners = new Set();
   this._searchString = "";

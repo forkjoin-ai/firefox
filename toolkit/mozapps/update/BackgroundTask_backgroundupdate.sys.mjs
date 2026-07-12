@@ -422,6 +422,9 @@ export async function runActions(
   return result;
 }
 
+/**
+ * Handles the firefox run Background Task workflow.
+ */
 export async function runBackgroundTask(commandLine) {
   let SLUG = "runBackgroundTask";
   lazy.log.error(`${SLUG}: backgroundupdate`);

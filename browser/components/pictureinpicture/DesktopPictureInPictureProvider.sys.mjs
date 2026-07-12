@@ -106,6 +106,9 @@ class PictureInPictureFunctionsImpl {
   }
 }
 
+/**
+ * Renders the Picture In Picture Provider view.
+ */
 export function PictureInPictureProvider() {
   return new PictureInPictureFunctionsImpl();
 }

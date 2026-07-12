@@ -322,6 +322,9 @@ export const setBreakpointPositions = memoizeableAction(
   }
 );
 
+/**
+ * Handles the firefox update Breakpoint Positions For New Pretty Printed Source workflow.
+ */
 export function updateBreakpointPositionsForNewPrettyPrintedSource(
   minifiedSource
 ) {

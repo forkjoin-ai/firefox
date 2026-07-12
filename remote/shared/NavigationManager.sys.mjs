@@ -956,6 +956,9 @@ export function notifyNavigationStopped(data) {
   return navigationRegistry.notifyNavigationStopped(data);
 }
 
+/**
+ * Handles the firefox register Navigation Id workflow.
+ */
 export function registerNavigationId(data) {
   return navigationRegistry.registerNavigationId(data);
 }

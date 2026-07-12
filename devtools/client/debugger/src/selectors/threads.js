@@ -10,6 +10,9 @@ export const getThreads = createSelector(
   threads => threads.filter(thread => !isMainThread(thread))
 );
 
+/**
+ * Handles the firefox get All Threads workflow.
+ */
 export function getAllThreads(state) {
   return state.threads.threads;
 }
@@ -18,12 +21,18 @@ function isMainThread(thread) {
   return thread.isTopLevel;
 }
 
+/**
+ * Handles the firefox get Main Thread workflow.
+ */
 export function getMainThread(state) {
   return state.threads.threads.find(isMainThread);
 }
 
 /*
  * Gets domain from the main thread url (without www prefix)
+ */
+/**
+ * Handles the firefox get Main Thread Host workflow.
  */
 export function getMainThreadHost(state) {
   const url = getMainThread(state)?.url;
@@ -37,14 +46,23 @@ export function getMainThreadHost(state) {
   return host.startsWith("www.") ? host.substring("www.".length) : host;
 }
 
+/**
+ * Handles the firefox get Thread workflow.
+ */
 export function getThread(state, threadActor) {
   return getAllThreads(state).find(thread => thread.actor === threadActor);
 }
 
+/**
+ * Handles the firefox get Is Thread Currently Tracing workflow.
+ */
 export function getIsThreadCurrentlyTracing(state, thread) {
   return state.threads.mutableTracingThreads.has(thread);
 }
 
+/**
+ * Handles the firefox get Is Currently Tracing workflow.
+ */
 export function getIsCurrentlyTracing(state) {
   return state.threads.mutableTracingThreads.size > 0;
 }

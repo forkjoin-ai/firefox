@@ -1196,6 +1196,9 @@ const CHANNEL_MULTIPLIERS = {
 
 export const CANVAS_HASH_LENGTH = 13;
 
+/**
+ * Handles the firefox get Hash Probability workflow.
+ */
 export function getHashProbability(hash) {
   const base = BASE_CANVAS_HASH_PROBABILITIES.get(hash);
   if (base === undefined) {
@@ -1207,6 +1210,9 @@ export function getHashProbability(hash) {
   return Math.min(1.0, base * multiplier);
 }
 
+/**
+ * Returns whether is Known Hash is true.
+ */
 export function isKnownHash(hash) {
   return BASE_CANVAS_HASH_PROBABILITIES.has(hash);
 }

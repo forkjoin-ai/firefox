@@ -1,6 +1,9 @@
 import { Suites, Tags } from "./tests.mjs";
 import { params, defaultParams } from "./params.mjs";
 
+/**
+ * Creates the Developer Mode Container.
+ */
 export function createDeveloperModeContainer() {
     const container = document.createElement("div");
     container.className = "developer-mode";

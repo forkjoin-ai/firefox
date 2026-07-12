@@ -155,10 +155,16 @@ class NetworkCacheManager {
 // Create a private NetworkCacheManager singleton.
 const networkCacheManager = new NetworkCacheManager();
 
+/**
+ * Handles the firefox update Cache Behavior workflow.
+ */
 export function updateCacheBehavior(behavior, contexts) {
   return networkCacheManager.updateCacheBehavior(behavior, contexts);
 }
 
+/**
+ * Handles the firefox cleanup Cache Bypass State workflow.
+ */
 export function cleanupCacheBypassState() {
   return networkCacheManager.cleanup();
 }

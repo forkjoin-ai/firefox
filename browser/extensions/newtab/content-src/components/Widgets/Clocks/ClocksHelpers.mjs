@@ -28,6 +28,9 @@ export function isValidPaletteName(paletteName) {
   return typeof paletteName === "string" && LABEL_PALETTE.includes(paletteName);
 }
 
+/**
+ * Handles the firefox get Random Label Color workflow.
+ */
 export function getRandomLabelColor() {
   return RANDOM_LABEL_PALETTE[
     Math.floor(Math.random() * RANDOM_LABEL_PALETTE.length)
@@ -159,6 +162,9 @@ export function getDefaultTimeZones() {
   return result;
 }
 
+/**
+ * Handles the firefox decorate Default Zones workflow.
+ */
 export function decorateDefaultZones(timeZones) {
   return timeZones.map(timeZone => ({
     timeZone,
@@ -174,6 +180,9 @@ export function buildDefaultZones() {
   return decorateDefaultZones(getDefaultTimeZones());
 }
 
+/**
+ * Returns whether is Valid Time Zone is true.
+ */
 export const isValidTimeZone = timeZone => {
   if (typeof timeZone !== "string" || !timeZone) {
     return false;
@@ -186,6 +195,9 @@ export const isValidTimeZone = timeZone => {
   }
 };
 
+/**
+ * Handles the firefox get Supported Time Zones workflow.
+ */
 export const getSupportedTimeZones = () => {
   try {
     if (typeof Intl.supportedValuesOf === "function") {
@@ -216,6 +228,9 @@ export const getLocalizedTimeZoneName = (timeZone, locale) => {
   }
 };
 
+/**
+ * Builds the Localized Time Zone Map.
+ */
 export const buildLocalizedTimeZoneMap = (timeZones, locale) => {
   const map = new Map();
   for (const tz of timeZones) {
@@ -249,6 +264,9 @@ const normalizeClockZone = clock => {
   };
 };
 
+/**
+ * Parses the Clock Zones Pref.
+ */
 export const parseClockZonesPref = prefValue => {
   if (!prefValue) {
     return null;
@@ -296,6 +314,9 @@ export const buildClockZone = timeZone => ({
   labelColor: null,
 });
 
+/**
+ * Handles the firefox backfill Clock Label Colors workflow.
+ */
 export const backfillClockLabelColors = clockZones =>
   clockZones.map(clock =>
     clock.label && !clock.labelColor
@@ -361,6 +382,9 @@ export const getClockFormDerivedState = ({
   };
 };
 
+/**
+ * Builds the Next Clock Zones.
+ */
 export const buildNextClockZones = (clockZones, editingClockIndex, zone) =>
   editingClockIndex === null
     ? [...clockZones, zone]
@@ -368,6 +392,9 @@ export const buildNextClockZones = (clockZones, editingClockIndex, zone) =>
         index === editingClockIndex ? zone : clock
       );
 
+/**
+ * Handles the firefox remove Clock Zone At Index workflow.
+ */
 export const removeClockZoneAtIndex = (clockZones, indexToRemove) =>
   clockZones.filter((_, index) => index !== indexToRemove);
 

@@ -10,12 +10,18 @@ ChromeUtils.defineESModuleGetters(lazy, {
     "moz-src:///browser/components/urlbar/UrlbarProviderOpenTabs.sys.mjs",
 });
 
+/**
+ * Handles the firefox get Open Tabs workflow.
+ */
 export function getOpenTabs() {
   // We only want public tabs, so isInPrivateWindow = false
   let urls = lazy.UrlbarProviderOpenTabs.getOpenTabUrls(false);
   return Array.from(urls.keys());
 }
 
+/**
+ * Handles the firefox switch To Open Tab workflow.
+ */
 export function switchToOpenTab(url) {
   // We only want public tabs, so skip private top windows
   let win = lazy.BrowserWindowTracker.getTopWindow({

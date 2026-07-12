@@ -11,6 +11,9 @@ import {
 
 import { closeActiveSearch, clearHighlightLineRange } from "./ui";
 
+/**
+ * Handles the firefox do Search For Highlight workflow.
+ */
 export function doSearchForHighlight(query, editor) {
   return async ({ getState, dispatch }) => {
     const sourceTextContent = getSelectedSourceTextContent(getState());
@@ -23,12 +26,18 @@ export function doSearchForHighlight(query, editor) {
 }
 
 // Expose an action to the React component, so that it can call the searchWorker.
+/**
+ * Handles the firefox query Search Worker workflow.
+ */
 export function querySearchWorker(query, text, modifiers) {
   return ({ searchWorker }) => {
     return searchWorker.getMatches(query, text, modifiers);
   };
 }
 
+/**
+ * Handles the firefox search Contents For Highlight workflow.
+ */
 export function searchContentsForHighlight(query, editor) {
   return async ({ getState }) => {
     const modifiers = getSearchOptions(getState(), "file-search");
@@ -43,6 +52,9 @@ export function searchContentsForHighlight(query, editor) {
   };
 }
 
+/**
+ * Handles the firefox close File Search workflow.
+ */
 export function closeFileSearch() {
   return ({ dispatch }) => {
     dispatch(closeActiveSearch());

@@ -4,6 +4,9 @@
 
 import React from "react";
 
+/**
+ * Renders the Highlight Text view.
+ */
 export const HighlightText = ({ as: Tag = "p", className, value, id }) => {
   if (!value) {
     return null;

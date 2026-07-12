@@ -5,6 +5,9 @@
 import React from "react";
 import { Localized } from "./MSLocalized";
 
+/**
+ * Renders the Content Toggle view.
+ */
 export const ContentToggle = ({ content, toggled, onToggle }) => {
   const { data } = content.tiles;
   const onChange = React.useCallback(

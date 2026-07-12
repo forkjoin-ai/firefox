@@ -5,6 +5,9 @@
 
 import { MockFederatedAuthRequest } from './fedcm-mock.js';
 
+/**
+ * Handles the firefox fedcm mojo mock test workflow.
+ */
 export function fedcm_mojo_mock_test(test_func, name, exception, properties) {
   promise_test(async (t) => {
     assert_implements(navigator.credentials, 'missing navigator.credentials');

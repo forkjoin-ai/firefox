@@ -6,6 +6,9 @@ import { isFulfilled } from "./async-value";
 import { findClosestFunction } from "./ast";
 import { correctIndentation } from "./indentation";
 
+/**
+ * Handles the firefox find Function Text workflow.
+ */
 export function findFunctionText(line, source, sourceTextContent, symbols) {
   const func = findClosestFunction(symbols, {
     sourceId: source.id,

@@ -2,6 +2,9 @@ import { ADD_TODO, DELETE_TODO, EDIT_TODO, COMPLETE_TODO, COMPLETE_ALL, CLEAR_CO
 
 const initialState = []
 
+/**
+ * Converts input into todos.
+ */
 export default function todos(state = initialState, action) {
   switch (action.type) {
     case ADD_TODO:

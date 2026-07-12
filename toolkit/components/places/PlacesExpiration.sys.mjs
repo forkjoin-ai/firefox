@@ -438,6 +438,9 @@ const EXPIRATION_QUERIES = {
   },
 };
 
+/**
+ * Handles the firefox ns Places Expiration workflow.
+ */
 export function nsPlacesExpiration() {
   // Allows other components to easily access getPagesLimit.
   this.wrappedJSObject = this;

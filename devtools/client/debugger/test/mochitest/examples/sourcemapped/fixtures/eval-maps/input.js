@@ -1,4 +1,7 @@
 
+/**
+ * Handles the firefox root workflow.
+ */
 export default function root() {
   var one = 1;
   let two = 2;

@@ -5,6 +5,9 @@
 import React, { useEffect, useRef } from "react";
 import { getCityFromTimeZone } from "./ClocksHelpers";
 
+/**
+ * Renders the Edit Clocks Panel view.
+ */
 export function EditClocksPanel({
   clockZones,
   canAddClock,

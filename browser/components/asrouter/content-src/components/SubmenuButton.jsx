@@ -5,6 +5,9 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import { Localized } from "./MSLocalized";
 
+/**
+ * Renders the Submenu Button view.
+ */
 export const SubmenuButton = props => {
   return document.createXULElement ? <SubmenuButtonInner {...props} /> : null;
 };

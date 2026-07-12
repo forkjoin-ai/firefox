@@ -11,6 +11,9 @@ const stylesTemplate = () =>
     href="chrome://browser/content/aboutlogins/components/login-message-popup.css"
   />`;
 
+/**
+ * Renders the Message Popup view.
+ */
 export const MessagePopup = ({ l10nid, message, webTitle = "", role }) => {
   return html` <div class="tooltip-container" role=${ifDefined(role)}>
     <div class="arrow-box">

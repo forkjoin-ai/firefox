@@ -7,6 +7,9 @@ import Toast from "@/components/toast/toast";
 
 import { useDataContext } from "@/context/data-context";
 
+/**
+ * Renders the Page view.
+ */
 export default function Page({ id }) {
     const { content } = useDataContext();
     const [showPortal, setShowPortal] = useState(Boolean(content[id].notification));

@@ -5,6 +5,9 @@
 import fs from "fs";
 import path from "path";
 
+/**
+ * Handles the firefox read Fixture workflow.
+ */
 export default function readFixture(name) {
   const text = fs.readFileSync(
     path.join(__dirname, `../fixtures/${name}`),

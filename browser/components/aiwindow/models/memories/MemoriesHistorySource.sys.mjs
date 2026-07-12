@@ -864,10 +864,16 @@ function sanitizeTitle(title) {
 }
 
 // for tests only
+/**
+ * Handles the firefox set Block List Manager For Testing workflow.
+ */
 export function _setBlockListManagerForTesting(mgr) {
   _mgr = mgr;
 }
 
+/**
+ * Handles the firefox sanitize Title For Testing workflow.
+ */
 export function _sanitizeTitleForTesting(title) {
   return sanitizeTitle(title);
 }

@@ -39,6 +39,9 @@ const {
 
 let gWorkers;
 
+/**
+ * Handles the firefox bootstrap Store workflow.
+ */
 export function bootstrapStore(client, workers, panel, initialState) {
   const debugJsModules = AppConstants.DEBUG_JS_MODULES == "1";
   const createStore = configureStore({
@@ -63,6 +66,9 @@ export function bootstrapStore(client, workers, panel, initialState) {
   return { store, actions, selectors };
 }
 
+/**
+ * Handles the firefox bootstrap Workers workflow.
+ */
 export function bootstrapWorkers(panelWorkers) {
   // The panel worker will typically be the source map and parser workers.
   // Both will be managed by the toolbox.
@@ -73,6 +79,9 @@ export function bootstrapWorkers(panelWorkers) {
   return { ...panelWorkers, ...gWorkers };
 }
 
+/**
+ * Handles the firefox teardown Workers workflow.
+ */
 export function teardownWorkers() {
   gWorkers.prettyPrintWorker.stop();
   gWorkers.searchWorker.stop();
@@ -112,6 +121,9 @@ function getMountElement() {
 }
 
 // This is the opposite of bootstrapApp
+/**
+ * Handles the firefox unmount Root workflow.
+ */
 export function unmountRoot() {
   ReactDOM.unmountComponentAtNode(getMountElement());
 }

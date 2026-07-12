@@ -43,18 +43,30 @@ export const VPN_ACTIVE = RPMGetBoolPref(
   false
 );
 
+/**
+ * Returns whether is Captive is true.
+ */
 export function isCaptive() {
   return searchParams.get("captive") == "true";
 }
 
+/**
+ * Handles the firefox get CSSClass workflow.
+ */
 export function getCSSClass() {
   return searchParams.get("s");
 }
 
+/**
+ * Handles the firefox get Host Name workflow.
+ */
 export function getHostName() {
   return RPMGetHostForDisplay(document);
 }
 
+/**
+ * Handles the firefox get File Path workflow.
+ */
 export function getFilePath() {
   try {
     const url = new URL(document.location.href);
@@ -70,11 +82,17 @@ export function getFilePath() {
   return null;
 }
 
+/**
+ * Handles the firefox retry This workflow.
+ */
 export function retryThis(buttonEl) {
   RPMSendAsyncMessage("Browser:EnableOnlineMode");
   buttonEl.disabled = true;
 }
 
+/**
+ * Handles the firefox get Failed Certificates As PEMString workflow.
+ */
 export async function getFailedCertificatesAsPEMString() {
   let locationUrl = document.location.href;
   let failedCertInfo = document.getFailedCertSecurityInfo();
@@ -113,6 +131,9 @@ export async function getFailedCertificatesAsPEMString() {
   return details;
 }
 
+/**
+ * Handles the firefox get Subject Alt Names workflow.
+ */
 export async function getSubjectAltNames(failedCertInfo) {
   const serverCertBase64 = failedCertInfo.certChainStrings[0];
   const parsed = await parse(pemToDER(serverCertBase64));
@@ -128,6 +149,9 @@ export async function getSubjectAltNames(failedCertInfo) {
   return subjectAltNames;
 }
 
+/**
+ * Handles the firefox record Security UITelemetry workflow.
+ */
 export async function recordSecurityUITelemetry(category, name, errorInfo) {
   // Truncate the error code to avoid going over the allowed
   // string size limit for telemetry events.
@@ -194,6 +218,9 @@ export async function recordSecurityUITelemetry(category, name, errorInfo) {
 
 // Returns true if the error identified by the given error code string has no
 // particular action the user can take to fix it.
+/**
+ * Handles the firefox error Has No User Fix workflow.
+ */
 export function errorHasNoUserFix(errorCodeString) {
   switch (errorCodeString) {
     case "MOZILLA_PKIX_ERROR_INSUFFICIENT_CERTIFICATE_TRANSPARENCY":
@@ -265,6 +292,9 @@ export function detectClockSkew(failedCertInfo, now = Date.now()) {
   return buildDate > now && certNotAfter > buildDate;
 }
 
+/**
+ * Handles the NSSFailure request flow.
+ */
 export function handleNSSFailure(callback) {
   const netErrorInfo = document.getNetErrorInfo();
   void recordSecurityUITelemetry(

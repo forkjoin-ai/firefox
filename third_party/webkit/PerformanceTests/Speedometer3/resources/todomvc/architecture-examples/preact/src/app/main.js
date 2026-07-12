@@ -3,6 +3,9 @@ import { h } from "preact";
 import TodoItem from "./item";
 import { FILTERS } from "./utils";
 
+/**
+ * Renders the Todo Main view.
+ */
 export default function TodoMain({ onChange, onToggle, onRemove, onSave, todos, route }) {
     const visibleTodos = todos.filter(FILTERS[route]);
     const activeTodoCount = todos.filter(FILTERS["active"]).length;

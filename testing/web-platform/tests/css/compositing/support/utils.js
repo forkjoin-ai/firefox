@@ -1,3 +1,6 @@
+/**
+ * Handles the firefox multiply Alpha workflow.
+ */
 export function multiplyAlpha(pixel) {
   return pixel.map((channel, i) => {
     // Pass the alpha channel through unchanged
@@ -7,6 +10,9 @@ export function multiplyAlpha(pixel) {
   });
 }
 
+/**
+ * Handles the firefox unmultiply Alpha workflow.
+ */
 export function unmultiplyAlpha(pixel) {
   return pixel.map((channel, i) => {
     // Pass the alpha channel through unchanged
@@ -18,6 +24,9 @@ export function unmultiplyAlpha(pixel) {
   });
 }
 
+/**
+ * Handles the firefox clamp01 workflow.
+ */
 export function clamp01(value) {
   if (value < 0) return 0;
   if (value > 1) return 1;
@@ -25,6 +34,9 @@ export function clamp01(value) {
 }
 
 const toPercent = (num) => `${num * 100}%`;
+/**
+ * Converts input into CSSColor.
+ */
 export const toCSSColor = (pixel) =>
   `rgb(${toPercent(pixel[0])} ${toPercent(pixel[1])} ${toPercent(pixel[2])} / ${
     pixel[3]

@@ -1,5 +1,8 @@
 const variants = new Set((new URLSearchParams(location.search)).keys());
 
+/**
+ * Returns whether has Variant is true.
+ */
 export function hasVariant(name) {
   return variants.has(name);
 }

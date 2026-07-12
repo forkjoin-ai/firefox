@@ -6,6 +6,9 @@ function isFront(result) {
   return !!result && typeof result === "object" && !!result.getGrip;
 }
 
+/**
+ * Handles the firefox get Grip workflow.
+ */
 export function getGrip(result) {
   if (isFront(result)) {
     return result.getGrip();
@@ -14,6 +17,9 @@ export function getGrip(result) {
   return result;
 }
 
+/**
+ * Handles the firefox get Front workflow.
+ */
 export function getFront(result) {
   return isFront(result) ? result : null;
 }

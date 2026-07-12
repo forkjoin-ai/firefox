@@ -37,6 +37,9 @@ XPCOMUtils.defineLazyServiceGetter(
   Ci.nsIMIMEService
 );
 
+/**
+ * Renders the Handler Service view.
+ */
 export function HandlerService() {
   // Observe handlersvc-json-replace so we can switch to the datasource
   Services.obs.addObserver(this, "handlersvc-json-replace", true);

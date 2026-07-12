@@ -52,6 +52,9 @@ function getPath(source) {
   return result;
 }
 
+/**
+ * Handles the firefox should Blackbox workflow.
+ */
 export function shouldBlackbox(source) {
   if (!source) {
     return false;
@@ -167,6 +170,9 @@ export function isJavaScript(source, content) {
   );
 }
 
+/**
+ * Returns whether is Not Pretty Printable is true.
+ */
 export function isNotPrettyPrintable(source, sourceContent) {
   return (
     !isJavaScript(source, sourceContent) &&
@@ -175,6 +181,9 @@ export function isNotPrettyPrintable(source, sourceContent) {
   );
 }
 
+/**
+ * Returns whether is Pretty URL is true.
+ */
 export function isPrettyURL(url) {
   return url ? url.endsWith(":formatted") : false;
 }
@@ -213,6 +222,9 @@ function resolveFileURL(
   return endTruncateStr(name, 50);
 }
 
+/**
+ * Handles the firefox get Formatted Source Id workflow.
+ */
 export function getFormattedSourceId(id) {
   if (typeof id != "string") {
     console.error(
@@ -340,6 +352,9 @@ export const getLineText = memoizeLast((sourceId, asyncContent, line) => {
   return lineText || "";
 });
 
+/**
+ * Handles the firefox get Text At Position workflow.
+ */
 export function getTextAtPosition(sourceId, asyncContent, location) {
   const { column, line = 0 } = location;
 
@@ -377,6 +392,9 @@ export function getSourceClassnames(source, isBlackBoxed) {
   return sourceTypes[source.displayURL.fileExtension] || defaultClassName;
 }
 
+/**
+ * Handles the firefox get Relative Url workflow.
+ */
 export function getRelativeUrl(source, root) {
   const { group, path } = source.displayURL;
   if (!root) {
@@ -388,6 +406,9 @@ export function getRelativeUrl(source, root) {
   return url.slice(url.indexOf(root) + root.length + 1);
 }
 
+/**
+ * Returns whether is Url Extension is true.
+ */
 export function isUrlExtension(url) {
   return url.includes("moz-extension:") || url.includes("chrome-extension");
 }

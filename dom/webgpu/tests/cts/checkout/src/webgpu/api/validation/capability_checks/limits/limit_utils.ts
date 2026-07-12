@@ -33,6 +33,9 @@ export const kBindingCombinations = [
 ] as const;
 export type BindingCombination = (typeof kBindingCombinations)[number];
 
+/**
+ * Handles the firefox get Pipeline Type For Binding Combination workflow.
+ */
 export function getPipelineTypeForBindingCombination(bindingCombination: BindingCombination) {
   switch (bindingCombination) {
     case 'vertex':
@@ -46,6 +49,9 @@ export function getPipelineTypeForBindingCombination(bindingCombination: Binding
   }
 }
 
+/**
+ * Handles the firefox get Stage Visibility For Binding Combination workflow.
+ */
 export function getStageVisibilityForBindingCombination(bindingCombination: BindingCombination) {
   switch (bindingCombination) {
     case 'vertex':
@@ -104,6 +110,9 @@ function getWGSLBindings(
   ).join('\n        ');
 }
 
+/**
+ * Handles the firefox get Per Stage WGSLFor Binding Combination Impl workflow.
+ */
 export function getPerStageWGSLForBindingCombinationImpl(
   bindingCombination: BindingCombination,
   order: ReorderOrder,
@@ -194,6 +203,9 @@ export function getPerStageWGSLForBindingCombinationImpl(
   }
 }
 
+/**
+ * Handles the firefox get Per Stage WGSLFor Binding Combination workflow.
+ */
 export function getPerStageWGSLForBindingCombination(
   bindingCombination: BindingCombination,
   order: ReorderOrder,
@@ -217,6 +229,9 @@ export function getPerStageWGSLForBindingCombination(
   );
 }
 
+/**
+ * Handles the firefox get Per Stage WGSLFor Binding Combination Storage Textures workflow.
+ */
 export function getPerStageWGSLForBindingCombinationStorageTextures(
   bindingCombination: BindingCombination,
   order: ReorderOrder,
@@ -247,6 +262,9 @@ export type LimitsRequest = Record<string, LimitMode | number>;
 export const kMaximumTestValues = ['atLimit', 'overLimit'] as const;
 export type MaximumTestValue = (typeof kMaximumTestValues)[number];
 
+/**
+ * Handles the firefox get Maximum Test Value workflow.
+ */
 export function getMaximumTestValue(limit: number, testValue: MaximumTestValue) {
   switch (testValue) {
     case 'atLimit':
@@ -268,6 +286,9 @@ export const kMaximumLimitValueTests = [
 ] as const;
 export type MaximumLimitValueTest = (typeof kMaximumLimitValueTests)[number];
 
+/**
+ * Handles the firefox get Limit Value workflow.
+ */
 export function getLimitValue(
   defaultLimit: number,
   maximumLimit: number,
@@ -297,6 +318,9 @@ export const kMinimumLimitValueTests = [
 ] as const;
 export type MinimumLimitValueTest = (typeof kMinimumLimitValueTests)[number];
 
+/**
+ * Handles the firefox get Default Limit For Adapter workflow.
+ */
 export function getDefaultLimitForAdapter(adapter: GPUAdapter, limit: GPUSupportedLimit): number {
   const limitInfo = getDefaultLimitsForCTS();
   return limitInfo[limit as keyof typeof limitInfo].default;

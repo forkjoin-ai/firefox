@@ -74,6 +74,9 @@ function stringifyFilter(_k: string, v: unknown): unknown {
   return toStringMagicValue.has(v) ? toStringMagicValue.get(v) : v;
 }
 
+/**
+ * Handles the firefox stringify Param Value workflow.
+ */
 export function stringifyParamValue(value: JSONWithUndefined): string {
   return JSON.stringify(value, stringifyFilter);
 }
@@ -109,6 +112,9 @@ function parseParamValueReviver(_k: string, v: any): any {
   return v;
 }
 
+/**
+ * Parses the Param Value.
+ */
 export function parseParamValue(s: string): JSONWithUndefined {
   return JSON.parse(s, parseParamValueReviver);
 }

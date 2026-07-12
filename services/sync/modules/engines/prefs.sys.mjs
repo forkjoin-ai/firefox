@@ -71,6 +71,9 @@ function isAllowedPrefName(prefName) {
   }
 }
 
+/**
+ * Renders the Pref Rec view.
+ */
 export function PrefRec(collection, id) {
   CryptoWrapper.call(this, collection, id);
 }
@@ -82,6 +85,9 @@ Object.setPrototypeOf(PrefRec.prototype, CryptoWrapper.prototype);
 
 Utils.deferGetSet(PrefRec, "cleartext", ["value"]);
 
+/**
+ * Renders the Prefs Engine view.
+ */
 export function PrefsEngine(service) {
   SyncEngine.call(this, "Prefs", service);
 }
@@ -514,6 +520,9 @@ PrefTracker.prototype = {
 };
 Object.setPrototypeOf(PrefTracker.prototype, Tracker.prototype);
 
+/**
+ * Handles the firefox get Prefs GUIDFor Test workflow.
+ */
 export function getPrefsGUIDForTest() {
   return lazy.PREFS_GUID;
 }

@@ -18,12 +18,7 @@ import {
 './math.js';
 
 /**
- * Encode a JS `number` into the "normalized" (unorm/snorm) integer scale with `bits` bits but
- * remain unquantized. Input must be between -1 and 1 if signed, or 0 and 1 if unsigned.
- * e.g. float 0.5 -> "unorm8" 127.5
- *
- * MAINTENANCE_TODO: See if performance of texel_data improves if this function is pre-specialized
- * for a particular `bits`/`signed`.
+ * Handles the firefox float As Normalized Integer Unquantized workflow.
  */
 export function floatAsNormalizedIntegerUnquantized(
 float,
@@ -42,11 +37,7 @@ signed)
 }
 
 /**
- * Encodes a JS `number` into a "normalized" (unorm/snorm) integer representation with `bits` bits.
- * Input must be between -1 and 1 if signed, or 0 and 1 if unsigned.
- *
- * MAINTENANCE_TODO: See if performance of texel_data improves if this function is pre-specialized
- * for a particular `bits`/`signed`.
+ * Handles the firefox float As Normalized Integer workflow.
  */
 export function floatAsNormalizedInteger(float, bits, signed) {
   return Math.round(floatAsNormalizedIntegerUnquantized(float, bits, signed));
@@ -107,14 +98,7 @@ const workingDataU64 = new BigUint64Array(workingData);
 const workingDataView = new DataView(workingData);
 
 /**
- * Encodes a JS `number` into an IEEE754 floating point number with the specified number of
- * sign, exponent, mantissa bits, and exponent bias.
- * Returns the result as an integer-valued JS `number`.
- *
- * Does not handle clamping, overflow, or denormal inputs.
- * On underflow (result is subnormal), rounds to (signed) zero.
- *
- * MAINTENANCE_TODO: Replace usages of this with numberToFloatBits.
+ * Handles the firefox float32 To Float Bits workflow.
  */
 export function float32ToFloatBits(
 n,
@@ -520,11 +504,7 @@ export function pack4x8unorm(...vals) {
 }
 
 /**
- * Asserts that a number is within the representable (inclusive) of the integer type with the
- * specified number of bits and signedness.
- *
- * MAINTENANCE_TODO: Assert isInteger? Then this function "asserts that a number is representable"
- * by the type.
+ * Handles the firefox assert In Integer Range workflow.
  */
 export function assertInIntegerRange(n, bits, signed) {
   if (signed) {

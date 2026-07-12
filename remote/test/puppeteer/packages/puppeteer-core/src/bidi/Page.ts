@@ -1072,6 +1072,9 @@ function testUrlMatchCookie(cookie: Cookie, url: URL): boolean {
   return testUrlMatchCookiePath(cookie, normalizedUrl);
 }
 
+/**
+ * Handles the firefox bidi To Puppeteer Cookie workflow.
+ */
 export function bidiToPuppeteerCookie(
   bidiCookie: Bidi.Network.Cookie,
   returnCompositePartitionKey = false,
@@ -1165,6 +1168,9 @@ function convertCookiesSameSiteBiDiToCdp(
   return sameSite === 'strict' ? 'Strict' : sameSite === 'lax' ? 'Lax' : 'None';
 }
 
+/**
+ * Handles the firefox convert Cookies Same Site Cdp To Bi Di workflow.
+ */
 export function convertCookiesSameSiteCdpToBiDi(
   sameSite: CookieSameSite | undefined,
 ): Bidi.Network.SameSite {
@@ -1175,12 +1181,18 @@ export function convertCookiesSameSiteCdpToBiDi(
       : Bidi.Network.SameSite.None;
 }
 
+/**
+ * Handles the firefox convert Cookies Expiry Cdp To Bi Di workflow.
+ */
 export function convertCookiesExpiryCdpToBiDi(
   expiry: number | undefined,
 ): number | undefined {
   return [undefined, -1].includes(expiry) ? undefined : expiry;
 }
 
+/**
+ * Handles the firefox convert Cookies Partition Key From Puppeteer To Bi Di workflow.
+ */
 export function convertCookiesPartitionKeyFromPuppeteerToBiDi(
   partitionKey: CookiePartitionKey | string | undefined,
 ): string | undefined {

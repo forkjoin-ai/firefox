@@ -580,6 +580,9 @@ class BrowserModule extends RootBiDiModule {
   }
 }
 
+/**
+ * Handles the firefox set Download Folder Override For Browsing Context workflow.
+ */
 export const setDownloadFolderOverrideForBrowsingContext = options => {
   const { context, value } = options;
   const destinationFolder =

@@ -12,6 +12,9 @@ import { useDataContext } from "@/context/data-context";
 
 import styles from "news-site-css/dist/layout.module.css";
 
+/**
+ * Renders the Layout view.
+ */
 export default function Layout({ children, id }) {
     const { content, links } = useDataContext();
     const [showMessage, setShowMessage] = useState(Boolean(content[id].message));

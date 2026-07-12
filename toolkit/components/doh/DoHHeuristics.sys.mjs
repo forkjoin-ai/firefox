@@ -231,6 +231,9 @@ async function dnsListLookup(domainList) {
 }
 
 // TODO: Confirm the expected behavior when filtering is on
+/**
+ * Handles the firefox global Canary workflow.
+ */
 export async function globalCanary() {
   // Check that a commonly used domain resolves before and after
   // checking the global canary.
@@ -279,6 +282,9 @@ export async function globalCanary() {
   return "enable_doh";
 }
 
+/**
+ * Handles the firefox parental Controls workflow.
+ */
 export async function parentalControls() {
   if (lazy.gParentalControlsService.parentalControlsEnabled) {
     return "disable_doh";

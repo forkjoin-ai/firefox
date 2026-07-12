@@ -10,6 +10,9 @@
 
 import { pending, fulfilled, rejected } from "../utils/async-value";
 
+/**
+ * Handles the firefox initial Sources Content State workflow.
+ */
 export function initialSourcesContentState() {
   return {
     /**

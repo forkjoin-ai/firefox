@@ -4,10 +4,16 @@
 
 // System module whose console has mInnerID=0: messages are stored under
 // a filename key in ConsoleAPIStorage, not under a numeric window ID.
+/**
+ * Handles the firefox log Error workflow.
+ */
 export function logError(err) {
   console.error(err);
 }
 
+/**
+ * Handles the firefox log Sandbox Error workflow.
+ */
 export function logSandboxError(win) {
   let sb = Cu.Sandbox(win, { sandboxPrototype: win });
   let err = Cu.evalInSandbox(`new Error("sandbox leak test")`, sb);

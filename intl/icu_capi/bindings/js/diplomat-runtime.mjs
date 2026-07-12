@@ -7,16 +7,25 @@ export const internalConstructor = Symbol("constructor");
  */
 export const exposeConstructor = Symbol("exposeConstructor");
 
+/**
+ * Handles the firefox read String8 workflow.
+ */
 export function readString8(wasm, ptr, len) {
     const buf = new Uint8Array(wasm.memory.buffer, ptr, len);
     return (new TextDecoder("utf-8")).decode(buf)
 }
 
+/**
+ * Handles the firefox read String16 workflow.
+ */
 export function readString16(wasm, ptr, len) {
     const buf = new Uint16Array(wasm.memory.buffer, ptr, len);
     return String.fromCharCode.apply(null, buf)
 }
 
+/**
+ * Handles the firefox with Diplomat Write workflow.
+ */
 export function withDiplomatWrite(wasm, callback) {
     const write = wasm.diplomat_buffer_write_create(0);
     try {

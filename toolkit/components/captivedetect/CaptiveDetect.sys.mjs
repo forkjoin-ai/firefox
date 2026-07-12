@@ -238,6 +238,9 @@ function LoginObserver(captivePortalDetector) {
   return observer;
 }
 
+/**
+ * Renders the Captive Portal Detector view.
+ */
 export function CaptivePortalDetector() {
   // Load preference
   this._canonicalSiteURL = null;

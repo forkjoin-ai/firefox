@@ -65,6 +65,9 @@ function debounce(func, wait) {
   };
 }
 
+/**
+ * Renders the With Ds Admin view.
+ */
 export function WithDsAdmin(props) {
   const { hash = globalThis?.location?.hash || "" } = props;
 
@@ -93,6 +96,9 @@ export function WithDsAdmin(props) {
   );
 }
 
+/**
+ * Handles the firefox Base workflow.
+ */
 export function _Base(props) {
   const isDevtoolsEnabled = props.Prefs.values["asrouter.devtoolsEnabled"];
   const { App } = props;

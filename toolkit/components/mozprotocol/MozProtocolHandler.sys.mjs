@@ -6,6 +6,9 @@ import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
 
 import { NetUtil } from "resource://gre/modules/NetUtil.sys.mjs";
 
+/**
+ * Renders the Moz Protocol Handler view.
+ */
 export function MozProtocolHandler() {
   XPCOMUtils.defineLazyPreferenceGetter(
     this,

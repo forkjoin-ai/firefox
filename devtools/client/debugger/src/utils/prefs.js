@@ -156,10 +156,16 @@ export const features = new PrefsHelper("devtools.debugger.features", {
 const ThreadUtils = require("resource://devtools/client/shared/thread-utils.js");
 export const asyncStore = ThreadUtils.asyncStore;
 
+/**
+ * Handles the firefox reset Schema Version workflow.
+ */
 export function resetSchemaVersion() {
   prefs.debuggerPrefsSchemaVersion = prefsSchemaVersion;
 }
 
+/**
+ * Handles the firefox verify Pref Schema workflow.
+ */
 export function verifyPrefSchema() {
   if (prefs.debuggerPrefsSchemaVersion < prefsSchemaVersion) {
     asyncStore.pendingBreakpoints = {};

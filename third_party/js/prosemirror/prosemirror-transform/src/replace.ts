@@ -9,6 +9,9 @@ import {insertPoint} from "./structure"
 /// [step](#transform.Step) that inserts it. Will return null if
 /// there's no meaningful way to insert the slice here, or inserting it
 /// would be a no-op (an empty slice over an empty range).
+/**
+ * Handles the firefox replace Step workflow.
+ */
 export function replaceStep(doc: Node, from: number, to = from, slice = Slice.empty): Step | null {
   if (from == to && !slice.size) return null
 
@@ -331,6 +334,9 @@ function definesContent(type: NodeType) {
   return type.spec.defining || type.spec.definingForContent
 }
 
+/**
+ * Handles the firefox replace Range workflow.
+ */
 export function replaceRange(tr: Transform, from: number, to: number, slice: Slice) {
   if (!slice.size) return tr.deleteRange(from, to)
 
@@ -415,6 +421,9 @@ function closeFragment(fragment: Fragment, depth: number, oldOpen: number, newOp
   return fragment
 }
 
+/**
+ * Handles the firefox replace Range With workflow.
+ */
 export function replaceRangeWith(tr: Transform, from: number, to: number, node: Node) {
   if (!node.isInline && from == to && tr.doc.resolve(from).parent.content.size) {
     let point = insertPoint(tr.doc, from, node.type)
@@ -423,6 +432,9 @@ export function replaceRangeWith(tr: Transform, from: number, to: number, node: 
   tr.replaceRange(from, to, new Slice(Fragment.from(node), 0, 0))
 }
 
+/**
+ * Handles the firefox delete Range workflow.
+ */
 export function deleteRange(tr: Transform, from: number, to: number) {
   let $from = tr.doc.resolve(from), $to = tr.doc.resolve(to)
   let covered = coveredDepths($from, $to)

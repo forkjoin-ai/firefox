@@ -4,6 +4,9 @@
 
 import { setTimeout } from "resource://gre/modules/Timer.sys.mjs";
 
+/**
+ * Handles the firefox run Background Task workflow.
+ */
 export async function runBackgroundTask(commandLine) {
   let pid = Services.appinfo.processID;
   let finalProcessDelaySec = 10;

@@ -11,6 +11,9 @@ flags: [module]
 
 var count = 0;
 
+/**
+ * Handles the firefox f workflow.
+ */
 export default function f() {} if (true) { count += 1; }
 
 assert.sameValue(count, 1);

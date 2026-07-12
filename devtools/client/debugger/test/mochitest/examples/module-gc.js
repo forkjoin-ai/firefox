@@ -2,6 +2,9 @@ import stuff from "./module-gc2.js";
 
 var x = 10;
 
+/**
+ * Handles the firefox module Function workflow.
+ */
 export function moduleFunction() {
   stuff(x);
 }

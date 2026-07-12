@@ -268,6 +268,9 @@ export class FakeConsoleAPI {
   }
 }
 
+/**
+ * Renders the Fake Nimbus Feature view.
+ */
 export function FakeNimbusFeature() {
   return {
     getEnrollmentMetadata() {},

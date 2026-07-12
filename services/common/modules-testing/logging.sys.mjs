@@ -4,6 +4,9 @@
 
 import { Log } from "resource://gre/modules/Log.sys.mjs";
 
+/**
+ * Handles the firefox init Test Logging workflow.
+ */
 export function initTestLogging(level) {
   function LogStats() {
     this.errorsLogged = 0;
@@ -51,6 +54,9 @@ export function initTestLogging(level) {
   return logStats;
 }
 
+/**
+ * Handles the firefox get Test Logger workflow.
+ */
 export function getTestLogger() {
   return Log.repository.getLogger("Testing");
 }

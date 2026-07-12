@@ -236,6 +236,9 @@ export const loadOriginalSourceText = memoizeableAction(
   }
 );
 
+/**
+ * Loads the Source Text.
+ */
 export function loadSourceText(source, sourceActor) {
   return async ({ dispatch, getState }) => {
     if (!source) {

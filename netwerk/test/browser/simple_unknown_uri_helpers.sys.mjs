@@ -5,6 +5,9 @@
 import { NetUtil } from "resource://gre/modules/NetUtil.sys.mjs";
 import { Assert } from "resource://testing-common/Assert.sys.mjs";
 
+/**
+ * Handles the firefox check Input And Serialization Match workflow.
+ */
 export function checkInputAndSerializationMatch(input) {
   let uri = NetUtil.newURI(input);
   Assert.equal(
@@ -14,6 +17,9 @@ export function checkInputAndSerializationMatch(input) {
   );
 }
 
+/**
+ * Handles the firefox check Input And Serialization Match Child workflow.
+ */
 export function checkInputAndSerializationMatchChild(input) {
   let uri = Services.io.newURI(input);
   Assert.equal(
@@ -23,6 +29,9 @@ export function checkInputAndSerializationMatchChild(input) {
   );
 }
 
+/**
+ * Handles the firefox remove Second Colon workflow.
+ */
 export function removeSecondColon(str) {
   let colonIndex = str.indexOf(":");
   if (colonIndex !== -1) {
@@ -35,6 +44,9 @@ export function removeSecondColon(str) {
   return str;
 }
 
+/**
+ * Handles the firefox check Serialization Missing Second Colon workflow.
+ */
 export function checkSerializationMissingSecondColon(input) {
   let uri = NetUtil.newURI(input);
   Assert.equal(
@@ -44,6 +56,9 @@ export function checkSerializationMissingSecondColon(input) {
   );
 }
 
+/**
+ * Handles the firefox check Serialization Missing Second Colon Child workflow.
+ */
 export function checkSerializationMissingSecondColonChild(input) {
   let uri = Services.io.newURI(input);
   Assert.equal(
@@ -53,6 +68,9 @@ export function checkSerializationMissingSecondColonChild(input) {
   );
 }
 
+/**
+ * Handles the firefox run Parent Test Suite workflow.
+ */
 export function runParentTestSuite() {
   // sanity check
   checkInputAndSerializationMatch("https://example.com/");

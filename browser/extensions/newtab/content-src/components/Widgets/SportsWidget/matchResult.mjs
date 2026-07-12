@@ -5,6 +5,9 @@
 // Resolves the winning team's `key` for a finished match, or null for a draw.
 // Mirrors the score resolution used in SportsMatchRow: regular + extra time,
 // then a penalty shootout when the aggregate is level.
+/**
+ * Handles the firefox get Match Winner Key workflow.
+ */
 export const getMatchWinnerKey = match => {
   if (!match) {
     return null;

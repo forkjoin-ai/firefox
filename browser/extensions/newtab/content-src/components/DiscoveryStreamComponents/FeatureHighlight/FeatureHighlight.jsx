@@ -5,6 +5,9 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { actionCreators as ac } from "common/Actions.mjs";
 
+/**
+ * Renders the Feature Highlight view.
+ */
 export function FeatureHighlight({
   message,
   icon,

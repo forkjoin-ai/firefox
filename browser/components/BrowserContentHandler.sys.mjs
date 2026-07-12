@@ -478,6 +478,9 @@ function spinResolve(promise) {
   }
 }
 
+/**
+ * Handles the firefox ns Browser Content Handler workflow.
+ */
 export function nsBrowserContentHandler() {
   if (!gBrowserContentHandler) {
     gBrowserContentHandler = this;
@@ -1401,6 +1404,9 @@ function maybeRecordSearchActivationTelemetry(uri, isLaunch) {
   }
 }
 
+/**
+ * Handles the firefox ns Default Command Line Handler workflow.
+ */
 export function nsDefaultCommandLineHandler() {}
 
 nsDefaultCommandLineHandler.prototype = {

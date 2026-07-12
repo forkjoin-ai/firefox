@@ -4,6 +4,9 @@
 
 import { DEBUGGER_PAUSED_REASONS_L10N_MAPPING } from "devtools/shared/constants";
 
+/**
+ * Handles the firefox get Pause Reason workflow.
+ */
 export function getPauseReason(why) {
   if (!why) {
     return null;
@@ -17,14 +20,23 @@ export function getPauseReason(why) {
   return DEBUGGER_PAUSED_REASONS_L10N_MAPPING[reasonType];
 }
 
+/**
+ * Returns whether is Exception is true.
+ */
 export function isException(why) {
   return why?.type === "exception";
 }
 
+/**
+ * Returns whether is Interrupted is true.
+ */
 export function isInterrupted(why) {
   return why?.type === "interrupted";
 }
 
+/**
+ * Handles the firefox in Debugger Eval workflow.
+ */
 export function inDebuggerEval(why) {
   if (
     why &&

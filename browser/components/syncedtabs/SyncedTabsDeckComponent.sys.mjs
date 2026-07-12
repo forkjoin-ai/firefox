@@ -16,6 +16,9 @@ import { UIState } from "resource://services-sync/UIState.sys.mjs";
  * isolated and easier to test.
  */
 
+/**
+ * Renders the Synced Tabs Deck Component view.
+ */
 export function SyncedTabsDeckComponent({
   window,
   SyncedTabs,

@@ -12,6 +12,9 @@ ChromeUtils.defineESModuleGetters(lazy, {
 
 var storePromise = null;
 
+/**
+ * Handles the firefox get Tabs Store workflow.
+ */
 export async function getTabsStore() {
   if (storePromise == null) {
     const path = PathUtils.join(PathUtils.profileDir, "synced-tabs.db");
@@ -33,6 +36,9 @@ export async function getTabsStore() {
   return await storePromise;
 }
 
+/**
+ * Handles the firefox get Remote Command Store workflow.
+ */
 export async function getRemoteCommandStore() {
   const store = await getTabsStore();
   // creating a new remote command store is cheap (but not free, so maybe we should cache this in the future?)

@@ -31,6 +31,9 @@ function getTabsFilterContextMenu(window) {
  * and triggers actions that may cause the state to change and
  * ultimately the view to rerender.
  */
+/**
+ * Renders the Tab List View view.
+ */
 export function TabListView(window, props) {
   this.props = props;
 

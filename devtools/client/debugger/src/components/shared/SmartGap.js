@@ -106,6 +106,9 @@ function getSmartGapDimensions(
   };
 }
 
+/**
+ * Renders the Smart Gap view.
+ */
 export default function SmartGap({
   token,
   preview,
