@@ -13,19 +13,33 @@ import {
 } from "node:fs";
 import { basename, dirname, join, resolve, sep } from "node:path";
 import { spawnSync } from "node:child_process";
+import { tmpdir } from "node:os";
+import { fileURLToPath } from "node:url";
 
 const args = new Set(process.argv.slice(2));
-const sourceRoot = resolve(new URL("..", import.meta.url).pathname);
+const isWindows = process.platform === "win32";
+function normalizeFileUrlPath(url) {
+  const path = fileURLToPath(url);
+  return isWindows ? path.replace(/^\/([A-Za-z]:[\\/])/, "$1") : path;
+}
+
+const sourceRoot = resolve(normalizeFileUrlPath(new URL("..", import.meta.url)));
 const tmpRoot = resolve(
-  process.env.FIREFOX_TMP_BUILD_DIR || "/tmp/forkjoin-firefox-build"
+  process.env.FIREFOX_TMP_BUILD_DIR || join(tmpdir(), "forkjoin-firefox-build")
 );
 const remote =
   process.env.FIREFOX_MOZILLA_REMOTE ||
   "https://github.com/mozilla-firefox/firefox.git";
 const ref = process.env.FIREFOX_MOZILLA_REF || "main";
-const python = process.env.PYTHON || "python3.12";
+const mozillaBuildPython = "C:\\mozilla-build\\python3\\python.exe";
+const python =
+  process.env.FIREFOX_PYTHON ||
+  process.env.PYTHON ||
+  (isWindows && existsSync(mozillaBuildPython) ? mozillaBuildPython : isWindows ? "python" : "python3.12");
 
-const objectDir = "obj-aarch64-apple-darwin25.5.0";
+const objectDir = isWindows
+  ? "obj-x86_64-pc-windows-msvc"
+  : "obj-aarch64-apple-darwin25.5.0";
 const appBundleCandidates = ["Kenoma.app", "Nightly.app"];
 const monorepoArtifactRoot = resolve(
   process.env.FIREFOX_MONOREPO_ARTIFACT_DIR ||
@@ -38,11 +52,11 @@ const legacyMonorepoAppPaths = [
   join(monorepoArtifactRoot, "Firefox Nightly.app"),
 ];
 
-function run(command, commandArgs, cwd = tmpRoot) {
+function run(command, commandArgs, cwd = tmpRoot, env = process.env) {
   const result = spawnSync(command, commandArgs, {
     cwd,
     stdio: "inherit",
-    env: process.env,
+    env,
   });
   if (result.status !== 0) {
     process.exit(result.status ?? 1);
@@ -83,10 +97,10 @@ function withSyncLock(callback) {
 
 function ensureInsideTmp(path) {
   const resolved = resolve(path);
-  if (
-    !resolved.startsWith(`/tmp${sep}`) ||
-    !basename(resolved).startsWith("forkjoin-firefox-build")
-  ) {
+  const tmpRootResolved = resolve(tmpdir());
+  const insideSystemTmp =
+    resolved === tmpRootResolved || resolved.startsWith(`${tmpRootResolved}${sep}`);
+  if (!insideSystemTmp || !basename(resolved).startsWith("forkjoin-firefox-build")) {
     throw new Error(`Refusing to remove non-Forkjoin tmp build path: ${resolved}`);
   }
 }
@@ -131,6 +145,9 @@ function ensureForkjoinBuildEntries() {
 }
 
 function findBuiltAppPath() {
+  if (isWindows) {
+    return join(tmpRoot, objectDir, "dist", "bin");
+  }
   for (const appBundleName of appBundleCandidates) {
     const candidate = join(tmpRoot, objectDir, "dist", appBundleName);
     if (existsSync(join(candidate, "Contents", "MacOS", "firefox"))) {
@@ -141,10 +158,16 @@ function findBuiltAppPath() {
 }
 
 function findBuiltAppExecutable() {
+  if (isWindows) {
+    return join(findBuiltAppPath(), "firefox.exe");
+  }
   return join(findBuiltAppPath(), "Contents", "MacOS", "firefox");
 }
 
 function findDistResources() {
+  if (isWindows) {
+    return join(tmpRoot, objectDir, "dist", "bin");
+  }
   const resourceCandidates = [
     join(tmpRoot, objectDir, "dist", "Kenoma.app", "Contents", "Resources"),
     join(findBuiltAppPath(), "Contents", "Resources"),
@@ -222,17 +245,7 @@ function syncForkjoinFiles() {
   copyPath("browser/branding/nightly/configure.sh");
   copyPath("browser/branding/nightly/locales/en-US/brand.ftl");
   copyPath("browser/branding/nightly/locales/en-US/brand.properties");
-  copyPath("browser/branding/nightly/content/jar.mn");
-  copyPath("browser/branding/nightly/content/kenoma-home.css");
-  copyPath("browser/branding/nightly/content/kenoma-home.html");
-  copyPath("browser/branding/nightly/content/kenoma-home.js");
-  copyPath("browser/branding/nightly/content/skychat-home.css");
-  copyPath("browser/branding/nightly/content/skychat-home.html");
-  copyPath("browser/branding/nightly/content/skychat-home.js");
-  copyPath("browser/branding/nightly/content/weather-home.css");
-  copyPath("browser/branding/nightly/content/weather-home.html");
-  copyPath("browser/branding/nightly/content/weather-home.js");
-  copyPath("browser/branding/nightly/content/operator-tab");
+  copyPath("browser/branding/nightly/content");
   ensureForkjoinBuildEntries();
   syncBuiltSessionstoreArtifacts();
   syncBuiltToolkitModuleArtifacts();
@@ -328,7 +341,7 @@ function syncPostGeneratedBrandingFiles() {
 }
 
 function generateKenomaBranding() {
-  run("/opt/homebrew/bin/node", [
+  run(process.execPath, [
     join(sourceRoot, "scripts", "generate-kenoma-branding.mjs"),
     "--target-root",
     tmpRoot,
@@ -337,33 +350,53 @@ function generateKenomaBranding() {
   ]);
 }
 
+function configureWindowsMozconfig(env) {
+  if (!isWindows) {
+    return env;
+  }
+  const windowsEnv = { ...env };
+  const msvcOverlay =
+    windowsEnv.FIREFOX_MSVC_OVERLAY ||
+    "C:\\tmp\\vs-msvc-overlay\\VC\\Tools\\MSVC\\14.44.35207";
+  const defaultVcPath = "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207";
+  const defaultWindowsSdkDir = "C:\\Program Files (x86)\\Windows Kits\\10";
+  if (!windowsEnv.VC_PATH && existsSync(msvcOverlay)) {
+    windowsEnv.VC_PATH = msvcOverlay;
+  }
+  if (!windowsEnv.VC_PATH && existsSync(defaultVcPath)) {
+    windowsEnv.VC_PATH = defaultVcPath;
+  }
+  if (!windowsEnv.WINDOWSSDKDIR && existsSync(defaultWindowsSdkDir)) {
+    windowsEnv.WINDOWSSDKDIR = defaultWindowsSdkDir;
+  }
+  if (windowsEnv.MOZCONFIG) {
+    return windowsEnv;
+  }
+  const mozconfigPath = join(tmpRoot, "mozconfig.windows");
+  writeFileSync(
+    mozconfigPath,
+    [
+      "ac_add_options --enable-bootstrap=no-update",
+      "ac_add_options --with-branding=browser/branding/nightly",
+      "",
+    ].join("\n")
+  );
+  return {
+    ...windowsEnv,
+    MOZCONFIG: mozconfigPath,
+  };
+}
+
 function verifyBuiltArtifact() {
   const appPath = findBuiltAppPath();
   const appExecutable = findBuiltAppExecutable();
   const distResources = findDistResources();
+  const browserChromeRoot = isWindows
+    ? join(distResources, "browser", "chrome", "browser")
+    : join(appPath, "Contents", "Resources", "browser", "chrome", "browser");
   const expectedFiles = [
-    join(
-      appPath,
-      "Contents",
-      "Resources",
-      "browser",
-      "chrome",
-      "browser",
-      "builtin-addons",
-      "aeon",
-      "manifest.json"
-    ),
-    join(
-      appPath,
-      "Contents",
-      "Resources",
-      "browser",
-      "chrome",
-      "browser",
-      "builtin-addons",
-      "aeon",
-      "run.js"
-    ),
+    join(browserChromeRoot, "builtin-addons", "aeon", "manifest.json"),
+    join(browserChromeRoot, "builtin-addons", "aeon", "run.js"),
     join(distResources, "browser", "modules", "AeonProtocolHandler.sys.mjs"),
     join(
       distResources,
@@ -488,7 +521,11 @@ function mirrorBuiltAppToMonorepo() {
     rmSync(legacyAppPath, { recursive: true, force: true });
   }
   rmSync(monorepoAppPath, { recursive: true, force: true });
-  cpSync(appPath, monorepoAppPath, { recursive: true });
+  if (isWindows) {
+    cpSync(appPath, monorepoArtifactRoot, { recursive: true });
+  } else {
+    cpSync(appPath, monorepoAppPath, { recursive: true });
+  }
   console.log(`Monorepo Kenoma app: ${monorepoAppPath}`);
   console.log(`Monorepo executable: ${monorepoAppExecutable}`);
 }
@@ -533,6 +570,8 @@ if (args.has("--mirror-only")) {
   process.exit(0);
 }
 
-run(python, ["./mach", "--no-interactive", "build"]);
+const machEnv = { ...process.env };
+delete machEnv.PYTHON;
+run(python, ["./mach", "--no-interactive", "build"], tmpRoot, configureWindowsMozconfig(machEnv));
 verifyBuiltArtifact();
 mirrorBuiltAppToMonorepo();

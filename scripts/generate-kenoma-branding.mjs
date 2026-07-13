@@ -2,18 +2,30 @@
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
 const args = process.argv.slice(2);
-const sourceRoot = resolve(new URL("..", import.meta.url).pathname);
+const isWindows = process.platform === "win32";
+function normalizeFileUrlPath(url) {
+  const path = fileURLToPath(url);
+  return isWindows ? path.replace(/^\/([A-Za-z]:[\\/])/, "$1") : path;
+}
+
+const sourceRoot = resolve(normalizeFileUrlPath(new URL("..", import.meta.url)));
 const defaultRepoRoot = resolve(sourceRoot, "..", "..");
 const targetRoot = readArg("--target-root") || sourceRoot;
 const repoRoot = readArg("--repo-root") || defaultRepoRoot;
-const rsvgConvert = process.env.RSVG_CONVERT || "/opt/homebrew/bin/rsvg-convert";
-const iconutil = process.env.ICONUTIL || "/usr/bin/iconutil";
+const rsvgConvert =
+  process.env.RSVG_CONVERT || (isWindows ? "rsvg-convert.exe" : "/opt/homebrew/bin/rsvg-convert");
+const iconutil = process.env.ICONUTIL || (isWindows ? "" : "/usr/bin/iconutil");
 
 const brandingRoot = join(targetRoot, "browser", "branding", "nightly");
 const brandingContentRoot = join(brandingRoot, "content");
-const sigilSource = join(repoRoot, "open-source", "aeon-ux", "sigil-rs", "out", "keystone.svg");
+const sigilSourceCandidates = [
+  join(repoRoot, "open-source", "aeon-ux", "sigil-rs", "out", "keystone.svg"),
+  join(repoRoot, "open-source", "aeon-ux", "src", "swag", "svg", "piece-keystone.svg"),
+];
+const sigilSource = sigilSourceCandidates.find((path) => existsSync(path)) || sigilSourceCandidates[0];
 const splashSource = join(repoRoot, "open-source", "aeon-ux", "src", "swag", "svg", "piece-knot-void.svg");
 
 function readArg(name) {
@@ -33,6 +45,14 @@ function run(command, commandArgs) {
   if (result.status !== 0) {
     process.exit(result.status ?? 1);
   }
+}
+
+function commandWorks(command) {
+  if (!command) {
+    return false;
+  }
+  const result = spawnSync(command, ["--version"], { stdio: "ignore" });
+  return !result.error && (result.status ?? 1) === 0;
 }
 
 function requireFile(path) {
@@ -171,12 +191,18 @@ const splashPath = join(brandingContentRoot, "kenoma-splash.svg");
 writeFileSync(sigilPath, themedSigilSvg());
 writeFileSync(splashPath, themedSplashSvg());
 
+const canRenderRaster = commandWorks(rsvgConvert);
+
 for (const size of [16, 22, 24, 32, 48, 64, 128, 256]) {
-  renderPng(sigilPath, join(brandingRoot, `default${size}.png`), size);
+  if (canRenderRaster) {
+    renderPng(sigilPath, join(brandingRoot, `default${size}.png`), size);
+  }
 }
-renderPng(sigilPath, join(brandingContentRoot, "about-logo.png"), 192);
-renderPng(sigilPath, join(brandingContentRoot, "about-logo@2x.png"), 384);
-renderPng(sigilPath, join(brandingContentRoot, "about.png"), 300);
+if (canRenderRaster) {
+  renderPng(sigilPath, join(brandingContentRoot, "about-logo.png"), 192);
+  renderPng(sigilPath, join(brandingContentRoot, "about-logo@2x.png"), 384);
+  renderPng(sigilPath, join(brandingContentRoot, "about.png"), 300);
+}
 writeFileSync(join(brandingContentRoot, "about-logo.svg"), themedSigilSvg());
 writeFileSync(
   join(brandingContentRoot, "about-wordmark.svg"),
@@ -186,10 +212,16 @@ writeFileSync(
   join(brandingContentRoot, "firefox-wordmark.svg"),
   `<svg xmlns="http://www.w3.org/2000/svg" width="560" height="120" viewBox="0 0 560 120"><text x="0" y="88" fill="#f7efe0" font-family="Georgia, serif" font-size="96" letter-spacing="-8">Kenoma</text></svg>\n`
 );
-generateIconset(sigilPath);
+if (canRenderRaster && iconutil && commandWorks(iconutil)) {
+  generateIconset(sigilPath);
+}
 
 // Windows .exe icons (the macOS .app uses firefox.icns above).
-generateIco(sigilPath, join(brandingRoot, "firefox.ico"), [16, 32, 48, 64, 128, 256]);
-generateIco(sigilPath, join(brandingRoot, "firefox64.ico"), [16, 24, 32, 48, 64]);
+if (canRenderRaster) {
+  generateIco(sigilPath, join(brandingRoot, "firefox.ico"), [16, 32, 48, 64, 128, 256]);
+  generateIco(sigilPath, join(brandingRoot, "firefox64.ico"), [16, 24, 32, 48, 64]);
+} else {
+  console.warn(`rsvg-convert not found; kept existing raster/icon branding in ${brandingRoot}`);
+}
 
 console.log(`Generated Kenoma branding into ${brandingRoot}`);

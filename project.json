@@ -21,42 +21,42 @@
       "executor": "a0:run-commands",
       "options": {
         "cwd": "open-source/firefox",
-        "command": "/opt/homebrew/bin/node scripts/forkjoin-tmp-build.mjs --reuse"
+        "command": "node scripts/forkjoin-tmp-build.mjs --reuse"
       }
     },
     "brand:generate": {
       "executor": "a0:run-commands",
       "options": {
         "cwd": "open-source/firefox",
-        "command": "/opt/homebrew/bin/node scripts/generate-kenoma-branding.mjs"
+        "command": "node scripts/generate-kenoma-branding.mjs"
       }
     },
     "build:tmp:fresh": {
       "executor": "a0:run-commands",
       "options": {
         "cwd": "open-source/firefox",
-        "command": "/opt/homebrew/bin/node scripts/forkjoin-tmp-build.mjs --fresh"
+        "command": "node scripts/forkjoin-tmp-build.mjs --fresh"
       }
     },
     "sync:tmp": {
       "executor": "a0:run-commands",
       "options": {
         "cwd": "open-source/firefox",
-        "command": "/opt/homebrew/bin/node scripts/forkjoin-tmp-build.mjs --sync-only --reuse"
+        "command": "node scripts/forkjoin-tmp-build.mjs --sync-only --reuse"
       }
     },
     "verify:tmp": {
       "executor": "a0:run-commands",
       "options": {
         "cwd": "open-source/firefox",
-        "command": "/opt/homebrew/bin/node scripts/forkjoin-tmp-build.mjs --verify-only --reuse"
+        "command": "node scripts/forkjoin-tmp-build.mjs --verify-only --reuse"
       }
     },
     "mirror:tmp": {
       "executor": "a0:run-commands",
       "options": {
         "cwd": "open-source/firefox",
-        "command": "/opt/homebrew/bin/node scripts/forkjoin-tmp-build.mjs --mirror-only --reuse"
+        "command": "node scripts/forkjoin-tmp-build.mjs --mirror-only --reuse"
       }
     },
     "version:tmp": {
@@ -105,7 +105,7 @@
       "executor": "a0:run-commands",
       "options": {
         "cwd": "open-source/firefox",
-        "command": "/opt/homebrew/bin/node scripts/forkjoin-tmp-build.mjs --paths"
+        "command": "node scripts/forkjoin-tmp-build.mjs --paths"
       }
     },
     "native:self-test": {
