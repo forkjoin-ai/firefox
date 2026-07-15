@@ -174,6 +174,8 @@ function errorDocument(title, error) {
   return `<!doctype html><meta charset="utf-8"><title>${title}</title><pre>${escaped}</pre>`;
 }
 
+const AEON_FRAME_LOAD_TIMEOUT_MS = 8000;
+
 function createPublicHostAeonChannel(uri, loadInfo) {
   const target = resolveHostStyleAddress(uri);
   return inputStreamChannel(
@@ -186,9 +188,31 @@ function createPublicHostAeonChannel(uri, loadInfo) {
 html,body,iframe{margin:0;width:100%;height:100%;border:0;background:#05080a}
 .fallback{position:fixed;inset:auto 1rem 1rem 1rem;z-index:1;font:12px ui-monospace,monospace;color:#9fb3c8}
 .fallback a{color:#9fd1ff}
+.fallback[hidden]{display:none}
 </style>
 <iframe src="${escapeAttribute(target)}" referrerpolicy="no-referrer-when-downgrade"></iframe>
-<p class="fallback">Aeon fallback frame: <a href="${escapeAttribute(target)}">${escapeAttribute(target)}</a></p>`
+<p class="fallback" id="aeon-fallback" hidden>Failed to load frame automatically: <a href="${escapeAttribute(target)}">${escapeAttribute(target)}</a></p>
+<script>
+(() => {
+  const iframe = document.querySelector("iframe");
+  const fallback = document.getElementById("aeon-fallback");
+  let settled = false;
+  const markLoaded = () => {
+    settled = true;
+  };
+  const markFailed = () => {
+    settled = true;
+    fallback.hidden = false;
+  };
+  iframe.addEventListener("load", markLoaded);
+  iframe.addEventListener("error", markFailed);
+  setTimeout(() => {
+    if (!settled) {
+      markFailed();
+    }
+  }, ${AEON_FRAME_LOAD_TIMEOUT_MS});
+})();
+</script>`
   );
 }
 
@@ -221,7 +245,11 @@ async function runWall(uri) {
 
   try {
     const [stdout, stderr, waitResult] = await Promise.race([
-      Promise.all([readPipeString(proc.stdout), readPipeString(proc.stderr), proc.wait()]),
+      Promise.all([
+        readPipeString(proc.stdout),
+        readPipeString(proc.stderr),
+        proc.wait(),
+      ]),
       timeout,
     ]);
     if (waitResult.exitCode !== 0) {
@@ -276,14 +304,20 @@ AeonProtocolHandler.prototype = {
   scheme: "aeon",
   defaultPort: -1,
   protocolFlags:
-    Ci.nsIProtocolHandler.URI_STD | Ci.nsIProtocolHandler.URI_DANGEROUS_TO_LOAD,
+    Ci.nsIProtocolHandler.URI_STD |
+    Ci.nsIProtocolHandler.URI_DANGEROUS_TO_LOAD |
+    Ci.nsIProtocolHandler.URI_IS_POTENTIALLY_TRUSTWORTHY,
 
   newChannel(uri, loadInfo) {
     if (shouldUseWall(uri)) {
       return createWallBackedChannel(uri, loadInfo);
     }
 
-    if (uri?.host && isHostStyleAddress(uri.host) && !isLoopbackHost(uri.host)) {
+    if (
+      uri?.host &&
+      isHostStyleAddress(uri.host) &&
+      !isLoopbackHost(uri.host)
+    ) {
       return createPublicHostAeonChannel(uri, loadInfo);
     }
 
