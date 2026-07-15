@@ -304,7 +304,9 @@ AeonProtocolHandler.prototype = {
   scheme: "aeon",
   defaultPort: -1,
   protocolFlags:
-    Ci.nsIProtocolHandler.URI_STD | Ci.nsIProtocolHandler.URI_DANGEROUS_TO_LOAD,
+    Ci.nsIProtocolHandler.URI_STD |
+    Ci.nsIProtocolHandler.URI_DANGEROUS_TO_LOAD |
+    Ci.nsIProtocolHandler.URI_IS_POTENTIALLY_TRUSTWORTHY,
 
   newChannel(uri, loadInfo) {
     if (shouldUseWall(uri)) {
