@@ -119,9 +119,10 @@ Current replacement sources:
 - News / live broadcast: `apps/skymesh-rtmp` and `apps/skychat`
 - Default app bookmarks: `apps/edgework-app`, `apps/dashrelay-app`, `apps/edge-web-app`
 
-The user-facing name is `palimpset` in conversation, but the current repo path
-is `apps/paplimpset`. Do not introduce another spelling in code without a repo
-rename or redirect decision.
+Product / conversation name is **Palimpsest** (correct spelling). The repo
+path and package id remain `apps/paplimpset` / `@affectively/paplimpset` until
+an explicit rename. Do not reintroduce misspellings (`palimpset`, `paplimpset`
+as a product title).
 
 ## Aeon / Bitwise / Lacey Boundary
 
