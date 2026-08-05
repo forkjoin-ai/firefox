@@ -42,5 +42,6 @@
   window.kenoma = Object.freeze({
     truth: Object.freeze({ assess: payload => call("truth.assess", payload) }),
     precog: Object.freeze({ forecast: payload => call("precog.forecast", payload) }),
+    aether: Object.freeze({ runtime: () => call("aether.runtime.status") }),
   });
 })();

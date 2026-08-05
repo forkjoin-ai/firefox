@@ -3769,6 +3769,16 @@ pref("forkjoin.gnosis.entropy.rewards.enabled", true);
 pref("forkjoin.gnosis.network.enabled", true);
 pref("forkjoin.gnosis.commandbar.enabled", true);
 
+// Aether OPFS browser runtime: first-party apps (for example apps/astrolabe)
+// run the sovereign aether engine against OPFS knot caches
+// (aether/src/browser-knot-transport.ts). Persistent-storage grants for
+// first-party origins live in browser/app/permissions; the aeon extension
+// exposes aether.runtime.status / aether.opfs.* through the runtime gateway
+// and window.kenoma.aether.runtime() on first-party pages.
+pref("forkjoin.aether.runtime.enabled", true);
+pref("forkjoin.aether.runtime.opfs.enabled", true);
+pref("forkjoin.aether.runtime.opfs.persist.enabled", true);
+
 // Sovereign sensorium: first-party origins are granted camera/microphone/geo by
 // policy (browser/app/distribution/policies.json), so Cyrano taps in directly.
 // Prefer native macOS CoreLocation over the network geo provider.

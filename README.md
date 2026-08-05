@@ -26,6 +26,13 @@ the bundled `browser/extensions/aeon` extension, and the
 frames, UDP transport, wall requests/benchmarks, pneuma frames, residual
 payloads, voice envelopes, and Lacey PRNG state.
 
+The OPFS-based aether browser runtime (`open-source/aether/dist-browser`, used
+by `apps/astrolabe`) has first-class support: first-party origins get
+persistent-storage grants in `browser/app/permissions` so OPFS knot caches
+survive quota eviction, the runtime gateway exposes `aether.runtime.status` /
+`aether.opfs.status` / `aether.opfs.plan`, and first-party pages can probe
+browser-side support through `window.kenoma.aether.runtime()`.
+
 [Firefox](https://firefox.com/) is a fast, reliable and private web browser from the non-profit [Mozilla organization](https://mozilla.org/).
 
 ### Contributing

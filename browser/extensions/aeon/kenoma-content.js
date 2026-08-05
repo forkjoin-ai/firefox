@@ -5,7 +5,11 @@
 
 "use strict";
 
-const KENOMA_ALLOWED = new Set(["truth.assess", "precog.forecast"]);
+const KENOMA_ALLOWED = new Set([
+  "truth.assess",
+  "precog.forecast",
+  "aether.runtime.status",
+]);
 const KENOMA_REQ = "__kenoma_req";
 const KENOMA_RES = "__kenoma_res";
 

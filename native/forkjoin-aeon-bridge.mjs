@@ -2,8 +2,8 @@
 import dgram from "node:dgram";
 import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { homedir, tmpdir } from "node:os";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 
@@ -63,6 +63,63 @@ const aetherWasmCandidates = [
   path.join(aetherRoot, "src/wasm-simd/simd-kernel-matvec-q4k.wasm"),
   path.join(aetherRoot, "src/wasm-simd/pvq-codec-simd.wasm"),
 ];
+const aetherDistBrowserRoot = path.join(aetherRoot, "dist-browser");
+// Canonical OPFS browser runtime asset set (see aether/dist-browser/README.md);
+// apps consume it as static /aether/* assets synced by sync-aether-assets.mjs.
+const AETHER_RUNTIME_ENGINE_FILES = Object.freeze([
+  "sovereign-engine-webgpu.js",
+  "sovereign-engine.js",
+  "sovereign-shaders.js",
+  "x-gnosis-brew-worker.js",
+  "x-gnosis-brew-client.js",
+  "x-gnosis-dequant-worker.js",
+  "x-gnosis-dequant-client.js",
+  "skymesh-cache-client.js",
+  "skymesh-local-cache.js",
+  "model-manifest.js",
+  "admit.js",
+  "syzygy-orchestrator.js",
+]);
+const aetherRuntimeTranspileSources = [
+  path.join(aetherRoot, "src/browser-knot-transport.ts"),
+  path.join(aetherRoot, "src/frontier-model-registry.ts"),
+];
+const aetherRuntimeCandidates = [
+  path.join(aetherDistBrowserRoot, "syzygy-orchestrator.js"),
+  path.join(aetherDistBrowserRoot, "sovereign-engine.js"),
+  ...aetherRuntimeTranspileSources,
+];
+// Mirrors aether/src/browser-knot-transport.ts.
+const AETHER_KNOT_TRANSPORT = Object.freeze({
+  modes: Object.freeze(["demand", "layer-spans", "idle-full", "full"]),
+  defaultMode: "layer-spans",
+  blockBytes: Object.freeze({
+    default: 64 * 1024 * 1024,
+    min: 4 * 1024 * 1024,
+    max: 256 * 1024 * 1024,
+  }),
+  blockMetaKind: "aether-browser-knot-block-cache",
+  fullMetaKind: "astrolabe-full-knot-cache",
+});
+// Origins granted persistent-storage by default in browser/app/permissions so
+// navigator.storage.persist() resolves without a prompt and OPFS knot caches
+// are exempt from quota eviction.
+const AETHER_OPFS_PERSIST_ORIGINS = Object.freeze([
+  "https://affectively.ai",
+  "https://www.affectively.ai",
+  "https://forkjoin.ai",
+  "https://www.forkjoin.ai",
+  "https://astrolabe.forkjoin.ai",
+  "https://skychat.forkjoin.ai",
+  "https://skymesh.forkjoin.ai",
+  "https://edgework.forkjoin.ai",
+  "https://wiki.forkjoin.ai",
+]);
+const AETHER_RUNTIME_PREFS = Object.freeze({
+  enabled: "forkjoin.aether.runtime.enabled",
+  opfs: "forkjoin.aether.runtime.opfs.enabled",
+  persist: "forkjoin.aether.runtime.opfs.persist.enabled",
+});
 
 let flowCodecPromise;
 let frameReassemblerPromise;
@@ -725,6 +782,9 @@ function runtimeCapabilities() {
     ], { requestTypes: ["aeon3d.render.status", "aeon3d.render.bench"] }),
     aetherSimd: runtimeCapability("aether-wasm-simd", aetherWasmCandidates, {
       requestTypes: ["aether.simd.status", "aether.simd.bench"],
+    }),
+    aetherRuntime: runtimeCapability("aether-opfs-browser-runtime", aetherRuntimeCandidates, {
+      requestTypes: ["aether.runtime.status", "aether.opfs.status", "aether.opfs.plan"],
     }),
     xGnosis: runtimeCapability("x-gnosis", [
       path.join(xGnosisRoot, "src/index.ts"),
@@ -2189,6 +2249,193 @@ async function handleAetherSimdBench(payload) {
   };
 }
 
+async function handleAetherRuntimeStatus() {
+  const engine = AETHER_RUNTIME_ENGINE_FILES.map(file => ({
+    file,
+    ...fileStatus(path.join(aetherDistBrowserRoot, file)),
+  }));
+  const tokenizers = fileStatus(aetherDistBrowserRoot).exists
+    ? readdirSync(aetherDistBrowserRoot)
+        .filter(file => file.endsWith("-tokenizer.json"))
+        .sort()
+        .map(file => ({ file, ...fileStatus(path.join(aetherDistBrowserRoot, file)) }))
+    : [];
+  return {
+    backend: "aether-opfs-browser-runtime",
+    engine,
+    tokenizers,
+    transpileSources: aetherRuntimeTranspileSources.map(source => fileStatus(source)),
+    kernels: aetherWasmCandidates.map(kernel => fileStatus(kernel)),
+    syncScript: fileStatus(path.join(aetherRoot, "scripts/sync-aether-assets.mjs")),
+    transport: AETHER_KNOT_TRANSPORT,
+    opfs: {
+      persistOrigins: AETHER_OPFS_PERSIST_ORIGINS,
+      permissionsDefaults: "browser/app/permissions",
+      prefs: AETHER_RUNTIME_PREFS,
+    },
+    pageApi: "window.kenoma.aether.runtime()",
+  };
+}
+
+function decodeStorageOriginDir(name) {
+  // Gecko encodes origin directories as scheme+++host[+port], with ':' and '/'
+  // mapped to '+'.
+  const separator = name.indexOf("+++");
+  if (separator === -1) {
+    return name;
+  }
+  const scheme = name.slice(0, separator);
+  const rest = name.slice(separator + 3).replaceAll("+", ":");
+  return `${scheme}://${rest}`;
+}
+
+function directoryUsage(root, budget) {
+  let bytes = 0;
+  let files = 0;
+  let directories = 0;
+  const stack = [root];
+  while (stack.length) {
+    const current = stack.pop();
+    let entries;
+    try {
+      entries = readdirSync(current, { withFileTypes: true });
+    } catch (_) {
+      continue;
+    }
+    for (const entry of entries) {
+      if (budget.entries-- <= 0) {
+        return { bytes, files, directories, truncated: true };
+      }
+      const entryPath = path.join(current, entry.name);
+      if (entry.isDirectory()) {
+        directories++;
+        stack.push(entryPath);
+      } else if (entry.isFile()) {
+        files++;
+        try {
+          bytes += statSync(entryPath).size;
+        } catch (_) {
+          // Quota files can vanish mid-scan.
+        }
+      }
+    }
+  }
+  return { bytes, files, directories, truncated: false };
+}
+
+function firefoxProfileCandidates(request) {
+  const explicit = stringOr(request.profilePath, "", "payload.profilePath");
+  if (explicit) {
+    return [explicit];
+  }
+  const roots = [];
+  if (process.env.FORKJOIN_FIREFOX_PROFILE) {
+    roots.push(process.env.FORKJOIN_FIREFOX_PROFILE);
+  }
+  const home = homedir();
+  for (const container of [
+    path.join(home, "Library/Application Support/Firefox/Profiles"),
+    path.join(home, ".mozilla/firefox"),
+  ]) {
+    try {
+      for (const entry of readdirSync(container, { withFileTypes: true })) {
+        if (entry.isDirectory()) {
+          roots.push(path.join(container, entry.name));
+        }
+      }
+    } catch (_) {
+      // Container missing on this platform.
+    }
+  }
+  return roots;
+}
+
+async function handleAetherOpfsStatus(payload) {
+  const request = assertObject(payload ?? {}, "payload");
+  const limit = Math.max(1, Math.min(64, numberOr(request.limit, 16, "payload.limit") | 0));
+  const budget = {
+    entries: Math.max(1024, Math.min(200_000, numberOr(request.maxEntries, 50_000, "payload.maxEntries") | 0)),
+  };
+  const searched = firefoxProfileCandidates(request);
+  const profiles = [];
+  for (const profilePath of searched) {
+    const storageRoot = path.join(profilePath, "storage", "default");
+    let originDirs;
+    try {
+      originDirs = readdirSync(storageRoot, { withFileTypes: true });
+    } catch (_) {
+      continue;
+    }
+    const origins = [];
+    for (const entry of originDirs) {
+      if (!entry.isDirectory()) {
+        continue;
+      }
+      const fsRoot = path.join(storageRoot, entry.name, "fs");
+      if (!existsSync(fsRoot)) {
+        continue;
+      }
+      const origin = decodeStorageOriginDir(entry.name);
+      origins.push({
+        originDir: entry.name,
+        origin,
+        persistedByDefault: AETHER_OPFS_PERSIST_ORIGINS.includes(origin),
+        path: fsRoot,
+        ...directoryUsage(fsRoot, budget),
+      });
+    }
+    origins.sort((a, b) => b.bytes - a.bytes || a.originDir.localeCompare(b.originDir));
+    profiles.push({
+      profilePath,
+      originCount: origins.length,
+      totalBytes: origins.reduce((sum, origin) => sum + origin.bytes, 0),
+      origins: origins.slice(0, limit),
+    });
+  }
+  return {
+    available: profiles.length > 0,
+    profiles,
+    searched,
+    persistOrigins: AETHER_OPFS_PERSIST_ORIGINS,
+    transport: AETHER_KNOT_TRANSPORT,
+    prefs: AETHER_RUNTIME_PREFS,
+  };
+}
+
+async function handleAetherOpfsPlan() {
+  return {
+    mode: "opfs-first-knot-cache",
+    transport: AETHER_KNOT_TRANSPORT,
+    steps: [
+      {
+        id: "persist-grant",
+        work: "grant persistent-storage to first-party origins in browser/app/permissions so navigator.storage.persist() resolves without a prompt",
+        origins: AETHER_OPFS_PERSIST_ORIGINS,
+      },
+      {
+        id: "block-cache",
+        work: "cache model knots as OPFS block files (browser-knot-transport) with demand, layer-spans, idle-full, and full transports",
+        metaKinds: [AETHER_KNOT_TRANSPORT.blockMetaKind, AETHER_KNOT_TRANSPORT.fullMetaKind],
+      },
+      {
+        id: "eviction-protection",
+        work: "persisted origins are exempt from quota eviction, so multi-gigabyte knot caches survive storage pressure",
+      },
+      {
+        id: "runtime-probe",
+        work: "first-party pages confirm browser-side support through window.kenoma.aether.runtime()",
+      },
+    ],
+    invariants: {
+      originScopedStorage: true,
+      persistWithoutPrompt: true,
+      quotaEvictionExempt: true,
+      profileDataUntouched: true,
+      enabledPref: AETHER_RUNTIME_PREFS.enabled,
+    },
+  };
+}
+
 async function handleXGnosisStatus() {
   return {
     root: fileStatus(path.join(xGnosisRoot, "src/index.ts")),
@@ -2761,6 +3008,12 @@ async function dispatch(type, payload) {
       return handleAetherSimdStatus(payload);
     case "aether.simd.bench":
       return handleAetherSimdBench(payload);
+    case "aether.runtime.status":
+      return handleAetherRuntimeStatus(payload);
+    case "aether.opfs.status":
+      return handleAetherOpfsStatus(payload);
+    case "aether.opfs.plan":
+      return handleAetherOpfsPlan(payload);
     case "xgnosis.status":
       return handleXGnosisStatus(payload);
     case "xgnosis.bench":
@@ -3001,6 +3254,21 @@ async function runSelfTest() {
     throw new Error("aether SIMD status failed");
   }
 
+  const aetherRuntime = await dispatch("aether.runtime.status", {});
+  if (!Array.isArray(aetherRuntime.engine) || !aetherRuntime.transport?.blockMetaKind) {
+    throw new Error("aether runtime status failed");
+  }
+
+  const opfsPlan = await dispatch("aether.opfs.plan", {});
+  if (opfsPlan.invariants.persistWithoutPrompt !== true) {
+    throw new Error("aether OPFS plan failed");
+  }
+
+  const opfsStatus = await dispatch("aether.opfs.status", { limit: 4 });
+  if (typeof opfsStatus.available !== "boolean" || !Array.isArray(opfsStatus.profiles)) {
+    throw new Error("aether OPFS status failed");
+  }
+
   const xgnosis = await dispatch("xgnosis.status", {});
   if (!("root" in xgnosis)) {
     throw new Error("x-gnosis status failed");
@@ -3090,6 +3358,8 @@ async function runSelfTest() {
     topStorageVictim: victims.topVictim?.id ?? "none",
     authDidPrimary: authPlan.invariants.didPrimaryAuth,
     entropyRewardToken: entropy.reward.token,
+    aetherRuntimeEngineFiles: aetherRuntime.engine.length,
+    aetherOpfsProfiles: opfsStatus.profiles.length,
     wall: "available",
   }, null, 2));
   process.stdout.write("\n");
@@ -3101,6 +3371,7 @@ async function runtimeBenchSuite() {
     capabilities: await dispatch("gnosis.runtime.capabilities", {}),
     amplituhedron: await dispatch("gnosis.amplituhedron.lookup", { limit: 4 }),
     aetherStatus: await dispatch("aether.simd.status", {}),
+    aetherRuntime: await dispatch("aether.runtime.status", {}),
     frf: await dispatch("gnosis.frf.bench", { iterations: 8192, lanes: 8 }),
     aeon3d: await dispatch("aeon3d.render.bench", { vertices: 32768 }),
     aetherSimd: await dispatch("aether.simd.bench", { elements: 65536 }),
