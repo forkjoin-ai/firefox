@@ -23,3 +23,16 @@ origin	remote-troubleshooting	1	https://support.mozilla.org
 
 # autoplay video/audio
 origin	autoplay-media	1	about:welcome
+
+# Aether OPFS browser runtime: first-party origins get persistent storage so
+# navigator.storage.persist() resolves without a prompt and OPFS knot caches
+# (aether browser-knot-transport) are exempt from quota eviction.
+origin	persistent-storage	1	https://affectively.ai
+origin	persistent-storage	1	https://www.affectively.ai
+origin	persistent-storage	1	https://forkjoin.ai
+origin	persistent-storage	1	https://www.forkjoin.ai
+origin	persistent-storage	1	https://astrolabe.forkjoin.ai
+origin	persistent-storage	1	https://skychat.forkjoin.ai
+origin	persistent-storage	1	https://skymesh.forkjoin.ai
+origin	persistent-storage	1	https://edgework.forkjoin.ai
+origin	persistent-storage	1	https://wiki.forkjoin.ai

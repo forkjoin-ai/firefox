@@ -22,7 +22,8 @@ seeded PRNG path.
   `gnosis.runtime.capabilities`, `gnosis.runtime.cache.*`, `gnosis.frf.*`, `gnosis.foil.*`,
   `gnosis.moonshine.*`, `gnosis.amplituhedron.*`, `gnosis.antiqueue.*`,
   `gnosis.scheduler.*`, `gnosis.storage.*`, `gnosis.auth.*`, `gnosis.entropy.*`,
-  `aeon3d.render.*`, `aether.simd.*`, `xgnosis.*`, and `gnosis.uring.*`.
+  `aeon3d.render.*`, `aether.simd.*`, `aether.runtime.*`, `aether.opfs.*`,
+  `xgnosis.*`, and `gnosis.uring.*`.
 - Providing the Moonshine popup command bar, which sends commands through
   `gnosis.moonshine.exec` and runtime probes through the same native host.
 - Forwarding the sovereign engines `truth.assess` (`@a0n/aeon-truth` claim
@@ -38,12 +39,17 @@ seeded PRNG path.
 ```js
 const ledger = await window.kenoma.truth.assess({ claims, domain });
 const timeline = await window.kenoma.precog.forecast({ ticks, domain });
+const runtime = await window.kenoma.aether.runtime();
 ```
 
 Calls cross to the background script over `postMessage`, then to the native
-host. Only `truth.assess` and `precog.forecast` are reachable this way (the
-allow-list is enforced in both the page shim and the content script), so web
-pages cannot reach the transport, codec, or runtime ops.
+host. Only `truth.assess`, `precog.forecast`, and the read-only
+`aether.runtime.status` are reachable this way (the allow-list is enforced in
+both the page shim and the content script), so web pages cannot reach the
+transport, codec, or the other runtime ops. `aether.runtime.status` lets
+first-party apps running the OPFS aether browser runtime (for example
+`apps/astrolabe`) confirm browser-side support: canonical engine assets,
+knot-transport constants, and the persistent-storage grant list.
 
 ## What it does not own
 
@@ -88,3 +94,9 @@ The supported operation names intentionally mirror the package boundaries:
 - `gnosis.storage.victims` ranks the active disk-replacement targets inside
   Firefox: sessionstore recovery, HTTP cache chunks, HTTP cache metadata,
   async SQLite writes, quota origin operations, and small profile JSON rewrites.
+- Aether OPFS browser runtime: `aether.runtime.status` reports the canonical
+  `aether/dist-browser` engine assets, knot-transport constants, and the
+  persistent-storage grant list; `aether.opfs.status` scans a Firefox profile's
+  `storage/default/<origin>/fs` trees for OPFS usage per origin;
+  `aether.opfs.plan` states the OPFS-first knot-cache invariants (persist
+  without prompt, quota-eviction exemption, origin-scoped storage).
