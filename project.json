@@ -108,6 +108,20 @@
         "command": "node scripts/forkjoin-tmp-build.mjs --paths"
       }
     },
+    "test:archive": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "node --test scripts/kenoma-archive.test.mjs"
+      }
+    },
+    "archive:kenoma": {
+      "executor": "a0:run-commands",
+      "options": {
+        "cwd": "open-source/firefox",
+        "command": "node scripts/kenoma-archive.mjs"
+      }
+    },
     "native:self-test": {
       "executor": "a0:run-commands",
       "options": {

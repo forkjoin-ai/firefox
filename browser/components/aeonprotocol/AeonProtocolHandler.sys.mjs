@@ -140,80 +140,12 @@ function guessContentType(uri) {
   return "text/html";
 }
 
-function stringInputStream(text) {
-  const stream = Cc["@mozilla.org/io/string-input-stream;1"].createInstance(
-    Ci.nsIStringInputStream
-  );
-  stream.setUTF8Data(text);
-  return stream;
-}
-
-function inputStreamChannel(uri, loadInfo, content, contentType = "text/html") {
-  const innerChannel = Cc["@mozilla.org/network/input-stream-channel;1"]
-    .createInstance(Ci.nsIInputStreamChannel)
-    .QueryInterface(Ci.nsIChannel);
-  innerChannel.loadInfo = loadInfo;
-  innerChannel.setURI(uri);
-  innerChannel.contentType = contentType;
-  innerChannel.contentStream = stringInputStream(content);
-  return innerChannel;
-}
-
-function escapeAttribute(text) {
-  return String(text)
-    .replaceAll("&", "&amp;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("<", "&lt;");
-}
-
 function errorDocument(title, error) {
   const escaped = String(error?.message || error)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
   return `<!doctype html><meta charset="utf-8"><title>${title}</title><pre>${escaped}</pre>`;
-}
-
-const AEON_FRAME_LOAD_TIMEOUT_MS = 8000;
-
-function createPublicHostAeonChannel(uri, loadInfo) {
-  const target = resolveHostStyleAddress(uri);
-  return inputStreamChannel(
-    uri,
-    loadInfo,
-    `<!doctype html>
-<meta charset="utf-8">
-<title>${escapeAttribute(uri.spec)}</title>
-<style>
-html,body,iframe{margin:0;width:100%;height:100%;border:0;background:#05080a}
-.fallback{position:fixed;inset:auto 1rem 1rem 1rem;z-index:1;font:12px ui-monospace,monospace;color:#9fb3c8}
-.fallback a{color:#9fd1ff}
-.fallback[hidden]{display:none}
-</style>
-<iframe src="${escapeAttribute(target)}" referrerpolicy="no-referrer-when-downgrade"></iframe>
-<p class="fallback" id="aeon-fallback" hidden>Failed to load frame automatically: <a href="${escapeAttribute(target)}">${escapeAttribute(target)}</a></p>
-<script>
-(() => {
-  const iframe = document.querySelector("iframe");
-  const fallback = document.getElementById("aeon-fallback");
-  let settled = false;
-  const markLoaded = () => {
-    settled = true;
-  };
-  const markFailed = () => {
-    settled = true;
-    fallback.hidden = false;
-  };
-  iframe.addEventListener("load", markLoaded);
-  iframe.addEventListener("error", markFailed);
-  setTimeout(() => {
-    if (!settled) {
-      markFailed();
-    }
-  }, ${AEON_FRAME_LOAD_TIMEOUT_MS});
-})();
-</script>`
-  );
 }
 
 async function readPipeString(pipe) {
@@ -314,14 +246,6 @@ AeonProtocolHandler.prototype = {
   newChannel(uri, loadInfo) {
     if (shouldUseWall(uri)) {
       return createWallBackedChannel(uri, loadInfo);
-    }
-
-    if (
-      uri?.host &&
-      isHostStyleAddress(uri.host) &&
-      !isLoopbackHost(uri.host)
-    ) {
-      return createPublicHostAeonChannel(uri, loadInfo);
     }
 
     const resolvedURI = NetUtil.newURI(resolveAeonURI(uri));

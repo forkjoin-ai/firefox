@@ -59,6 +59,12 @@ and `open-source/aeon-ux/src/swag/svg/piece-knot-void.svg` for the home splash.
 The user-facing home URL is `about:kenoma`, registered through
 `browser/components/about/AboutRedirector.cpp`; the page itself is backed by the
 packaged `chrome://branding/content/kenoma-home.html` resource.
+The Nightly branding directory is Kenoma's build-channel source. Its branding
+prefs must not point first-run, What's New, update, or release-note UI at a
+Firefox-branded remote page. Desktop-owned feature names use Kenoma (for
+example Kenoma Home, View, Labs, Screenshots, Profiler, and Translations), while
+names for separate Mozilla products and Firefox as an import source remain
+unchanged.
 The current home surface is adapted from `Agent browser startup tab.zip` as a
 self-contained operator tab: `kenoma-home.html`, `kenoma-home.css`,
 `kenoma-home.js`, and local Atkinson fonts under
@@ -97,12 +103,13 @@ these as last-wins defaults for:
 
 Firefox now registers an internal `aeon://` protocol handler:
 
-- `aeon://wiki.forkjoin.ai` keeps the top-level browser URL as `aeon://...`
-  and renders the HTTPS public origin inside a local Aeon fallback frame
+- public host-style addresses resolve into a top-level HTTPS channel so the
+  resulting document retains its secure context, including WebGPU and
+  `crypto.randomUUID`
 - loopback hosts use HTTP for local development, e.g. `aeon://127.0.0.1:8787/foo`
   redirects to `http://127.0.0.1:8787/.aeon/foo`
-- public host-style addresses use the same non-redirect fallback frame while
-  public origins grow native `X-Aeon-*` endpoint negotiation
+- public origins advertise native `X-Aeon-*` endpoint negotiation while the
+  protocol channel records the originating Aeon URI
 - `aeon://rhizome/...` redirects to the edge Rhizome resolver at
   `https://api.edgework.ai/v1/rhizome/resolve?address=...`
 - other resource-style Aeon addresses are sent to Wiki search until a local

@@ -20,6 +20,13 @@ Firefox build from `~/Documents`. Successful `build:tmp` runs now mirror the
 packaged app into the ignored monorepo path
 `open-source/firefox/build/forkjoin/Kenoma.app`.
 
+Package that mirrored app for Forge publication with
+`pnpm run a0 -- run @a0n/firefox:archive:kenoma`. The target uses macOS
+`ditto` and writes a content-addressed zip plus an adjacent JSON descriptor to
+`build/forkjoin/archive/`. The receipt records the bundle's actual identifier,
+entrypoint, Mach-O architecture, Bitwise fp64 fingerprints, byte length, and
+verified signing state; it does not build or sign the app.
+
 Aeon browser support is split across the built-in `aeon://` protocol handler,
 the bundled `browser/extensions/aeon` extension, and the
 `native/forkjoin-aeon-bridge.mjs` native host. The native host handles Flow

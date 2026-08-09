@@ -488,7 +488,7 @@ const CFR_MESSAGES = [
         },
         sumo_path: "extensionrecommendations",
       },
-      notification_text: "Message from Firefox",
+      notification_text: "Message from Kenoma",
       category: "cfrFeatures",
     },
     trigger: {
@@ -685,7 +685,7 @@ const CFR_MESSAGES = [
       layout: "chiclet_open_url",
       category: "cfrHeartbeat",
       bucket_id: "HEARTBEAT_TACTIC_2",
-      notification_text: "Improve Firefox",
+      notification_text: "Improve Kenoma",
       active_color: "#595e91",
       action: {
         url: "http://example.com/%VERSION%/",

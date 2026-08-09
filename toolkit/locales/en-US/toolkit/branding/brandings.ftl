@@ -20,10 +20,10 @@
 -mozmonitor-brand-name = Mozilla Monitor
 -pocket-brand-name = Pocket
 -send-brand-name = Firefox Send
--screenshots-brand-name = Firefox Screenshots
+-screenshots-brand-name = Kenoma Screenshots
 -mozilla-vpn-brand-name = Mozilla VPN
--profiler-brand-name = Firefox Profiler
--translations-brand-name = Firefox Translations
+-profiler-brand-name = Kenoma Profiler
+-translations-brand-name = Kenoma Translations
 -focus-brand-name = Firefox Focus
 -relay-brand-name = Firefox Relay
 -relay-brand-short-name = Relay
@@ -40,20 +40,16 @@
 # The particle "by" can be localized, "Fakespot" and "Mozilla" should not be localized or transliterated.
 -fakespot-brand-full-name = Fakespot by Mozilla
 
-# “Suggest” can be localized, “Firefox” must be treated as a brand
-# and kept in English.
--firefox-suggest-brand-name = Firefox Suggest
+# “Suggest” can be localized; Kenoma is this fork's desktop product name.
+-firefox-suggest-brand-name = Kenoma Suggest
 
-# ”Home" can be localized, “Firefox” must be treated as a brand
-# and kept in English.
--firefox-home-brand-name = Firefox Home
+# ”Home" can be localized; Kenoma is this fork's desktop product name.
+-firefox-home-brand-name = Kenoma Home
 
-# View" can be localized, “Firefox” must be treated as a brand
-# and kept in English.
--firefoxview-brand-name = Firefox View
+# “View” can be localized; Kenoma is this fork's desktop product name.
+-firefoxview-brand-name = Kenoma View
 
-# Firefox Labs is the name for a page in Settings to allow users to learn about
+# Kenoma Labs is the name for a page in Settings to learn about
 # experimental and in-development features, and turn those features on and off.
-# The "Labs" portion can be localized, “Firefox” must be treated as a brand
-# and kept in English.
--firefoxlabs-brand-name = Firefox Labs
+# The "Labs" portion can be localized.
+-firefoxlabs-brand-name = Kenoma Labs
