@@ -2,6 +2,10 @@
 
 # Kenoma
 
+## Interface, operations, and failure boundaries
+
+The browser integration API and configuration define supported behavior. Run focused build and tests for supported versions, rejected messages, and unavailable browser state. Extension authority, browsing data, and native messaging are security boundaries; permissions remain minimal and errors never fall back to privileged behavior.
+
 This checkout is the Kenoma browser fork mounted at `open-source/firefox`.
 For local build, run, verification, commercial-surface policy, `aeon://`
 handling, and Aeon bridge notes, see [LOCAL_AGENTS.md](./LOCAL_AGENTS.md).

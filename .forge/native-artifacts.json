@@ -1,0 +1,58 @@
+{
+  "$schema": "../../native-release.schema.json",
+  "schema": "forkjoin-native-release.v1",
+  "producer": {
+    "id": "firefox",
+    "repository": "forkjoin-ai/firefox",
+    "sourcePath": "open-source/firefox",
+    "defaultBranch": "main"
+  },
+  "strictAllowlist": true,
+  "products": [
+    {
+      "id": "kenoma",
+      "displayName": "Kenoma",
+      "releaseSets": [
+        {
+          "id": "app",
+          "kind": "app-bundle",
+          "publishable": true,
+          "buildTargets": [
+            "@a0n/firefox:build:tmp",
+            "@a0n/firefox:verify:tmp"
+          ],
+          "closure": {
+            "status": "complete",
+            "runtime": "native",
+            "requires": []
+          },
+          "platforms": [
+            {
+              "id": "darwin-arm64",
+              "os": "darwin",
+              "arch": "arm64",
+              "target": "aarch64-apple-darwin",
+              "variant": "portable",
+              "exeSuffix": ""
+            }
+          ],
+          "artifacts": [
+            {
+              "id": "kenoma",
+              "kind": "directory",
+              "sourcePath": "build/forkjoin/Kenoma.app",
+              "installPath": "Kenoma.app",
+              "required": true,
+              "executable": false
+            }
+          ],
+          "package": {
+            "format": "zip",
+            "outputPath": "dist/native-release/kenoma/{platform}",
+            "archiveName": "kenoma-{platform}.zip"
+          }
+        }
+      ]
+    }
+  ]
+}
